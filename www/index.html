@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>  <script type="application/shiny-singletons">12b282b6c4e1ec3cee386f4ca6165aafc4731a84</script>  <script type="application/html-dependencies">json2[2014.02.04];jquery[1.12.4];babel-polyfill[6.7.2];shiny[0.14.2];htmlwidgets[0.8];plotlyjs[1.20.2];plotly-binding[4.5.6.9000];leaflet[0.7.3];leafletfix[1.0.0];leaflet-binding[1.0.1];bootstrap[3.3.7]</script><script src="shared/json2-min.js"></script>
+<script src="shared/jquery.min.js"></script>
+<script src="shared/babel-polyfill.min.js"></script>
+<link href="shared/shiny.css" rel="stylesheet" />
+<script src="shared/shiny.min.js"></script>
+<script src="htmlwidgets-0.8/htmlwidgets.js"></script>
+<link href="plotlyjs-1.20.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="plotlyjs-1.20.2/plotly-latest.min.js"></script>
+<script src="plotly-binding-4.5.6.9000/plotly.js"></script>
+<link href="leaflet-0.7.3/leaflet.css" rel="stylesheet" />
+<script src="leaflet-0.7.3/leaflet.js"></script>
+<link href="leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="leaflet-binding-1.0.1/leaflet.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="shared/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="shared/bootstrap/js/bootstrap.min.js"></script>
+<script src="shared/bootstrap/shim/html5shiv.min.js"></script>
+<script src="shared/bootstrap/shim/respond.min.js"></script>  
+<!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
+<link rel="stylesheet" type="text/css" href="myassets/style.css"/>
+
+  <style>.shinyjs-hide { display: none !important; }</style>
+  <script>Shiny.addCustomMessageHandler('shinyjs-show', function(params) { shinyjs.debugMessage('shinyjs: calling function "show" with parameters:'); shinyjs.debugMessage(params); shinyjs.show(params);});
+Shiny.addCustomMessageHandler('shinyjs-hide', function(params) { shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:'); shinyjs.debugMessage(params); shinyjs.hide(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggle', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggle(params);});
+Shiny.addCustomMessageHandler('shinyjs-enable', function(params) { shinyjs.debugMessage('shinyjs: calling function "enable" with parameters:'); shinyjs.debugMessage(params); shinyjs.enable(params);});
+Shiny.addCustomMessageHandler('shinyjs-disable', function(params) { shinyjs.debugMessage('shinyjs: calling function "disable" with parameters:'); shinyjs.debugMessage(params); shinyjs.disable(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggleState', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleState" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleState(params);});
+Shiny.addCustomMessageHandler('shinyjs-addClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "addClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.addClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-removeClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "removeClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.removeClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggleClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-html', function(params) { shinyjs.debugMessage('shinyjs: calling function "html" with parameters:'); shinyjs.debugMessage(params); shinyjs.html(params);});
+Shiny.addCustomMessageHandler('shinyjs-onevent', function(params) { shinyjs.debugMessage('shinyjs: calling function "onevent" with parameters:'); shinyjs.debugMessage(params); shinyjs.onevent(params);});
+Shiny.addCustomMessageHandler('shinyjs-alert', function(params) { shinyjs.debugMessage('shinyjs: calling function "alert" with parameters:'); shinyjs.debugMessage(params); shinyjs.alert(params);});
+Shiny.addCustomMessageHandler('shinyjs-logjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "logjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.logjs(params);});
+Shiny.addCustomMessageHandler('shinyjs-runjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "runjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.runjs(params);});
+Shiny.addCustomMessageHandler('shinyjs-reset', function(params) { shinyjs.debugMessage('shinyjs: calling function "reset" with parameters:'); shinyjs.debugMessage(params); shinyjs.reset(params);});
+Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugMessage('shinyjs: calling function "delay" with parameters:'); shinyjs.debugMessage(params); shinyjs.delay(params);});</script>
+  <script src="shinyjs/shinyjs-default-funcs.js"></script>
+  <script>shinyjs.debug = false;</script>
+  <title>LokDhaba</title>
+
+</head>
+
+<body>
+  <div class="container-fluid">
+  <!-- Header-->
+      <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand"><img height="20" alt="Brand" src="assets/logo.png" class="img-responsive"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="#">Contact us</a>
+            </li>
+            <li>
+              <a href="#">How to cite us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <!---Header end-->
+   <!-- banner -->
+<div class="banner">
+        <span class="b-heading">Lokdhaba</span>
+        <span class="b-subheading">Food For Political Thought</span>
+      </div>
+    <!-- banner end -->
+    <div class="row" >
+      <div class="col-sm-4">
+        <form class="well">
+          <div class="tabbable">
+            <ul class="nav nav-tabs shiny-tab-input" id="electionType">
+              <li class="active">
+                <a href="#tab-6325-1" data-toggle="tab" data-value="GE">GE</a>
+              </li>
+              <li>
+                <a href="#tab-6325-2" data-toggle="tab" data-value="AE">AE</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" data-value="GE" id="tab-6325-1">
+                <div id="ge_uitype_selection" class="shiny-html-output"></div>
+                <div id="ge_filter_selection" class="shiny-html-output"></div>
+              </div>
+              <div class="tab-pane" data-value="AE" id="tab-6325-2">
+                <div id="state_selection" class="shiny-html-output"></div>
+                <div id="ae_uitype_selection" class="shiny-html-output"></div>
+                <div id="ae_filter_selection" class="shiny-html-output"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-8">
+        <div id="distPlot" style="width:100%; height:400px; " class="plotly html-widget html-widget-output"></div>
+        <div id="mapPlot" style="width:100%; height:400px; " class="leaflet html-widget html-widget-output"></div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+

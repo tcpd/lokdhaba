@@ -1,0 +1,8 @@
+title,type,filename,modulename
+Party wise vote share,Chart,voteShareChart.R,voteShareChart
+Party wise seat share,Chart,seatShareChart.R,seatShareChart
+Gender wise party winners,Map,winnerGenderMap.R,winnerGenderMap
+Constituency wise party winners,Map,winnerMap.R,winnerMap
+Vote share of party winners,Map,winnerVoteShareMap.R,winnerVoteShareMap
+Winning margin of party winners,Map,winnerMarginMap.R,winnerMarginMap
+Constituency wise number of candidates,Map,numCandidatesMap.R,numCandidatesMap

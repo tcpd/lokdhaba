@@ -1,0 +1,60 @@
+@import url("//fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: #C1CDC1;
+  }
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 75px;
+    height: 75px;
+    padding-top: 0;
+}
+.banner {
+    height: 154px;
+    color: #CD0000;
+    text-align: center;
+    border-bottom: 2px solid #999999;
+    padding-top: 1px;
+}
+
+.b-heading {
+    display: block;
+    font-size: 50px;
+    line-height: 55px;
+    margin-top: 25px;
+}
+
+.b-subheading {
+    display: inline-block;
+    font-size: 18px;
+}
+
+.b-subheading::before, .b-subheading::after {
+    content: '';
+    display: block;
+    width: 238px;
+    height: 1px;
+    background-color: #C1CDC1;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+
+  
+body {
+    height: auto;
+    min-height: 100%;
+    position: relative;
+    padding-top: 80px; 
+    padding-bottom: 45px;
+    font-family: 'Droid Serif', serif;
+    background: url("watermark.svg");
+}
+
+@media screen and (max-width: 768px) {
+    body { padding-top: 0px; }
+}
+
+
