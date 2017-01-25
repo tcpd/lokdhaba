@@ -1,6 +1,9 @@
 library(shiny)
 library(reshape2)
 library(leaflet)
+library(plotly)
+library(shinyjs)
+
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 

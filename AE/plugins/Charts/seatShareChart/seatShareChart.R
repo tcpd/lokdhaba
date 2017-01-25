@@ -4,7 +4,7 @@
 seatShareChart <- function(input, output, session, parentsession,statename_reactive,dname) {
   ##################################### Values is a container to keep reactive values. These values are### 
   ##################use to trigger UI component renderings (like filters and chart area)##################
-  values<-reactiveValues()
+  values<-reactiveValues(partynames=c(),statename="")
   ##Variable to store the values used across functions
   current_filters<-c()
   #get the session id
@@ -35,7 +35,7 @@ seatShareChart <- function(input, output, session, parentsession,statename_react
       st<-gsub(" ","_",st)
       print(paste('seatshare: statename is ',st))
       
-        b<-read.csv(paste0(dirname,"SeatShares.csv"))%>%filter(state==st)
+        b<-readSeatShareFile(st)
         pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
         current_filters$base<<-plot_ly(pivotdata, x = ~year)
@@ -71,7 +71,7 @@ seatShareChart <- function(input, output, session, parentsession,statename_react
       if(is.null(sname) || trimws(sname)=="")
         return()
       #else from the csv file read in the information regarding this state in another dataframe
-      b<-read.csv(paste0(dirname,"SeatShares.csv"))%>%filter(state==sname)
+      b<-readSeatShareFile(sname)
       partynames<-unique(b$party)
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$partynames<-c()
@@ -103,11 +103,16 @@ seatShareChart <- function(input, output, session, parentsession,statename_react
       lapply(selectedpartynames,function(x) {print(paste('adding',x));base<<-add_trace(base,y=~get(x),name=x,type='scatter',mode='lines+markers')})
       sname<-current_filters$sname
       sname<-gsub("_"," ",sname)
-      
-      base %>%
-        layout(title = paste0("Party wise seat shares across years in ",sname),
-               xaxis = list(title = "Year"),
-               yaxis = list (title = "Seat share in percentage"))
+      thistitle<-paste0('Party wise seatshare across years in ',sname)
+      xtitle<-''
+      ytitle<-'Seat share %'
+      yrange<-c(0,100)
+      # 
+      # base %>%
+      #   layout(title = paste0("Party wise seat shares across years in ",sname),
+      #          xaxis = list(title = "Year"),
+      #          yaxis = list (title = "Seat share in percentage"))
+      preparechartlayout(base,thistitle,xtitle,ytitle,yrange) 
     })
     ##enable all observers
     

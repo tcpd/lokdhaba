@@ -2,10 +2,10 @@ source("utils/utils-charts-ui.R")
 
 #################################Fixed:################################################################
 ########################################################################################################
-voteShareChart <- function(input, output, session, parentsession,statename_reactive,dname) {
+contestedDepositSavedChart <- function(input, output, session, parentsession,statename_reactive,dname) {
   ##################################### Values is a container to keep reactive values. These values are### 
   ##################use to trigger UI component renderings (like filters and chart area)##################
-  values<-reactiveValues(partynames=c(),statename="")
+  values<-reactiveValues(optionnames=c(),statename="")
   ##Variable to store the values used across functions
   current_filters<-c()
   #get the session id
@@ -15,10 +15,10 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
   dirname<-dname
   ns("dummy")
   
-  obs_partynames<-observe({
+  obs_optionnames<-observe({
     if(!is.null(input$filter_pname)){
       print(paste("observer_filter",input$filter_pname))
-      values$partynames<-input$filter_pname
+      values$optionnames<-input$filter_pname
       #current_filters$partynames<<-input$filter_pname
       }
     #print(paste("observer_filter",input$filter_pname))
@@ -30,11 +30,11 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
     if(!is.null(st) && trimws(st)!=""){
       st<-gsub(" ","_",st)
       print(dirname)
-      print(paste('Voteshare-stchange: statename is ',st))
-        b<-readVoteShareFile(st)
-        pivotdata<-dcast(b,year~party)
+      print(paste('Contested Depositsaved-stchange: statename is ',st))
+        b<-readCandidatesContestedDepositLostFile(st)
+        #pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
-        current_filters$base<<-plot_ly(pivotdata, x = ~year)
+        current_filters$base<<-plot_ly(b, x = ~year)
         #print(paste('before',values$statename))
         current_filters$sname<<-st
         values$statename<-st
@@ -50,13 +50,13 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
   #############to ensure that proper shutdown and startup takes place when a UI type (chart/map visualization) changes
   HideAll<-function(){
     ##disable all observers
-    obs_partynames$suspend()
+    obs_optionnames$suspend()
     obs_sname$suspend()
     ##hide all components (pname_filter in this case)
     #shinyjs::disable(ns("pname_filter"))
     shinyjs::hide(ns("filter_pname")) #may be this hiding not possible..check it later
     shinyjs::hide("distPlot")
-    print('Voteshar[]=e: Hidden all')
+    print('contested deposit saved: Hidden all')
   }
   ShowAll<-function(){
     ##show all components 
@@ -66,57 +66,59 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ae_filter_selection<-renderUI({
       sname<-values$statename
-      print(paste("Voteshare-fill filter: statename is ",sname))
+      print(paste("contested deposit saved -fill filter: statename is ",sname))
       #obs_partynames$suspend()
       if(is.null(sname) || trimws(sname)=="")
         return()
       #else from the csv file read in the information regarding this state in another dataframe
-      b<-readVoteShareFile(sname)
-      partynames<-unique(b$party)
+      optionnames<-c("total candidates","deposit saved")
       #stale_filters$partynames<<-current_filters$partynames
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
-      values$partynames<-c()
-      checkboxGroupInput(ns("filter_pname"), "Select voteshare for ",
-                         partynames)
+      values$optionnames<-c()
+      checkboxGroupInput(ns("filter_pname"), "Filter by ",
+                         optionnames)
       
     })
     
     #################Render plotly chart based on the name of the state and the selected party ###################################
     parentsession$output$distPlot <- renderPlotly({
-      selectedpartynames<-values$partynames
-      if(length(selectedpartynames)==0){
-        print('voteshare: returning')
+      selectedoptionnames<-values$optionnames
+      if(length(selectedoptionnames)==0){
+        print('contested deposit lost chart: returning')
         return()
       }
+      print('about to render')
       # if( length(stale_filters$partynames)!=0)
       # {
       #   stale_filters$partynames<<-c()
       #   print(paste('stale names','returning'))
       #   return()
       # }
-      print(paste('selected',selectedpartynames))
+      print(paste('selected',selectedoptionnames))
       #read base that was set when state name changed.
       base<-current_filters$base
       # #for each selected party in the input "filter_pname" id (checkbox) add a new trace
       # #corresponding to that party
-      lapply(selectedpartynames,function(x) {
+      lapply(selectedoptionnames,function(x) {
+        n<-gsub(" ","_",x)
         print(paste('adding',x));
-        base<<-add_trace(base,y=~get(x),name=x,mode='lines+markers',showlegend=TRUE)
+        
+        base<<-add_trace(base,y=~get(n),name=x, type ='bar')
         }
         )
       sname<-current_filters$sname
       sname<-gsub("_"," ",sname)
-      thistitle<-paste0('Party wise voteshare across years in ',sname)
+      thistitle<-paste0('Contested and deposit saved across years in ',sname)
       xtitle<-''
-      ytitle<-'Vote share %'
-      yrange<-c(0,100)
+      ytitle<-'Number of Candidates'
+      yrange<-c(0,5000)
       preparechartlayout(base,thistitle,xtitle,ytitle,yrange)      
     })
     ##enable all observers
-    obs_partynames$resume()
+    obs_optionnames$resume()
     obs_sname$resume()
     
-    print('Voteshare: Enabled all')
+    print('contested and deposit saved chart : Enabled all')
   }
   
   ##Return these two functions to callers

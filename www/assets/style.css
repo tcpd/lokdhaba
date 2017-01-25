@@ -51,10 +51,12 @@ body {
     padding-bottom: 45px;
     font-family: 'Droid Serif', serif;
     background: url("watermark.svg");
+    background-repeat: no-repeat;
 }
 
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
 }
+
 
 

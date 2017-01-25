@@ -3,10 +3,10 @@ library(rgdal)
 library(dplyr)
 #################################Fixed:################################################################
 ########################################################################################################
-winnerGenderMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
+winnerCasteMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
   ##################################### Values is a container to keep reactive values. These values are### 
   ##################use to trigger UI component renderings (like filters and chart area)##################
-  values=reactiveValues(snameset=1,yearselected="",gendernames=c())
+  values=reactiveValues(snameset=1,yearselected="",castenames=c())
   ##Variable to store the values used across functions
   current_filters=c()
   #get the session id
@@ -28,10 +28,10 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
   
   
   ######################Observer for Gender selection UI (checkbox)###################
-  obs_gendernames<-observe({
+  obs_castenames<-observe({
     if(!is.null(input$filter_gname)){
       print(paste("observer_filter",input$filter_gname))
-      values$gendernames<-input$filter_gname
+      values$castenames<-input$filter_gname
       }
   },suspended=TRUE)
   
@@ -42,7 +42,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     if(!is.null(st) && trimws(st)!=""){
         st<-gsub(" ","_",st)
       
-        print(paste('Winnermap gender-stchange: statename is ',st))
+        print(paste('Winnermap ac type-stchange: statename is ',st))
         #store the statename in the filter setting variable
         
         current_filters$sname<<-st
@@ -55,7 +55,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         #get the year of elections for this state from current drame set 
         years<-unique(current_filters$dframewinners$year)
         current_filters$yearlist<<-years
-        values$gendernames<-c()#for removing the rendered map
+        values$castenames<-c()#for removing the rendered map
         isolate({
           if(!is.null(input$I_year)){
                 shiny::updateSelectizeInput(parentsession,ns("I_year"),choices = c("Year"="",years),selected="")
@@ -77,7 +77,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     #shinyjs::hide(ns("filter_gname"))
     #before hiding plot we also want to clear it out.. so use reactive value change
     #values$yearselected<-"" #this will trigger change in filter
-    values$gendernames<-c() #this will trigger mapPlot render 
+    values$castenames<-c() #this will trigger mapPlot render 
     #I wanted to trigger the year selection reset when calling hide so that the next time show is called on this module
     #the year selection comes afresh. However this was not working. Need to be investigagted further. Because the current feature does
     #not look bad hence continuing without this. In the current setting, if the UI was selected earlier and an year was selected then that
@@ -90,20 +90,20 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     #   }
     # })
     ##disable all observers
-    obs_gendernames$suspend()
+    obs_castenames$suspend()
     obs_sname$suspend()
     obs_yearname$suspend()
     
     shinyjs::hide("mapPlot")
     
-    print('Winner gender map: Hidden all')
+    print('Winner caste map: Hidden all')
   }
   ShowAll<-function(){
     ##show all components 
     
     shinyjs::show("mapPlot")
     ##enable all observers
-    obs_gendernames$resume()
+    obs_castenames$resume()
     obs_yearname$resume()
     obs_sname$resume()
     ####setting up filter triggered on change in the state name##############################################
@@ -130,20 +130,20 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         winners<-addPopupInfo(winners)
         current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
-        #set the count of winning seats for each gender
+        #set the count of winning seats for each ac type
         tm<-winners
         #browser()
-        tm<-subset(tm,select=c("year","sex1"))
-        tm<-WinnerGenderMapLegendCount(tm)
+        tm<-subset(tm,select=c("year","ac_type"))
+        tm<-WinnerCasteMapLegendCount(tm)
         current_filters$countedframe<<-tm
         
-        #create checkbox group for genders and render it with yearinput (make sure that the year selection
+        #create checkbox group for ac types and render it with yearinput (make sure that the year selection
         #remains same). Will yearinput being reactive help here?
         values$partynames<-c()
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
-          checkboxGroupInput(ns("filter_gname"), "Select gender ",
-                             WinnerGenderMapLegendList())
+          checkboxGroupInput(ns("filter_gname"), "Select AC Type ",
+                             WinnerCasteMapLegendList())
         )
         
       }
@@ -151,9 +151,9 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     
     #################Render leaflet map based on the name of the state and the selected party ###################################
     parentsession$output$mapPlot <- renderLeaflet({
-      selectedgendersnames<-values$gendernames
-      if(length(selectedgendersnames)==0){
-        print('winnermap gender: returning')
+      selectedcastenames<-values$castenames
+      if(length(selectedcastenames)==0){
+        print('winner caste map: returning')
         return()
       }
       # if( length(stale_filters$partynames)!=0)
@@ -162,28 +162,28 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
       #   print(paste('stale names','returning'))
       #   return()
       # }
-      print(paste('selected',selectedgendersnames))
+      print(paste('selected',selectedcastenames))
       #read base leaflet that was set when year changed.
       base<-current_filters$leaflet
+      #create a colour plaette only for the partys selected in selectedcastenames variable
+      #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
       cols<-c()
-      lapply(selectedgendersnames,function(x){
-        cols<<-c(cols,WinnerGenderMapLegendColor(x))
+      lapply(selectedcastenames,function(x){
+          cols<<-c(cols,WinnerCasteMapLegendColor(x))
       })
       
-      #create a colour plaette only for the partys selected in selectedgendersnames variable
-      #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
-      pal<- leaflet::colorFactor(cols,levels=selectedgendersnames,na.color = "white")
+      pal<- leaflet::colorFactor(cols,levels=selectedcastenames,na.color = "white")
       
       counted<-current_filters$countedframe
       #addpolygon for coloured display and add legend
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.character(trimws((sex1)))), popup=~(popup)) %>%
-        addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedgendersnames),title="Party",
+                    fillColor = ~pal(as.character(trimws((ac_type)))), popup=~(popup)) %>%
+        addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedcastenames),title="AC Type",
                   labFormat = labelFormat(transform=function(x) {
                     lapply(x,function(y){
-                      counted$legend[(trimws(counted$sex1))==y]
+                      counted$legend[(trimws(counted$ac_type))==y]
                     });
                   })
         )
@@ -192,7 +192,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     })
     
     
-    print('Winner Gender map: Enabled all')
+    print('Winner ac type map: Enabled all')
   }
   
   ##Return these two functions to callers

@@ -3,14 +3,15 @@ library(rgdal)
 library(dplyr)
 #################################Fixed:################################################################
 ########################################################################################################
-winnerGenderMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
+voterTurnoutMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
   ##################################### Values is a container to keep reactive values. These values are### 
   ##################use to trigger UI component renderings (like filters and chart area)##################
-  values=reactiveValues(snameset=1,yearselected="",gendernames=c())
+  values=reactiveValues(snameset=1,yearselected="",percentage=c())
+  
   ##Variable to store the values used across functions
-  current_filters=c()
+  current_filters<-c()
   #get the session id
-  ns=session$ns
+  ns<-session$ns
   ns("dummy")
   
   ############Why should we have a dummy read of ns and session###
@@ -19,6 +20,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
   ## assam- gender map 2016 -> winner map 2011 -> gender map switch does not preserve the old year value that is 2016 but 
   ## switches to the year value for the last one i.e. winner map that is 2011. The reason being that ns remains same for both modules
   ## and hence both modules refer to the same year selection input ns("I_year")
+  
   #####################Observer for yearname selection UI##########################
   obs_yearname<-observe({
     if(!is.null(input$I_year)){
@@ -27,11 +29,11 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
   },suspended = TRUE)
   
   
-  ######################Observer for Gender selection UI (checkbox)###################
-  obs_gendernames<-observe({
-    if(!is.null(input$filter_gname)){
-      print(paste("observer_filter",input$filter_gname))
-      values$gendernames<-input$filter_gname
+  ######################Observer for percentage selection UI (checkbox)###################
+  obs_percentage<-observe({
+    if(!is.null(input$filter_pname)){
+      print(paste("observer_filter",input$filter_pname))
+      values$percentage<-input$filter_pname
       }
   },suspended=TRUE)
   
@@ -42,7 +44,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     if(!is.null(st) && trimws(st)!=""){
         st<-gsub(" ","_",st)
       
-        print(paste('Winnermap gender-stchange: statename is ',st))
+        print(paste('voter turnout map-stchange: statename is ',st))
         #store the statename in the filter setting variable
         
         current_filters$sname<<-st
@@ -55,29 +57,27 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         #get the year of elections for this state from current drame set 
         years<-unique(current_filters$dframewinners$year)
         current_filters$yearlist<<-years
-        values$gendernames<-c()#for removing the rendered map
+        values$percentage<-c()#for removing the rendered map
         isolate({
           if(!is.null(input$I_year)){
-                shiny::updateSelectizeInput(parentsession,ns("I_year"),choices = c("Year"="",years),selected="")
-              }
+            shiny::updateSelectizeInput(parentsession,ns("I_year"),choices = c("Year"="",years),selected="")
+          }
           else{
             values$snameset<-(values$snameset+1)%%2
-            }
-          })
+          }
+        })
+        
+        
     }
   },suspended=TRUE)
+  
   
   
   #######################################Fixed part: ##########################################################################
   #############Every component must provide two functions. HideAll and showAll. These functions will be called by the main dashobard
   #############to ensure that proper shutdown and startup takes place when a UI type (chart/map visualization) changes
   HideAll<-function(){
-    ##hide all components (pname_filter in this case)
-    #shinyjs::disable(ns("pname_filter"))
-    #shinyjs::hide(ns("filter_gname"))
-    #before hiding plot we also want to clear it out.. so use reactive value change
-    #values$yearselected<-"" #this will trigger change in filter
-    values$gendernames<-c() #this will trigger mapPlot render 
+    values$percentage<-c() #this will trigger mapPlot render 
     #I wanted to trigger the year selection reset when calling hide so that the next time show is called on this module
     #the year selection comes afresh. However this was not working. Need to be investigagted further. Because the current feature does
     #not look bad hence continuing without this. In the current setting, if the UI was selected earlier and an year was selected then that
@@ -90,22 +90,25 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     #   }
     # })
     ##disable all observers
-    obs_gendernames$suspend()
+    obs_percentage$suspend()
     obs_sname$suspend()
     obs_yearname$suspend()
-    
+    ##hide all components (pname_filter in this case)
+    #shinyjs::disable(ns("pname_filter"))
+    #shinyjs::hide(ns("filter_pname"))
+    #before hiding plot we also want to clear it out.. so use reactive value change
     shinyjs::hide("mapPlot")
-    
-    print('Winner gender map: Hidden all')
+    print('voter turnout map: Hidden all')
   }
   ShowAll<-function(){
     ##show all components 
     
     shinyjs::show("mapPlot")
     ##enable all observers
-    obs_gendernames$resume()
-    obs_yearname$resume()
+    obs_percentage$resume()
     obs_sname$resume()
+    obs_yearname$resume()
+    
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ae_filter_selection<-renderUI({
       #Trigger this rendering when a) values$snameset changes or valeus$yearselected changes
@@ -113,8 +116,9 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         return()
       }
       years<-current_filters$yearlist
+      
       #create year selection box, also set it to the currently set value
-      if(values$yearselected=="" ){
+      if(values$yearselected==""){
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
@@ -130,30 +134,29 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         winners<-addPopupInfo(winners)
         current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
-        #set the count of winning seats for each gender
+        #set the count of winning seats for each victory margin
         tm<-winners
-        #browser()
-        tm<-subset(tm,select=c("year","sex1"))
-        tm<-WinnerGenderMapLegendCount(tm)
+        tm<-subset(tm,select=c("year","turnout"))
+        tm<-VoterTurnoutMapLegendCount(tm)
         current_filters$countedframe<<-tm
         
         #create checkbox group for genders and render it with yearinput (make sure that the year selection
         #remains same). Will yearinput being reactive help here?
-        values$partynames<-c()
+        values$percentage<-c()
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
-          checkboxGroupInput(ns("filter_gname"), "Select gender ",
-                             WinnerGenderMapLegendList())
+          checkboxGroupInput(ns("filter_pname"), "Select Voter turnout ",
+                             VoterTurnoutMapLegendList())
         )
         
       }
     })
     
-    #################Render leaflet map based on the name of the state and the selected party ###################################
+    #################Render leaflet map based on the name of the state year and the selected percentage ###################################
     parentsession$output$mapPlot <- renderLeaflet({
-      selectedgendersnames<-values$gendernames
-      if(length(selectedgendersnames)==0){
-        print('winnermap gender: returning')
+      selectedpercentage<-values$percentage
+      if(length(selectedpercentage)==0){
+        print('Voter turnout : returning')
         return()
       }
       # if( length(stale_filters$partynames)!=0)
@@ -162,37 +165,39 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
       #   print(paste('stale names','returning'))
       #   return()
       # }
-      print(paste('selected',selectedgendersnames))
+      print(paste('selected',selectedpercentage))
       #read base leaflet that was set when year changed.
       base<-current_filters$leaflet
-      cols<-c()
-      lapply(selectedgendersnames,function(x){
-        cols<<-c(cols,WinnerGenderMapLegendColor(x))
-      })
-      
-      #create a colour plaette only for the partys selected in selectedgendersnames variable
+      #create a colour plaette only for the marrgins selected in selectedpercentage variable
       #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
-      pal<- leaflet::colorFactor(cols,levels=selectedgendersnames,na.color = "white")
-      
+      cols<-c()
+      optionslist<-VoterTurnoutMapLegendList()
+      lapply(optionslist,function(x){
+        if(x %in% selectedpercentage){
+          cols<<-c(cols,VoterTurnoutMapLegendColor(x))
+        }else{
+          cols<<-c(cols,"white")
+        }
+      })
+      pal<-leaflet::colorBin(cols,bins=VoterTurnoutMapBreakupList(),na.color="white")
+      #coords<-current_filters$coords
+      #From the colors of legend remove white they are the colors/options not selected in the checkbox 
+      legendcolors<-setdiff(cols,c("white"))
       counted<-current_filters$countedframe
+      legendvalues<- lapply(selectedpercentage,function(y){
+        counted$legend[(trimws(counted$tmp))==y]
+      });
+      
       #addpolygon for coloured display and add legend
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.character(trimws((sex1)))), popup=~(popup)) %>%
-        addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedgendersnames),title="Party",
-                  labFormat = labelFormat(transform=function(x) {
-                    lapply(x,function(y){
-                      counted$legend[(trimws(counted$sex1))==y]
-                    });
-                  })
+                    fillColor = ~pal(as.numeric(((turnout)))), popup=~(popup)) %>%
+        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
         )
       
-      
     })
-    
-    
-    print('Winner Gender map: Enabled all')
+    print('voter turnout: Enabled all')
   }
   
   ##Return these two functions to callers

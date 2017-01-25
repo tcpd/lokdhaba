@@ -5,14 +5,14 @@
 # http://shiny.rstudio.com
 #
 
-library(shiny)
-library(shinyjs)
-library(plotly)
-library(shinythemes)
-library(leaflet)
+# library(shiny)
+# library(shinyjs)
+# library(plotly)
+ #library(shinythemes)
+# library(leaflet)
 options(shiny.sanitize.errors = FALSE)
 
-shinyUI(fluidPage(theme=shinytheme("darkly"),
+shinyUI(fluidPage(
                   useShinyjs(),
                   #includeCSS("style.css"),
                   

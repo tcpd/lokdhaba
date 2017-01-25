@@ -1,0 +1,15 @@
+TODO-
+
+1. chart's title same as in previous version
+2. map's title same as in previous version
+3. map's colors same as in previous version (for heatmap)
+4. for parties make colors read fromr a settings csv file
+
+
+droplet-- digital ocean
+
+<text style="font-size: 20px;">Party wise voteshare</text>
+<text style="font-size: 16px; font-style: italic; color: rgb(102, 102, 102);" transform="translate(194.6093750)"> Andhra Pradesh </text>
+</hr>
+<text style="font-size: 12px; color: rgb(51, 51, 51);">Source: Adapted from ECI Data</text>
+<text  x="350" y="80" text-anchor="middle" style="font-size: 12px;">Trivedi Centre for Political Data, Ashoka University</text>
