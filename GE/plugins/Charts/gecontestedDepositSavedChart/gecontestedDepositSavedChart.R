@@ -115,7 +115,7 @@ gecontestedDepositSavedChart <- function(input, output, session, parentsession,d
       thistitle<-paste0('Contested and deposit saved across years in General Elections')
       xtitle<-''
       ytitle<-'Number of Candidates'
-      yrange<-c(0,5000)
+      yrange<-c(0,20000)
       preparechartlayout(base,thistitle,xtitle,ytitle,yrange)      
     })
     ##enable all observers

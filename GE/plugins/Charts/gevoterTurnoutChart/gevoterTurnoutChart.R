@@ -66,7 +66,7 @@ gevoterTurnoutChart <- function(input, output, session, parentsession,dname) {
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ge_filter_selection<-renderUI({
       #else from the csv file read in the information regarding this state in another dataframe
-      b<-readVoterTurnoutFile(st)
+      b<-readVoterTurnoutFile("ge")
       #pivotdata<-dcast(b,year~party)
       #create a base line chart with year as the x-axis
       current_filters$base<<-plot_ly(b, x = ~year)
@@ -103,8 +103,7 @@ gevoterTurnoutChart <- function(input, output, session, parentsession,dname) {
         base<<-add_trace(base,y=~get(x),name=x,mode='lines+markers',showlegend=TRUE)
         }
         )
-      sname<-current_filters$sname
-      sname<-gsub("_"," ",sname)
+      
       thistitle<-paste0('Voter turnout across years in General Elections')
       xtitle<-''
       ytitle<-'Turnout in %'
@@ -115,7 +114,7 @@ gevoterTurnoutChart <- function(input, output, session, parentsession,dname) {
     obs_gendernames$resume()
     # obs_sname$resume()
     
-    print('Voter turnout chart : Enabled all')
+    print('ge Voter turnout chart : Enabled all')
   }
   
   ##Return these two functions to callers

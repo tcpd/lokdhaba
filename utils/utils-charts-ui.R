@@ -68,19 +68,33 @@ readSeatShareFile<-function(statename){
 
 #read ae_voter_turnouts.csv
 readVoterTurnoutFile<-function(statename){
-  filename<-paste0("datadir/AE/ae_voter_turnouts.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename) %>% filter(state==statename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/ge_voter_turnouts.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }else{
+    filename<-paste0("datadir/AE/ae_voter_turnouts.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename) %>% filter(state==statename)
+    return(m)
+  }
 }
 
 ##read ae_parties_contested.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_parties_contested.csv
 
 readPartiesContestedRepresentedFile<-function(statename){
-  filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_parties_contests.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_parties_contests.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }else{
+    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_parties_contests.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }
 }
 
 
@@ -88,8 +102,15 @@ readPartiesContestedRepresentedFile<-function(statename){
 ##read ae_contested_deposit_losts.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_contested_deposit_losts.csv
 
 readCandidatesContestedDepositLostFile<-function(statename){
-  filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_contested_deposit_losts.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_contested_deposit_losts.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }else{
+    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_contested_deposit_losts.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }
 }

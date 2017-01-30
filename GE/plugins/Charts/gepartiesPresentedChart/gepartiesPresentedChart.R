@@ -111,7 +111,7 @@ gepartiesPresentedChart <- function(input, output, session, parentsession,dname)
       thistitle<-paste0('Parties contested and represented across years in General Elections')
       xtitle<-''
       ytitle<-'Number of Candidates'
-      yrange<-c(0,100)
+      yrange<-c(0,600)
       preparechartlayout(base,thistitle,xtitle,ytitle,yrange)      
     })
     ##enable all observers
