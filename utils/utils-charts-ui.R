@@ -6,7 +6,7 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
     layout(title = title, xanchor="center",
          font=list(family= 'Droid Serif, serif',size=16,color=rgb(.2,.2,.2)),
          xaxis = list(title=xtitle,
-           tickangle=45, type="category",titlefont=list(
+           tickangle=45, type="category",categoryorder="category ascending",titlefont=list(
              family='Droid Serif, serif',
              size=16
            ),zeroline=T,showline=T),
@@ -37,19 +37,33 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
 #read ae_voteshares.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_voteshares.csv
 
 readVoteShareFile<-function(statename){
-  filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_voteshares.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }else{
+    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }
 }
 
 #read ae_seatshares.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_seatshares.csv
 
 readSeatShareFile<-function(statename){
-  filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_seatshares.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_seatshares.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }else{
+    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_seatshares.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }
 }
 
 #read ae_voter_turnouts.csv
