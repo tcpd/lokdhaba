@@ -1,39 +1,66 @@
-
+#right now no selection of shape file based on year.. but later we need to do it appropriately
 readShapeFile<- function(sname, year){
-  dname<-paste0("datadir/AE/Maps/Delim4/",sname)
-  lname<-paste0(sname,"_Assembly_con")
-  print(dname)
-  print(lname)
-  shape<-readOGR(dsn=dname,layer=lname)
-  return(shape)
+  if(sname=="ge"){
+    dname<-paste0("datadir/GE/Maps/Delim4/")
+    lname<-paste0("LOKSABHA_15_Modified")
+    shape<-readOGR(dsn=dname,layer=lname)
+    return(shape)  
+  }else{
+    dname<-paste0("datadir/AE/Maps/Delim4/",sname)
+    lname<-paste0(sname,"_Assembly_con")
+    shape<-readOGR(dsn=dname,layer=lname)
+    return(shape)
+  }
 }
 
 
-addPopupInfo<- function(winnersframe){
+
+addPopupInfo<- function(winnersframe,type="state"){
   cand<-paste0("<b>Candidate:</b> ", winnersframe$cand1)
-  assembly<-paste0("<b>Constituency :</b> ", winnersframe$ASSEMBLY_1)
   marginp<-paste0("<b>Margin Percentage :</b> ", paste0(winnersframe$margin_percent,"%"))
-  winnersframe$popup<-paste(cand,assembly,marginp,sep="<br>")
+  numcand<-paste0("<b>Total Candidates :</b> ", paste0(winnersframe$n_cand))
+  party<-paste0("<b>Party :</b> ", paste0(winnersframe$party1))
+  
+  if(type=="state"){
+    assembly<-paste0("<b>Constituency :</b> ", winnersframe$ASSEMBLY_1)
+  }else{
+    assembly<-paste0("<b>Constituency :</b> ", winnersframe$pc_name)
+  }
+  winnersframe$popup<-paste(cand,assembly,party,numcand,marginp,sep="<br>")
   return(winnersframe)
 }
 
 #read ae_maps.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_maps.csv
 
 readStateWinnersFile<- function(statename){
-  filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_maps.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m) 
+  }else{
+    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }
 }
 
 
 #read ae_partys.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_maps.csv
 
 readPartyPositionsFile<- function(statename){
-  filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_partys.csv")
-  print(paste0('reading from ',filename))
-  m<-read.csv(filename)
-  return(m)
+  if(statename=="ge"){
+    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_partys.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }else{
+    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_partys.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    return(m)
+  }
 }
 ############################################VoteShareMap######################################################3
 voteShareMapLegendList<- function(){
@@ -165,7 +192,7 @@ NumCandidatesMapLegendList <- function(){return (c("<5","5-15",">15"))}
 
 
 NumCandidatesMapBreakupList<- function(){
-  return(c(0,5,15,100))
+  return(c(0,5,15,1000))
 }
 
 NumCandidatesMapLegendCount<- function(dframe){

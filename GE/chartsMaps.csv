@@ -4,4 +4,7 @@ Party wise seat share,Chart,geseatShareChart.R,geseatShareChart
 Voter Turnout Timeline,Chart,gevoterTurnoutChart.R,gevoterTurnoutChart
 Candidates who saved their deposits,Chart,gecontestedDepositSavedChart.R,gecontestedDepositSavedChart
 Parties contested and represented,Chart,gepartiesPresentedChart.R,gepartiesPresentedChart
+Nota Turnout,Map,genotaTurnoutMap.R,genotaTurnoutMap
+Constituency wise party winners,Map,gewinnerMap.R,gewinnerMap
+Number of candidates,Map,genumCandidatesMap.R,genumCandidatesMap
 

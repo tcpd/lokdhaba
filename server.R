@@ -21,6 +21,21 @@ shinyServer(function(input, output, session) {
   #1. render GE specific ui components, ge_uitype_selection, and ge_filter_selection(it's children will do that)
   #2. During this process it will also callmodule for each UI component.  
   
+  observe({
+    if(input$electionType=="GE"){
+      print("GE selected")
+      #clean AE slate
+      updateSelectizeInput(session,"ge_I_chart_map_name",selected="")
+      
+    }else{
+      print("AE selected")
+      #clean GE slate
+      
+      updateSelectizeInput(session,"ae_I_chart_map_name",selected="")
+      
+    }
+  })
+  
 })
   
 

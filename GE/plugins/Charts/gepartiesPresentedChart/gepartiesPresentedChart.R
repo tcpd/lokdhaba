@@ -5,7 +5,7 @@ source("utils/utils-charts-ui.R")
 gepartiesPresentedChart <- function(input, output, session, parentsession,dname) {
   ##################################### Values is a container to keep reactive values. These values are### 
   ##################use to trigger UI component renderings (like filters and chart area)##################
-  values<-reactiveValues(optionnames=c())
+  values<-reactiveValues(optionnames=c(),filterreset=T)
   ##Variable to store the values used across functions
   current_filters<-c()
   #get the session id
@@ -49,6 +49,8 @@ gepartiesPresentedChart <- function(input, output, session, parentsession,dname)
   #############Every component must provide two functions. HideAll and showAll. These functions will be called by the main dashobard
   #############to ensure that proper shutdown and startup takes place when a UI type (chart/map visualization) changes
   HideAll<-function(){
+    values$optionnames<-c()
+    values$filterreset<-T
     ##disable all observers
     obs_optionnames$suspend()
     # obs_sname$suspend()
@@ -62,10 +64,14 @@ gepartiesPresentedChart <- function(input, output, session, parentsession,dname)
     ##show all components 
     
     shinyjs::show("distPlot")
-    
+    values$filterreset<-F
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ge_filter_selection<-renderUI({
-      #else from the csv file read in the information regarding this state in another dataframe
+      if(values$filterreset==T){
+        return()
+      }
+      
+            #else from the csv file read in the information regarding this state in another dataframe
       b<-readPartiesContestedRepresentedFile("ge")
       #pivotdata<-dcast(b,year~party)
       #create a base line chart with year as the x-axis

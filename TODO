@@ -5,7 +5,8 @@ TODO-
 3. map's colors same as in previous version (for heatmap)
 4. for parties make colors read fromr a settings csv file
 
-
+1. Why StateNormalized.csv is not being used?
+2. 
 droplet-- digital ocean
 
 <text style="font-size: 20px;">Party wise voteshare</text>
