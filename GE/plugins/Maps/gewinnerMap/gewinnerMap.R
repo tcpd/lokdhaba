@@ -160,7 +160,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_pname"), "Select parties ",
-                             partys)
+                             partys,selected=partys)
         )
         
       }
