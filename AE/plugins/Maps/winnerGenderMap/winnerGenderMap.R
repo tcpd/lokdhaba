@@ -178,8 +178,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
       
       counted<-current_filters$countedframe
       #addpolygon for coloured display and add legend
-        st<-gsub(" ","_",st)
-	title<-paste0("Gender wise winners for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
+  title<-paste0("Gender wise winners for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
       current_filters$finalmap<<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
