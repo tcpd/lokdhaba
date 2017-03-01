@@ -1,12 +1,12 @@
 #right now no selection of shape file based on year.. but later we need to do it appropriately
 readShapeFile<- function(sname, year){
   if(sname=="ge"){
-    dname<-paste0("datadir/GE/Maps/Delim4/")
+    dname<-paste0("../tcpd_data/data/GE/Maps/Delim4/")
     lname<-paste0("LOKSABHA_15_Modified")
     shape<-readOGR(dsn=dname,layer=lname)
     return(shape)  
   }else{
-    dname<-paste0("datadir/AE/Maps/Delim4/",sname)
+    dname<-paste0("../tcpd_data/data/AE/Maps/Delim4/",sname)
     lname<-paste0(sname,"_Assembly_con")
     shape<-readOGR(dsn=dname,layer=lname)
     return(shape)
@@ -30,16 +30,22 @@ addPopupInfo<- function(winnersframe,type="state"){
   return(winnersframe)
 }
 
+addTitleLeaflet<-function(map,titlemessage){
+ addControl(map,html=paste0(titlemessage,"<br>",
+                                    "<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
+                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle",position="topleft")
+
+}
 #read ae_maps.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_maps.csv
 
 readStateWinnersFile<- function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_maps.csv")
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m) 
   }else{
-    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
@@ -51,12 +57,12 @@ readStateWinnersFile<- function(statename){
 
 readPartyPositionsFile<- function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_partys.csv")
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_partys.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
   }else{
-    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_partys.csv")
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_partys.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
