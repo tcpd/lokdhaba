@@ -1,6 +1,7 @@
 source("utils/utils-lokdhaba.R")
 library(rgdal)
 library(dplyr)
+library(mapview)
 #################################Fixed:################################################################
 ########################################################################################################
 winnerGenderMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
@@ -118,6 +119,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
+	current_filters$year<<-yr
         print(paste0('year change detected',yr))
         shape<-readShapeFile(current_filters$sname, yr)
         #get winners name from winners dataframe stored for this state for the given year
@@ -176,7 +178,8 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
       
       counted<-current_filters$countedframe
       #addpolygon for coloured display and add legend
-      base %>% 
+  title<-paste0("Gender wise winners for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
+      current_filters$finalmap<<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.character(trimws((sex1)))), popup=~(popup)) %>%
@@ -186,12 +189,24 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
                       counted$legend[(trimws(counted$sex1))==y]
                     });
                   })
-        )
-      
-      
+        )%>%
+	addTitleLeaflet(title)%>%
+	addControl(html=downloadLink(ns("prnt"), "Save"),position="topleft")
+	#addControl(html="<a id=\"winnerGenderMap-prnt\" class=\"shiny-download-link\" href=\"\" target=\"_blank\" download>Download</a>",position="topleft")
+	current_filters$finalmap
+          
     })
     
-    
+output$prnt <- downloadHandler(
+  filename="GenderWinners.png",
+  content = function(con) {
+	if(!is.null(current_filters$finalmap)){
+	mapshot(current_filters$finalmap,con)
+	}
+  }
+)
+
+
     print('Winner Gender map: Enabled all')
   }
   
