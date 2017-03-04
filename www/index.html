@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.22.0/polyfill.min.js"></script>
 <link href="shared/shiny.css" rel="stylesheet" />
 <script src="shared/shiny.min.js"></script>
+<script src="https://use.fontawesome.com/1e3e72b187.js"></script>
 <script src="assets/htmlwidgets-0.8/htmlwidgets.js"></script>
 <link href="assets/plotlyjs-1.20.2/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="assets/plotlyjs-1.20.2/plotly-latest.min.js"></script>
@@ -16,11 +17,18 @@
 <script src="assets/leaflet-0.7.3/leaflet.js"></script>
 <link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
 <script src="assets/leaflet-binding-1.0.1/leaflet.js"></script>
+<script src="assets/d3-3.5.5/d3.min.js"></script>
+<script src="assets/d3-legend-1.6.0/d3-legend.min.js"></script>
+<script src="assets/radarChart-0.1/radarChart.js"></script>
+<script src="assets/d3radar-binding-0.1/d3radar.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>  
+<script src="assets/AdminLTE-2.0.6/AdminLTE.min.css"></script>
+<script src="assets/AdminLTE-2.0.6/_all-skins.min.css"></script>
+<script src="assets/AdminLTE-2.0.6/app.min.js"></script>
 <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 
@@ -107,6 +115,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
       <div class="col-sm-8">
         <div id="distPlot" style="width:100%; height:400px; " class="plotly html-widget html-widget-output"></div>
         <div id="mapPlot" style="width:100%; height:400px; " class="leaflet html-widget html-widget-output"></div>
+        <div id="radarPlot" style="width:100%; height:400px; " class="d3radar html-widget html-widget-output"></div>
       </div>
     </div>
   </div>

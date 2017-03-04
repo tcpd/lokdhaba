@@ -11,6 +11,7 @@
  #library(shinythemes)
  library(shinydashboard)
  library(leaflet)
+ library(d3radarR)
  source("utils/utils-ui.R")
 options(shiny.sanitize.errors = FALSE)
 
@@ -32,7 +33,9 @@ shinyUI(navbarPage(title=div(img(src="myassets/logo.png")),windowTitle = "LokDha
                                             ),
                                           dashboardBody(
                                                    plotlyOutput("distPlot",height = 600),
-                                                   leafletOutput("mapPlot",height = 600)
+                                                   leafletOutput("mapPlot",height = 600),
+                                                   d3radarOutput("radarPlot",height = 600)
+                                                   
                                             )
                                           ),
                             value="EDV"),

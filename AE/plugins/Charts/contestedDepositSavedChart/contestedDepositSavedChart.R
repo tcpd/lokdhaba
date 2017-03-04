@@ -55,13 +55,13 @@ contestedDepositSavedChart <- function(input, output, session, parentsession,sta
     ##hide all components (pname_filter in this case)
     #shinyjs::disable(ns("pname_filter"))
     shinyjs::hide(ns("filter_pname")) #may be this hiding not possible..check it later
-    shinyjs::hide("distPlot")
+    shinyjs::hide("radarPlot")
     print('contested deposit saved: Hidden all')
   }
   ShowAll<-function(){
     ##show all components 
     
-    shinyjs::show("distPlot")
+    shinyjs::show("radarPlot")
     
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ae_filter_selection<-renderUI({
@@ -81,13 +81,53 @@ contestedDepositSavedChart <- function(input, output, session, parentsession,sta
     })
     
     #################Render plotly chart based on the name of the state and the selected party ###################################
-    parentsession$output$distPlot <- renderPlotly({
+    parentsession$output$radarPlot <- renderPlotly({
       selectedoptionnames<-values$optionnames
       if(length(selectedoptionnames)==0){
         print('contested deposit lost chart: returning')
         return()
       }
       print('about to render')
+      #############################3
+      
+      espn_efficiency <- list(
+        list(
+          key = "Alabama",
+          values = list(
+            list(axis = "offense", value = 70.9/100),
+            list(axis = "defense", value = 92.9/100),
+            list(axis = "specialtms", value = 58.3/100)
+          )
+        ),
+        list(
+          key = "Oklahoma",
+          values = list(
+            list(axis = "offense", value = 83.3/100),
+            list(axis = "defense", value = 83.1/100),
+            list(axis = "specialtms", value =42.6/100)
+          )
+        ),
+        list(
+          key = "Clemson",
+          values = list(
+            list(axis = "offense", value = 81.3/100),
+            list(axis = "defense", value = 87.1/100),
+            list(axis = "specialtms", value = 32.4/100)
+          )
+        ),
+        list(
+          key = "Michigan State",
+          values = list(
+            list(axis = "offense", value = 70.5/100),
+            list(axis = "defense", value = 73.2/100),
+            list(axis = "specialtms", value = 39.0/100)
+          )
+        )  
+      )
+      
+      return(d3radar( espn_efficiency ))
+      
+      ################################
       # if( length(stale_filters$partynames)!=0)
       # {
       #   stale_filters$partynames<<-c()
