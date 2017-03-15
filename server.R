@@ -8,6 +8,8 @@ source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 
 shinyServer(function(input, output, session) {
+
+   
   addResourcePath("myassets", "www/assets")
 ###Call aeOptionsInput.R's function
   #pass input, output and session. That function will
@@ -23,17 +25,20 @@ shinyServer(function(input, output, session) {
   
   observe({
     if(input$electionType=="GE"){
-      print("GE selected")
+      #browser()
       #clean AE slate
       updateSelectizeInput(session,"ge_I_chart_map_name",selected="")
       
     }else{
-      print("AE selected")
       #clean GE slate
-      
+      #browser()
       updateSelectizeInput(session,"ae_I_chart_map_name",selected="")
       
     }
+  })
+  output$UPSummary<-renderUI({
+    ##Render the summary report of UP election written in rmd file format.
+    includeHTML("www/Reports/Gilles/UP-2017/Report.html")
   })
   
 })
