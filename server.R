@@ -40,6 +40,11 @@ shinyServer(function(input, output, session) {
     ##Render the summary report of UP election written in rmd file format.
     includeHTML("www/Reports/Gilles/UP-2017/Report.html")
   })
+
+  output$PBSummary<-renderUI({
+    ##Render the summary report of UP election written in rmd file format.
+    includeHTML("www/Reports/Gilles/Punjab-2017/Report.html")
+  })
   
 })
   
