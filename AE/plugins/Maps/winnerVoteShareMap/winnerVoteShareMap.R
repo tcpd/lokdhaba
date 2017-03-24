@@ -131,7 +131,8 @@ winnerVoteShareMap <- function(input, output, session, parentsession,statename_r
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else if(values$yearselected!=""){
         yr<-values$yearselected
-        if(values$partyselected==""){
+            current_filters$year<<-yr
+    if(values$partyselected==""){
           ###we have to get parties present for this year and create a party selection drop box for them
           shape<-readShapeFile(current_filters$sname, yr)
           current_filters$coords<<-coordinates(shape)
@@ -154,6 +155,7 @@ winnerVoteShareMap <- function(input, output, session, parentsession,statename_r
           )  
         }else{
         party<-values$partyselected
+current_filters$party<<-party
         print('populating further')
         ##IMP: for every row where party1 is different from party (selected) set voteshare as na
         winners<-current_filters$mergedframe
@@ -174,7 +176,7 @@ winnerVoteShareMap <- function(input, output, session, parentsession,statename_r
           selectInput(ns("I_year"),"Select Year",c("Year"="",years),selected=yr,selectize = TRUE),
           selectInput(ns("I_party"),"Select Party",c("Party"="",as.list(current_filters$partys)),selected=party,selectize = TRUE),
           checkboxGroupInput(ns("filter_input"), "Select voteshare percentage ",
-                             voteShareMapLegendList())
+                             voteShareMapLegendList(),selected=voteShareMapLegendList())
         )
         }
       }
@@ -214,13 +216,16 @@ winnerVoteShareMap <- function(input, output, session, parentsession,statename_r
       });
       print(legendvalues)
       #addpolygon for coloured display and add legend
+      title<-paste0("Winners' vote share for ",current_filters$party," in ",gsub("_"," ",current_filters$sname),"-",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.numeric(vote_percent)), popup=~(popup)) %>%
         #addLegend("topright",pal=pal, values=(selectedfilters),opacity=1,title="Percentage vote share of winners")
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
-                  )
+                  )%>%
+        addTitleLeaflet(title)
     })
     
     print('Winner vote shares map: Enabled all')

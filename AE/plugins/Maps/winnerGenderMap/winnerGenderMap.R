@@ -1,7 +1,6 @@
 source("utils/utils-lokdhaba.R")
 library(rgdal)
 library(dplyr)
-library(mapview)
 #################################Fixed:################################################################
 ########################################################################################################
 winnerGenderMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
@@ -107,6 +106,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
     obs_gendernames$resume()
     obs_yearname$resume()
     obs_sname$resume()
+
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ae_filter_selection<-renderUI({
       #Trigger this rendering when a) values$snameset changes or valeus$yearselected changes
@@ -145,7 +145,7 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_gname"), "Select gender ",
-                             WinnerGenderMapLegendList())
+                             WinnerGenderMapLegendList(),selected=WinnerGenderMapLegendList())
         )
         
       }
@@ -190,22 +190,12 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
                     });
                   })
         )%>%
-	addTitleLeaflet(title)%>%
-	addControl(html=downloadLink(ns("prnt"), "Save"),position="topleft")
+	addTitleLeaflet(title)
 	#addControl(html="<a id=\"winnerGenderMap-prnt\" class=\"shiny-download-link\" href=\"\" target=\"_blank\" download>Download</a>",position="topleft")
 	current_filters$finalmap
           
     })
     
-output$prnt <- downloadHandler(
-  filename="GenderWinners.png",
-  content = function(con) {
-	if(!is.null(current_filters$finalmap)){
-	mapshot(current_filters$finalmap,con)
-	}
-  }
-)
-
 
     print('Winner Gender map: Enabled all')
   }

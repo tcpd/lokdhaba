@@ -132,6 +132,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
+	current_filters$year<<-yr
         print(paste0('year change detected',yr))
         shape<-readShapeFile("ge", yr)
         #get winners name from winners dataframe stored for this state for the given year
@@ -151,6 +152,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
         tm$count<-1
         tm<-aggregate(count~year+party1,tm,function(x) length(x))
         tm$legend<-paste0(tm$party1,"(",tm$count,")")
+	tm<-arrange(tm,desc(count))
         tm$count<-NULL
         current_filters$countedframe<<-tm
         
@@ -187,18 +189,20 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
       pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
       
       counted<-current_filters$countedframe
+      sset<-subset(counted,counted$party1 %in% selectedpartynames)
+      sset$color<-pal(as.character(sset$party1))
+    
       #addpolygon for coloured display and add legend
+      title<-paste0("Constituency wise Party winners for General Elections in ",current_filters$year)
+
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.character(party1)), popup=~(popup)) %>%
-        addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedpartynames),title="Party",
-                  labFormat = labelFormat(transform=function(x) {
-                    lapply(x,function(y){
-                      counted$legend[counted$party1==y]
-                    });
-                  })
-        )
+        addLegend("topright",color=sset$color, opacity= 1, labels=sset$legend,title="Party",
+        )%>% 
+        addTitleLeaflet(title)
       
       
     })  

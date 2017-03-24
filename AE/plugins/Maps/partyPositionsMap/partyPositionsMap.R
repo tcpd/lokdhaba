@@ -55,7 +55,8 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
         current_filters$sname<<-st
         #read ae_maps.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_maps.csv
         #and store the dataframe in the filter setting variable
-        m<-readStateWinnersFile(st)
+	m<-readPartyPositionsFile(st)
+        #m<-readStateWinnersFileAll(st)
         
         #store it in the filter setting variable
         current_filters$dframewinners<<-m
@@ -131,22 +132,14 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else if(values$yearselected!=""){
         yr<-values$yearselected
+         current_filters$year<<-yr
         if(values$partyselected==""){
           ###we have to get parties present for this year and create a party selection drop box for them
-          shape<-readShapeFile(current_filters$sname, yr)
-          current_filters$coords<<-coordinates(shape)
           #get winners name from winners dataframe stored for this state for the given year
           winners<-current_filters$dframewinners %>% filter(year==yr)
           partys<-unique(winners$party1)
           current_filters$partys<<-partys
-          #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
-          #for creating a new leaflet map. Set this leaflet map in the current setting variable
-          winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
-          assertthat::are_equal(nrow(shape),nrow(winners))
-          winners<-addPopupInfo(winners)
-          #store merged frame in the current setting
-          current_filters$mergedframe<<-winners
-          print('setting the party names')
+         print('setting the party names')
           print(partys)
           tagList(
             selectInput(ns("I_year"),"Select Year",c("Year"="",years),yr,selectize = TRUE),
@@ -154,10 +147,21 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
           )  
         }else{
         party<-values$partyselected
+	current_filters$party<<-party
         print('populating further')
         ##IMP: for every row where party1 is different from party (selected) set position as na
-        winners<-current_filters$mergedframe
-        winners$position[winners$party1!=party]<-NA
+          #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
+          #for creating a new leaflet map. Set this leaflet map in the current setting variable
+          winners<-current_filters$dframewinners %>% filter(year==yr) %>% filter(party1==party)
+          shape<-readShapeFile(current_filters$sname, yr)
+          current_filters$coords<<-coordinates(shape)
+          winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"),)
+          #assertthat::are_equal(nrow(shape),nrow(winners))
+          winners<-addPopupInfopartys(winners)
+          #store merged frame in the current setting
+          current_filters$mergedframe<<-winners
+         #winners<-current_filters$mergedframe %>% filter(party1==party)
+        #winners$position[winners$party1!=party]<-NA
         current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
         #set the count of  seats for each option
@@ -174,7 +178,7 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
           selectInput(ns("I_year"),"Select Year",c("Year"="",years),selected=yr,selectize = TRUE),
           selectInput(ns("I_party"),"Select Party",c("Party"="",as.list(current_filters$partys)),selected=party,selectize = TRUE),
           checkboxGroupInput(ns("filter_input"), "Select Party Positions ",
-                             PartyPositionsMapLegendList())
+                             PartyPositionsMapLegendList(),selected=PartyPositionsMapLegendList())
         )
         }
       }
@@ -188,6 +192,7 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
         print('party positions map: returning')
         return()
       }
+#cat(file=stderr(), selectedfilters, "\n")
       print(paste('selected',selectedfilters))
       #read base leaflet that was set when year changed.
       base<-current_filters$leaflet
@@ -198,11 +203,14 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
       optionslist<-PartyPositionsMapLegendList()
       lapply(optionslist,function(x){
         if(x %in% selectedfilters){
+#cat(file=stderr(), x, "\n")
           cols<<-c(cols,PartyPositionsMapLegendColor(x))
         }else{
           cols<<-c(cols,"white")
         }
       })
+#cat(file=stderr(), cols, "\n")
+#cat(file=stderr(),PartyPositionsMapBreakupList(),"\n")
       pal<-leaflet::colorBin(cols,bins=PartyPositionsMapBreakupList(),na.color="white")
       #coords<-current_filters$coords
       #From the colors of legend remove white they are the colors/options not selected in the checkbox 
@@ -214,13 +222,16 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
       });
       print(legendvalues)
       #addpolygon for coloured display and add legend
+      title<-paste0("Party wise positions for ",current_filters$party," in ",gsub("_"," ",current_filters$sname)," - ",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.numeric(position)), popup=~(popup)) %>%
         #addLegend("topright",pal=pal, values=(selectedfilters),opacity=1,title="Percentage vote share of winners")
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Party positions "
-                  )
+                  )%>%
+        addTitleLeaflet(title)
     })
     
     print('Party Positions map: Enabled all')

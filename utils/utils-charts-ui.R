@@ -33,19 +33,28 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
 }
 
 
+readVoteSharePhaseFile<-function(statename,year){
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/",year,"/derived/lokdhaba/ae_voteshares_phase.csv")
+    m<-read.csv(filename)
+    #m<-subset(m,m$year>=2012,select=c("state","year","party","votes"))
+    return(m)
+
+}
 
 #read ae_voteshares.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_voteshares.csv
 
 readVoteShareFile<-function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_voteshares.csv")
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_voteshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
   }else{
-    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares.csv")
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares.csv")
     print(paste0('reading from ',filename))
+    
     m<-read.csv(filename)
+    m<-subset(m,select=c("state","year","party","votes"))
     return(m)
   }
 }
@@ -54,14 +63,15 @@ readVoteShareFile<-function(statename){
 
 readSeatShareFile<-function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_seatshares.csv")
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_seatshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
   }else{
-    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_seatshares.csv")
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_seatshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m<-subset(m,select=c("state","year","party","seats"))
     return(m)
   }
 }
@@ -69,12 +79,12 @@ readSeatShareFile<-function(statename){
 #read ae_voter_turnouts.csv
 readVoterTurnoutFile<-function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/ge_voter_turnouts.csv")
+    filename<-paste0("../tcpd_data/data/GE/ge_voter_turnouts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
   }else{
-    filename<-paste0("datadir/AE/ae_voter_turnouts.csv")
+    filename<-paste0("../tcpd_data/data/AE/ae_voter_turnouts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename) %>% filter(state==statename)
     return(m)
@@ -85,12 +95,12 @@ readVoterTurnoutFile<-function(statename){
 
 readPartiesContestedRepresentedFile<-function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_parties_contests.csv")
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_parties_contests.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
   }else{
-    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_parties_contests.csv")
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_parties_contests.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
@@ -103,12 +113,12 @@ readPartiesContestedRepresentedFile<-function(statename){
 
 readCandidatesContestedDepositLostFile<-function(statename){
   if(statename=="ge"){
-    filename<-paste0("datadir/GE/Data/derived/lokdhaba/ge_contested_deposit_losts.csv")
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_contested_deposit_losts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)
   }else{
-    filename<-paste0("datadir/AE/Data/",statename,"/derived/lokdhaba/ae_contested_deposit_losts.csv")
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_contested_deposit_losts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
     return(m)

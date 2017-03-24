@@ -1,6 +1,7 @@
 source("utils/utils-lokdhaba.R")
 library(rgdal)
 library(dplyr)
+library(leaflet.extras)
 #################################Fixed:################################################################
 ########################################################################################################
 winnerMap <- function(input, output, session, parentsession,statename_reactive,dirname) {
@@ -123,7 +124,8 @@ winnerMap <- function(input, output, session, parentsession,statename_reactive,d
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
-        print(paste0('year change detected',yr))
+           current_filters$year<<-yr
+     print(paste0('year change detected',yr))
         shape<-readShapeFile(current_filters$sname, yr)
         #get winners name from winners dataframe stored for this state for the given year
         winners<-current_filters$dframewinners %>% filter(year==yr)
@@ -134,7 +136,10 @@ winnerMap <- function(input, output, session, parentsession,statename_reactive,d
         winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners)
-        current_filters$leaflet<<-leaflet(winners)
+        winners$Lat<-as.vector(coordinates(shape)[,2])
+        winners$Long<-as.vector(coordinates(shape)[,1])
+        
+	current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
         #set the count of winning seats for each party
         tm<-winners
@@ -142,6 +147,7 @@ winnerMap <- function(input, output, session, parentsession,statename_reactive,d
         tm$count<-1
         tm<-aggregate(count~year+party1,tm,function(x) length(x))
         tm$legend<-paste0(tm$party1,"(",tm$count,")")
+        tm<-arrange(tm,desc(count))
         tm$count<-NULL
         current_filters$countedframe<<-tm
         
@@ -151,7 +157,7 @@ winnerMap <- function(input, output, session, parentsession,statename_reactive,d
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_pname"), "Select parties ",
-                             partys)
+                             partys,selected=partys)
         )
         
       }
@@ -175,21 +181,24 @@ winnerMap <- function(input, output, session, parentsession,statename_reactive,d
       base<-current_filters$leaflet
       #create a colour plaette only for the partys selected in selectedpartynames variable
       #pal<-createPal(selectedpartynames, current_filters$sname, current_filters$year)
-      pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
-      
+      #pal<-getColorFactorParty
+      #(selectedpartynames)
+#      pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
+pal<-colorFactor(c("#ff6600","#A5F1F9","#0000ff","#228B22","#0000ff","#808000","#32CD32","#A52A2A","#A2FF33","#FF33E3","#F3FF33","#FF334C"),levels=c("BJP","INC","SAD","SC","BSP","IND","AAP","MAG","RLD","ADS","SBSP","NISHD"),na.color = "#800000")
       counted<-current_filters$countedframe
+      sset<-subset(counted,counted$party1 %in% selectedpartynames)
+      sset$color<-pal(as.character(sset$party1))
+
       #addpolygon for coloured display and add legend
+      title<-paste0("Constituency wise party winners for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.character(party1)), popup=~(popup)) %>%
-        addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedpartynames),title="Party",
-                  labFormat = labelFormat(transform=function(x) {
-                    lapply(x,function(y){
-                      counted$legend[counted$party1==y]
-                    });
-                  })
-        )
+   addLegend("topright",color=sset$color, opacity= 1, labels=sset$legend,title="Party",
+                        )%>%
+        addTitleLeaflet(title)
       
       
     })  

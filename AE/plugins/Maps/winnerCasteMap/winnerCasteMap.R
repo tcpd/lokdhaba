@@ -118,7 +118,8 @@ winnerCasteMap <- function(input, output, session, parentsession,statename_react
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
-        print(paste0('year change detected',yr))
+            current_filters$year<<-yr
+    print(paste0('year change detected',yr))
         shape<-readShapeFile(current_filters$sname, yr)
         #get winners name from winners dataframe stored for this state for the given year
         winners<-current_filters$dframewinners %>% filter(year==yr)
@@ -143,7 +144,7 @@ winnerCasteMap <- function(input, output, session, parentsession,statename_react
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_gname"), "Select AC Type ",
-                             WinnerCasteMapLegendList())
+                             WinnerCasteMapLegendList(),selected=WinnerCasteMapLegendList())
         )
         
       }
@@ -176,6 +177,8 @@ winnerCasteMap <- function(input, output, session, parentsession,statename_react
       
       counted<-current_filters$countedframe
       #addpolygon for coloured display and add legend
+      title<-paste0("Constituency type wise winners for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
@@ -186,7 +189,8 @@ winnerCasteMap <- function(input, output, session, parentsession,statename_react
                       counted$legend[(trimws(counted$ac_type))==y]
                     });
                   })
-        )
+        )%>%
+        addTitleLeaflet(title)
       
       
     })

@@ -122,6 +122,7 @@ notaTurnoutMap <- function(input, output, session, parentsession,statename_react
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
+	current_filters$year<<-yr
         print(paste0('year change detected',yr))
         shape<-readShapeFile(current_filters$sname, yr)
         #get winners name from winners dataframe stored for this state for the given year
@@ -146,7 +147,7 @@ notaTurnoutMap <- function(input, output, session, parentsession,statename_react
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_pname"), "Select nota turnout ",
-                             NotaTurnoutMapLegendList())
+                             NotaTurnoutMapLegendList(),selected=NotaTurnoutMapLegendList())
         )
         
       }
@@ -189,12 +190,15 @@ notaTurnoutMap <- function(input, output, session, parentsession,statename_react
       });
       
       #addpolygon for coloured display and add legend
+      title<-paste0("NOTA turnout for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.numeric(((nota_percent)))), popup=~(popup)) %>%
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
-        )
+        )%>%
+        addTitleLeaflet(title)
       
     })
     print('nota turnout: Enabled all')

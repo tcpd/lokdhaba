@@ -122,7 +122,8 @@ winnerMarginMap <- function(input, output, session, parentsession,statename_reac
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
-        print(paste0('year change detected',yr))
+            current_filters$year<<-yr
+    print(paste0('year change detected',yr))
         shape<-readShapeFile(current_filters$sname, yr)
         #get winners name from winners dataframe stored for this state for the given year
         winners<-current_filters$dframewinners %>% filter(year==yr)
@@ -146,7 +147,7 @@ winnerMarginMap <- function(input, output, session, parentsession,statename_reac
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_pname"), "Select margin percentage ",
-                             WinnerMarginMapLegendList())
+                             WinnerMarginMapLegendList(),selected=WinnerMarginMapLegendList())
         )
         
       }
@@ -189,12 +190,15 @@ winnerMarginMap <- function(input, output, session, parentsession,statename_reac
       });
       
       #addpolygon for coloured display and add legend
+  title<-paste0("Constituency wise winners' margin-",gsub("_"," ",current_filters$sname)," ",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.numeric(((margin_percent)))), popup=~(popup)) %>%
-        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
-        )
+        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Winner margin"
+        )%>%
+        addTitleLeaflet(title)
       
     })
     print('Winner map: Enabled all')

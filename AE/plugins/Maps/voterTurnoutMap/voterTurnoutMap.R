@@ -122,7 +122,8 @@ voterTurnoutMap <- function(input, output, session, parentsession,statename_reac
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
-        print(paste0('year change detected',yr))
+            current_filters$year<<-yr
+    print(paste0('year change detected',yr))
         shape<-readShapeFile(current_filters$sname, yr)
         #get winners name from winners dataframe stored for this state for the given year
         winners<-current_filters$dframewinners %>% filter(year==yr)
@@ -146,7 +147,7 @@ voterTurnoutMap <- function(input, output, session, parentsession,statename_reac
         tagList(
           selectInput(ns("I_year"),"Select Year",c("Year"="",years), selected=yr,selectize = TRUE),
           checkboxGroupInput(ns("filter_pname"), "Select Voter turnout ",
-                             VoterTurnoutMapLegendList())
+                            VoterTurnoutMapLegendList(), selected=VoterTurnoutMapLegendList())
         )
         
       }
@@ -189,12 +190,15 @@ voterTurnoutMap <- function(input, output, session, parentsession,statename_reac
       });
       
       #addpolygon for coloured display and add legend
+      title<-paste0("Constituency wise voter turnout for ",gsub("_"," ",current_filters$sname)," in ",current_filters$year)
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.numeric(((turnout)))), popup=~(popup)) %>%
-        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
-        )
+        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Voter turnout"
+        )%>%
+        addTitleLeaflet(title)
+
       
     })
     print('voter turnout: Enabled all')
