@@ -72,10 +72,11 @@ body {
 
 .leaflettitle{
     position:relative;
-    left:300px;
+    text-align: center;
+    left:100px;
     top:-65px;
     font-family: Droid Serif,serif; 
-    font-size: 22px; 
+    font-size: 20px; 
     fill: rgb(51, 51, 51); 
     opacity: 1; 
     font-weight: normal; 
