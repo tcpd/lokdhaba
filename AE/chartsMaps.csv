@@ -11,5 +11,5 @@ Winning margin of party winners: Map,Map,winnerMarginMap.R,winnerMarginMap
 Number of candidates: Map,Map,numCandidatesMap.R,numCandidatesMap
 Nota Turnout: Map,Map,notaTurnoutMap.R,notaTurnoutMap
 Party wise positions: Map,Map,partyPositionsMap.R,partyPositionsMap
-Voter Turnout Map,Map,voterTurnoutMap.R,voterTurnoutMap
-Constituency type wise winners,Map,winnerCasteMap.R,winnerCasteMap
+Voter Turnout Map: Map,Map,voterTurnoutMap.R,voterTurnoutMap
+Constituency type wise winners: Map,Map,winnerCasteMap.R,winnerCasteMap
