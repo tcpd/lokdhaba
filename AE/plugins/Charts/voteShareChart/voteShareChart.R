@@ -77,7 +77,7 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$partynames<-c()
       checkboxGroupInput(ns("filter_pname"), "Select voteshare for ",
-                         partynames)
+                         partynames,selected=partynames)
       
     })
     

@@ -76,7 +76,7 @@ partiesPresentedChart <- function(input, output, session, parentsession,statenam
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$optionnames<-c()
       checkboxGroupInput(ns("filter_pname"), "Filter by ",
-                         optionnames)
+                         optionnames,selected=optionnames)
       
     })
     

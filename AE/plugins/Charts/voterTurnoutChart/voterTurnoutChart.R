@@ -76,7 +76,7 @@ voterTurnoutChart <- function(input, output, session, parentsession,statename_re
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$gendernames<-c()
       checkboxGroupInput(ns("filter_pname"), "Select Voter Turnout options for ",
-                         gendernames)
+                         gendernames,selected=gendernames)
       
     })
     

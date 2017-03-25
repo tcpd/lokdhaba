@@ -18,7 +18,7 @@ function RadarChart() {
       filter: 'rcGlow' + uuid,            // define your own filter; false = no filter;
       filter_id: 'rcGlow' + uuid,         // assign unique name for default filter
 
-      resize: false,
+      resize: true,
 
       width: window.innerWidth,
       widthMax: window.innerWidth,
@@ -26,20 +26,20 @@ function RadarChart() {
 	   height: window.innerHeight,
       heightMax: window.innerHeight,
 
-      minRadius: 80,
+      minRadius: 160,
 
       // Margins for the SVG
       margins: {
-         top: 100, 
+         top: 150, 
          right: 100, 
-         bottom: 100, 
+         bottom: 150, 
          left: 100
       },
 
       circles: { 
-         levels: 8, 
+         levels: 3, 
          maxValue: 0, 
-         labelFactor: 1.25, 
+         labelFactor: 1.2, 
          opacity: 0.1, 
          fill: "#CDCDCD", 
          color: "#CDCDCD"
@@ -57,10 +57,10 @@ function RadarChart() {
 
       axes: {
          display: true,
-         threshold: 90,    // radius threshold for hiding
+         threshold: 60,    // radius threshold for hiding
          lineColor: "white",
-         lineWidth: "2px",
-         fontWidth: "11px",
+         lineWidth: "4px",
+         fontWidth: "12px",
          fontColor: "black",
          wrapWidth: 60,	      // The number of pixels after which a label needs to be given a new line
          filter: [],
@@ -243,7 +243,7 @@ function RadarChart() {
                     .attr("x", 4)
                     .attr("y", function(d) { return -d * radial_calcs.radius / options.circles.levels; })
                     .attr("dy", "0.4em")
-                    .style("font-size", "10px")
+                    .style("font-size", "14px")
                     .attr("fill", "#737373")
                     .on('mouseover', function(d, i) { if (events.axisLabel.mouseover) events.axisLabel.mouseover(d, i); })
                     .on('mouseout', function(d, i) { if (events.axisLabel.mouseout) events.axisLabel.mouseout(d, i); })

@@ -78,7 +78,7 @@ seatShareChart <- function(input, output, session, parentsession,statename_react
       
       #stale_filters2$partynames<<-current_filters$partynames
       checkboxGroupInput(ns("filter_pname"), "Select seatshare for ",
-                         partynames)
+                         partynames,selected=partynames)
       
     })
     

@@ -112,6 +112,7 @@ genumCandidatesMap <- function(input, output, session, parentsession,dirname) {
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
+	current_filters$year<<-yr
         print(paste0('year change detected',yr))
         shape<-readShapeFile("ge", yr)
         #get winners name from winners dataframe stored for this state for the given year
@@ -181,12 +182,15 @@ genumCandidatesMap <- function(input, output, session, parentsession,dirname) {
       });
       
       #addpolygon for coloured display and add legend
+      title<-paste0("Constituency wise candidate count for General Election  in ",current_filters$year)
+
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.numeric(((n_cand)))), popup=~(popup)) %>%
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Number of contesting candidates"
-        )
+        )%>%
+        addTitleLeaflet(title)
       
     })
     print('ge num candidates map: Enabled all')
