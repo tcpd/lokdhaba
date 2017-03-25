@@ -35,6 +35,10 @@
 <script src="assets/AdminLTE-2.0.6/app.min.js"></script>
 <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+<script src="assets/datatables-binding-0.2/datatables.js"></script> 
+  <!-- <link rel="stylesheet" type="text/css" href="assets/shinyTree/jsTree-3.0.2/themes/default/style.min.css"/> -->
+  <!-- <script src="assets/shinyTree/jsTree-3.0.2/jstree.min.js"></script> -->
+  <!-- <script src="assets/shinyTree/shinyTree.js"></script> -->
 
   <style>.shinyjs-hide { display: none !important; }</style>
   <script>Shiny.addCustomMessageHandler('shinyjs-show', function(params) { shinyjs.debugMessage('shinyjs: calling function "show" with parameters:'); shinyjs.debugMessage(params); shinyjs.show(params);});
@@ -70,49 +74,66 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
      <div class="collapse navbar-collapse" id="navbar-ex-collapse">
        <ul class="nav navbar-nav">
         <li class="active">
-          <a href="#tab-5312-2" data-toggle="tab" data-value="EDV">
-            Election Data Visualization
+          <a href="#tab-5312-1" data-toggle="tab" data-value="HOME">
+            Home
           </a>
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Analysis: 2017 Elections
+            Election Data
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#tab-3246-1" data-toggle="tab" data-value="UP">
-                Uttar Pradesh
+              <a href="#tab-5312-2" data-toggle="tab" data-value="EDV">
+                Data Visualization
               </a>
             </li>
             <li>
-              <a href="#tab-3246-2" data-toggle="tab" data-value="UK">
-                Uttarakhand
-              </a>
-            </li>
-            <li>
-              <a href="#tab-3246-3" data-toggle="tab" data-value="PB">
-                Punjab
+              <a href="#tab-5312-3" data-toggle="tab" data-value="DLD">
+                Data Download
               </a>
             </li>
           </ul>
         </li>
-       <li >
-              <a href="#">Contact us</a>
-            </li>
-            <li>
-              <a href="#">How to cite us</a>
-            </li>
-           </ul>
+	</ul>
+        <ul class="nav navbar-nav navbar-right">
+	  <li><a href="#">Contact us</a></li>
+	  <li><a href="#">How to cite us</a></li>
+	</ul>
        </div>
     </div>
   </nav>
   <div class="container-fluid">
     <div class="tab-content">
-    <div class="tab-pane active" data-value="EDV" id="tab-5312-2">
+<!-- Home page tab, Active by default on the site opening -->
+    <div class="tab-pane active" data-value="HOME" id="tab-5312-1">
         <div class="container-fluid">
 	  <div class="banner">
-            <span class="b-heading">Lokdhaba</span>
+            <span class="b-heading">LokDhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+
+          <div class="row" >
+	    <div class="tcpd-intro">
+<span class="tcpd-intro-text">
+	 The Centre conducts real time data collections on ongoing General and Assembly Elections, and diffuses data driven analysis through print and electronic media. The coverage includes the analysis and contextualisation of results and the profiling of the main party candidates. 
+<span>
+
+<span class="tcpd-intro-text">The project aims at measuring individual incumbency in General and State Elections.It requires the coding of incumbency, The quantification of turncoats and defections, and candidates name matching. </span>
+      </div>
+    </div>
+      <div class="tcpd-buttons-wrap">
+        <a href="javascript:void(0)" class="tcpd-button primary" id="get-started">Get Started</a>
+        <a href="search.html" class="tcpd-button primary">Enter</a>
+      </div>
+	</div>
+      </div>
+<!-- data visualization tab -->
+    <div class="tab-pane" data-value="EDV" id="tab-5312-2">
+        <div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">LokDhaba</span>
             <span class="b-subheading">Food For Political Thought</span>
 	  </div>
 
@@ -151,21 +172,117 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 
         </div>
       </div>
-      <div class="tab-pane" data-value="UP" id="tab-3246-1">
-        <div class="container-fluid">
-          <div id="UPSummary" class="shiny-html-output"></div>
-        </div>
-      </div>
-      <div class="tab-pane" data-value="UK" id="tab-3246-2">
-        <div class="container-fluid">
-          <div id="UKSummary" class="shiny-html-output"></div>
-        </div>
-      </div>
-      <div class="tab-pane" data-value="PB" id="tab-3246-3">
-        <div class="container-fluid">
-          <div id="PBSummary" class="shiny-html-output"></div>
-        </div>
-      </div>
+<!-- Data download tab  -->
+    <div class="tab-pane" data-value="DLD" id="tab-5312-3">
+  <div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">LokDhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+
+	  <div class="row" >
+	    <div class="col-sm-3">
+	      <form class="well">
+          <div class="form-group shiny-input-container">
+            <label class="control-label" for="dd_electiontype_selector">Election Type</label>
+            <div>
+              <select id="dd_electiontype_selector" class="form-control"><option value="" selected>Select Election Type</option>
+<option value="GE">General Elections</option>
+<option value="AE">Assembly Elections</option></select>
+              <script type="application/json" data-for="dd_electiontype_selector">{}</script>
+            </div>
+          </div>
+          <div data-display-if="input.dd_electiontype_selector!=&#39;&#39;">
+            <div class="form-group shiny-input-container">
+              <label class="control-label" for="dd_state_selector">State Name</label>
+              <div>
+                <select id="dd_state_selector" class="form-control"><option value="" selected>Select</option></select>
+                <script type="application/json" data-for="dd_state_selector">{}</script>
+              </div>
+            </div>
+          </div>
+          <div data-display-if="input.dd_state_selector!=&#39;&#39;">
+	    <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+	      <label class="control-label" for="id">Years</label>
+	      <div class="shiny-options-group"></div>
+	    </div>
+          </div>
+	  </div>
+	    </form>
+	    <div class="col-sm-9">
+	      <div data-display-if="input.dd_year_selector.length!=0">
+		<div style="text-align:center"><div class="tcpd-h3">Code Book (Meaning of the variables in data)</div></div>
+		<div id="dd_variablenames_selector" style="width:100%; height:100%; " class="datatables html-widget html-widget-output"></div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="col-sm-12">
+	      <div data-display-if="input.dd_year_selector.length!=0">
+		<!-- place for terms and condition -->
+		<!-- <div class="banner"> -->
+		<!--   <span class="b-subheading"> -->
+		<!--     <pre id="dd_terms_and_conditions" class="shiny-text-output noplaceholder"></pre> -->
+		<!--   </span> -->
+		<!-- </div> -->
+		<div style="border-bottom: 2px solid #999999;"></div>                                                                                 		     <div id="dd_terms_and_conditions" class="shiny-html-output"></div>
+		<div style="border-bottom: 2px solid #999999;"></div>                                                                                 
+	      <!-- place for checkbox declaration -->
+	      <div class="form-group shiny-input-container" style="width:100%;margin-left:none;">
+	      <div style="text-align:center">
+		<div class="checkbox">
+
+		  <label>
+		    <input id="dd_accept_condition" type="checkbox"/>
+		    <span>I accept the terms and conditions mentioned here.</span>
+		  </label>
+		</div>
+	      </div>
+	      </div>
+	      </div>
+	      </div>
+	    <div class="col-sm-12">
+	      <!-- Place for simple check -->
+	      <div data-display-if="input.dd_accept_condition!=0">
+		<!-- <div data-display-if="input.dd_variablenames_selector_rows_selected.length==0"> -->
+		<!--   <div style="width:900px; margin-left:auto"> **Please select at least one variable in the above table</div> -->
+		<!-- </div> -->
+	      <!-- Place for download button -->
+		<!-- <div data-display-if="input.dd_variablenames_selector_rows_selected.length!=0"> -->
+		  <div style="text-align:center">
+		  <a id="dd_download_button" class="btn btn-default tcpd-button-wrap tcpd-button primary shiny-download-link " href="" target="_blank" download>
+		    <i class="fa fa-download"></i>
+		    Download
+		  </a>
+		  </div>
+		  <!-- <button id="dd_download_button" type="button" class="btn  btn-default tcpd-button-wrap tcpd-button primary action-button" style="margin-left:500px">Download</button> -->
+		<!-- </div> -->
+	
+	      </div>
+	    </div>
+	   </div>
+
+	  </div>
+    </div>
+
+<!-- UP Summary tab opened on election report viewing -->
+      <!-- <div class="tab-pane" data-value="UP" id="tab-3246-1"> -->
+      <!--   <div class="container-fluid"> -->
+      <!--     <div id="UPSummary" class="shiny-html-output"></div> -->
+      <!--   </div> -->
+      <!-- </div> -->
+<!-- UK Summary tab opened on election report viewing -->
+      <!-- <div class="tab-pane" data-value="UK" id="tab-3246-2"> -->
+      <!--   <div class="container-fluid"> -->
+      <!--     <div id="UKSummary" class="shiny-html-output"></div> -->
+      <!--   </div> -->
+      <!-- </div> -->
+<!-- Punjab Summary tab opened on election report viewing -->
+      <!-- <div class="tab-pane" data-value="PB" id="tab-3246-3"> -->
+      <!--   <div class="container-fluid"> -->
+      <!--     <div id="PBSummary" class="shiny-html-output"></div> -->
+      <!--   </div> -->
+      <!-- </div> -->
     </div>
   </div>
 </body>

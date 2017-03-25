@@ -6,7 +6,7 @@ library(shinyjs)
 
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
-
+source("DataDownloader/dataDownloadOptions.R")
 shinyServer(function(input, output, session) {
 
    
@@ -36,15 +36,17 @@ shinyServer(function(input, output, session) {
       
     }
   })
-  output$UPSummary<-renderUI({
-    ##Render the summary report of UP election written in rmd file format.
-    includeHTML("www/Reports/Gilles/UP-2017/Report.html")
-  })
-
-  output$PBSummary<-renderUI({
-    ##Render the summary report of UP election written in rmd file format.
-    includeHTML("www/Reports/Gilles/Punjab-2017/Report.html")
-  })
+  # output$UPSummary<-renderUI({
+  #   ##Render the summary report of UP election written in rmd file format.
+  #   includeHTML("www/Reports/Gilles/UP-2017/Report.html")
+  # })
+  # 
+  # output$PBSummary<-renderUI({
+  #   ##Render the summary report of UP election written in rmd file format.
+  #   includeHTML("www/Reports/Gilles/Punjab-2017/Report.html")
+  # })
+  
+  dataDownloadOptions(input,output,session,"AE/")
   
 })
   

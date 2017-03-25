@@ -83,3 +83,68 @@ body {
     white-space:pre; 
     visibility: inherit;
 }
+
+
+.tcpd-intro {
+    padding: 15px 0;
+    border-bottom: 1px solid #DADADA;
+}
+
+
+.tcpd-intro-text {
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+    color: #666666;
+    padding: 0 10px;
+    max-width: 900px;
+}
+
+
+.tcpd-buttons-wrap {
+    text-align: center;
+    height: 100px;
+    margin-top: 20px;
+}
+
+.tcpd-button.primary {
+    background-color: #CD0000;
+    color: #fefefe;
+
+}
+
+.tcpd-button {
+    font-size: 18px;
+    width: 150px;
+    line-height: 40px;
+    padding: 0;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    -webkit-appearance: none;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    margin: 0 0 1rem 0;
+ 
+}
+
+.tcpd-h3 {
+    font-size: 22px;
+    width: 100%;
+    line-height: 40px;
+    color: #FFFFFF;
+    display: inline;
+    padding: 5px;
+    text-align: center;
+    /* cursor: pointer; */
+    -webkit-appearance: none;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    margin: 0 0 1rem 0;
+    border-radius: 10px;
+    background-color: #CF0000;
+}

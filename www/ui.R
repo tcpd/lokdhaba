@@ -8,7 +8,8 @@
  library(shiny)
  library(shinyjs)
  library(plotly)
- #library(shinythemes)
+library(DT)
+  #library(shinythemes)
  library(shinydashboard)
  library(leaflet)
  library(d3radarR)
@@ -18,26 +19,27 @@ options(shiny.sanitize.errors = FALSE)
 shinyUI(navbarPage(title=div(img(src="myassets/logo.png")),windowTitle = "LokDhaba",  useShinyjs(),
                    selected="EDV",
                    tabPanel(tagList(br(),h4("Election Data Visualization")),
-                            dashboardPage(dashboardHeader(disable = TRUE),
-                                          dashboardSidebar(
-                                            tabsetPanel(
-                                                         tabPanel("General Elections", tagList(uiOutput("ge_uitype_selection"),
-                                                                                uiOutput("ge_filter_selection")
-                                                                                ),value="GE"),
-                                                         tabPanel("Assembly Elections", tagList(uiOutput("state_selection"),
-                                                                                uiOutput("ae_uitype_selection"),
-                                                                                uiOutput("ae_filter_selection")
-                                                                                ),value="AE"),
-                                                         id="electionType"
-                                                         ),width=300
-                                            ),
-                                          dashboardBody(
-                                                   plotlyOutput("distPlot",height = 600),
-                                                   leafletOutput("mapPlot",height = 600),
-                                                   d3radarOutput("radarPlot",height = 600)
-                                                   
-                                            )
-                                          ),
+                             dashboardPage(dashboardHeader(disable = TRUE),
+                                           dashboardSidebar(
+                                             tabsetPanel(
+                                                          tabPanel("General Elections", tagList(uiOutput("ge_uitype_selection"),
+                                                                                 uiOutput("ge_filter_selection")
+                                                                                 ),value="GE"),
+                                                          tabPanel("Assembly Elections", tagList(uiOutput("state_selection"),
+                                                                                 uiOutput("ae_uitype_selection"),
+                                                                                 uiOutput("ae_filter_selection")
+                                                                                 ),value="AE"),
+                                                          id="electionType"
+                                                          ),width=300
+                                             ),
+                                           dashboardBody(
+                                                    plotlyOutput("distPlot",height = 600),
+                                                    leafletOutput("mapPlot",height = 600),
+                                                    d3radarOutput("radarPlot",height = 600)
+
+                                             )
+                                           ),
+                     
                             value="EDV"),
                      #  tagList(sidebarLayout(
                      #        sidebarPanel(
@@ -63,41 +65,71 @@ shinyUI(navbarPage(title=div(img(src="myassets/logo.png")),windowTitle = "LokDha
                      # ),
   navbarMenu(tagList(br(),h4("2017 Assembly Elections")),
               tabPanel(h4("Uttar Pradesh"),
-                       dashboardPage(dashboardHeader(disable = TRUE),
-                                     dashboardSidebar(useShinyjs()),
-                                     dashboardBody(useShinyjs(),
-                                        getFixedUIHolders("Uttar Pradesh","UP")              
-                                     )
-                       ),value="UP"),
+                       ## dashboardPage(dashboardHeader(disable = TRUE),
+                       ##               dashboardSidebar(useShinyjs()),
+                       ##               dashboardBody(useShinyjs(),
+                       ##                             verbatimTextOutput("UPSummary")
+                       ##                  #getFixedUIHolders("Uttar Pradesh","UP")              
+                       ##               )
+                       ## )
+                       basicPage(
+                           tagList(
+                             # htmlOutput("UPSummary"),
+                                   selectizeInput("dd_electiontype_selector","Election Type",choices = c("Select Election Type"="","General Elections"="GE","Assembly Elections"="AE")),
+                                   conditionalPanel(
+                                     condition="input.dd_electiontype_selector!=''",
+                                     selectizeInput("dd_state_selector","State Name",choices=c("Select State"=""))
+                                     ),
+                                   conditionalPanel(
+                                     condition="input.dd_state_selector!=''",
+                                     checkboxGroupInput("dd_year_selector","Years",choices=c())
+                                   ),
+                                   conditionalPanel(
+                                     condition="input.dd_year_selector.length!=0",
+                                     DT::dataTableOutput("dd_variablenames_selector")
+                                     , downloadButton("id","label")
+                                     #selectizeInput("dd_year_selector","Year",choices=c("Select Year"=""))
+                                   )
+                           )
+                       )
+                       ,value="UP"),
                        # tagList(leafletOutput("UP_vis1"),
                        #                         leafletOutput("UP_vis2"),
                        #                         leafletOutput("UP_vis3"),
                        #                         leafletOutput("UP_vis4")
                        #                         ),value="UP"),
               tabPanel(h4("Uttarakhand"),
-                       dashboardPage(dashboardHeader(disable = TRUE),
-                                     dashboardSidebar(useShinyjs()),
-                                     dashboardBody(useShinyjs(),
-                                       getFixedUIHolders("Uttarakhand","UK")
-                                     )
-                       ),value="UK"),
+                       ## dashboardPage(dashboardHeader(disable = TRUE),
+                       ##               dashboardSidebar(useShinyjs()),
+                       ##               dashboardBody(useShinyjs(),
+                       ##                 getFixedUIHolders("Uttarakhand","UK")
+                       ##               )
+                       ## )
+                        basicPage(
+                           htmlOutput("UKSummary")
+                       )
+                       ,value="UK"),
               #          tagList(leafletOutput("UK_vis1"),
               #                                  leafletOutput("UK_vis2"),
               #                                  leafletOutput("UK_vis3"),
               #                                  leafletOutput("UK_vis4")
               # ),value="UK"),
               tabPanel(h4("Punjab"),
-                       dashboardPage(dashboardHeader(disable = TRUE),
-                                     dashboardSidebar(useShinyjs()),
-                                     dashboardBody(useShinyjs(),
-                                       getFixedUIHolders("Punjab","PB")
-                                       )
+                       ## dashboardPage(dashboardHeader(disable = TRUE),
+                       ##               dashboardSidebar(useShinyjs()),
+                       ##               dashboardBody(useShinyjs(),
+                       ##                 getFixedUIHolders("Punjab","PB")
+                       ##                 )
+                       ## )
+                        basicPage(
+                           htmlOutput("PBSummary")
                        )
                        # tagList(leafletOutput("PB_vis1"),
                        #                         leafletOutput("PB_vis2"),
                        #                         leafletOutput("PB_vis3"),
                        #                         leafletOutput("PB_vis4")
-              ,value="PB")
+              ,
+                value="PB")
              )
   )
 )
