@@ -20,7 +20,8 @@ getYearList<-function(statename,type="ge"){
   aa$ano<-Vectorize(getStringFormatOfNumber)(aa$ga_no)
   }else{
     #otherwise return only election year of that state
-    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/mastersheet.csv")
+  statenamemodified<- gsub(" ","_",statename)
+    filename<-paste0("../tcpd_data/data/AE/Data/",statenamemodified,"/derived/mastersheet.csv")
     a<-read.csv(filename)
     aa<-getUniqueANoWithYears(a,"sa_no")
     aa$sa_no<-as.numeric(trimws(aa$sa_no))
