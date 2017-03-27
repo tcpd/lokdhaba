@@ -3,13 +3,31 @@ library(reshape2)
 library(leaflet)
 library(plotly)
 library(shinyjs)
-
+library(DT)
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
 shinyServer(function(input, output, session) {
+# enableBookmarking("url")
+# testf<-function(){
+# cat(file=stderr(),"---restoring to old state----","\n")
+# #cat(file=stderr(),state,"\n")
+# }
+# testff<-function(){
+# 	cat(file=stderr(),"---Session ended---","\n")
+# }
+# session$onRestored(function(state){
+# #	message("message onrestored\n")
+#   #updateSelectizeInput("dd_state_selector",selected="Madras")
+#  testf 
+# })   
 
-   
+# session$onSessionEnded({
+#   #message("message on session end\n")
+#   #updateSelectizeInput("dd_state_selector",selected="Madras")
+#   testff  
+# })   
+#cat(file=stderr(),"Testing of cat","\n")
   addResourcePath("myassets", "www/assets")
 ###Call aeOptionsInput.R's function
   #pass input, output and session. That function will
@@ -47,7 +65,19 @@ shinyServer(function(input, output, session) {
   # })
   
   dataDownloadOptions(input,output,session,"AE/")
-  
+
+   output$contactus<-renderUI({
+     ##Render the summary report of UP election written in rmd file format.
+     includeHTML("ContactUs.html")
+   })
+   
+   output$howtocite<-renderUI({
+     ##Render the summary report of UP election written in rmd file format.
+     includeHTML("HowToCite.html")
+   })
+
+ 
+session$allowReconnect("force") 
 })
   
 

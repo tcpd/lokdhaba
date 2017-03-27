@@ -100,6 +100,16 @@ getMastersheetData<-function(electiontype,statename,electionyears){
  l<-unlist(lst,1)
  ##surprising, why did we need double brackets here..
  ms<-subset(ms,ms[[ano]]%in%l)
+ ####Remove all those columns which should not be distributed right now.. like caste/jati..
+ ms$Jati<-NULL
+ ms$Caste_Rec<-NULL
+ ms$Rel<-NULL
+ ms$New.Caste<-NULL
+ ms$Old_Jati<-NULL
+ ms$Postal_votes<-NULL
+ ms$MaleTurnout<-NULL
+ ms$FemaleTurnout<-NULL
+
  #return that dataframe
  return(ms)
  }
@@ -108,16 +118,18 @@ getMastersheetData<-function(electiontype,statename,electionyears){
 #####################################################################################################################
 getVariableInfo<-function(type){
   #read a file called variable description [going forward this is our code book]
-  
   a<-read.csv("../tcpd_data/data/CodeBook.csv")
   #get all attributes where type is same as type and where type is "" (to denote that those names make sense
   #for both AE and GE)
-  aa<-subset(a,a$validfor==type || trimws(a$validfor)=="")
-  aa<-subset(aa,select=c("variable","description","source","citation"))
+  #cat(file=stderr(),names(a),"\n")
+  aa<-subset(a,trimws(toupper(a$validfor))==trimws(toupper(type)) | trimws(a$validfor)=="")
+  #cat(file=stderr(),names(aa),"\n")
+  aa<-subset(aa,select=c("variable","description"))
+#,"source","citation"))
   names(aa)[names(aa)=="variable"]<-"Variable Name"
   names(aa)[names(aa)=="description"]<-"Variable Description"
-  names(aa)[names(aa)=="source"]<-"Source"
-  names(aa)[names(aa)=="citation"]<-"How to cite"
+ # names(aa)[names(aa)=="source"]<-"Source"
+ # names(aa)[names(aa)=="citation"]<-"How to cite"
   stopifnot(nrow(aa)!=0)
   return(aa)
 }

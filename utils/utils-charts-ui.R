@@ -16,7 +16,7 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
          ),zeroline=T,showline=T,range=yrange),
          annotations=list(text=subtitle,
                           showarrow=FALSE,
-                          x=0.45,y=1.1,
+                          x=0.45,y=1.05,
                           xref='paper',
                           yref='paper',
                           font=list(
