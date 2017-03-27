@@ -58,6 +58,11 @@ body {
     body { padding-top: 0px; }
 }
 
+.leaflet-right .leaflet-control {
+    margin-top: 50px;
+    margin-right: 18px;
+}
+
 .leaflet-tcpd{
    font-family: "Droid Serif,serif"; 
    font-size: 10px; 
