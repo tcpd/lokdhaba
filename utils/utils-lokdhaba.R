@@ -31,9 +31,16 @@ addPopupInfo<- function(winnersframe,type="state"){
 }
 
 addTitleLeaflet<-function(map,titlemessage){
- addControl(map,html=paste0(titlemessage,"<br>",
+ winners<-getMapData(map)
+ winners$Lat<-as.vector(coordinates(winners)[,2])
+ winners$Long<-as.vector(coordinates(winners)[,1]) 
+
+addControl(map,html=paste0(titlemessage,"<br>",
                                     "<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle",position="topleft")
+                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle",position="topleft")%>%
+ addCircleMarkers(data=winners,lng=~ Long, lat= ~ Lat,fill=F, stroke=F, color='#000000',opacity= 0, label=~ ac_name,group='const')%>%
+        addSearchMarker(targetGroup = 'const',options=searchMarkersOptions(textPlaceholder='Search Constituency', zoom=10,autoCollapse=T, autoCollapseTime=1600 , hideMarkerOnCollapse=T))
+
 
 }
 #read ae_maps.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_maps.csv
