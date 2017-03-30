@@ -184,7 +184,7 @@ winnerMap <- function(input, output, session, parentsession,statename_reactive,d
       #pal<-getColorFactorParty
       #(selectedpartynames)
 #      pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
-pal<-colorFactor(c("#ff6600","#A5F1F9","#0000ff","#228B22","#0000ff","#808000","#32CD32","#A52A2A","#A2FF33","#FF33E3","#F3FF33","#FF334C"),levels=c("BJP","INC","SAD","SC","BSP","IND","AAP","MAG","RLD","ADS","SBSP","NISHD"),na.color = "#800000")
+pal<-colorFactor(c("#ff6600","#A5F1F9","#0000ff","#228B22","#0000ff","#808000","#32CD32","#A52A2A","#A2FF33","#FF33E3","#F3FF33","#FF334C",'#FF334C','#FF33E3','#0000ff','#228B22'),levels=c("BJP","INC","SAD","SC","BSP","IND","AAP","MAG","RLD","ADS","SBSP","NISHD","ADMK","AIADMK","DMK","IUML"),na.color = "#800000")
       counted<-current_filters$countedframe
       sset<-subset(counted,counted$party1 %in% selectedpartynames)
       sset$color<-pal(as.character(sset$party1))
