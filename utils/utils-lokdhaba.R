@@ -74,7 +74,62 @@ readPartyPositionsFile<- function(statename){
     m<-read.csv(filename)
     return(m)
   }
+  
 }
+
+###########################################Party color maps##############################################
+
+getColorFactorParty<-function(partynames){
+  allcols<-c('#576f2d',
+             '#c44eb7',
+             '#5dc356',
+             '#7862ce',
+             '#99b538',
+             '#d8407f',
+             '#4a9138',
+             '#cc8cd8',
+             '#c5a539',
+             '#6489cc',
+             '#df8b30',
+             '#3dbabe',
+             '#d53f41',
+             '#5ab27f',
+             '#934e88',
+            '#a9ab65',
+            '#dd81aa',
+            '#92692f',
+            '#a64657',
+            '#e09a6b',
+            '#be562a',
+            '#de7c78')
+  partyl<-c()
+  colors<-c()
+  if("BJP"%in% partynames){
+    partyl<-c("BJP")
+    colors<-c('#ff6600')
+  }
+  if("BSP"%in% partynames){
+    partyl<-c(partyl,"BSP")
+    colors<-c(colors,'#0000ff')
+  }
+  if("SP"%in% partynames){
+    partyl<-c(partyl,"SP")
+    colors<-c(colors,'#228B22')
+  }
+  if("SAD"%in% partynames){
+    partyl<-c(partyl,"SAD")
+    colors<-c(colors,'#0000aa')
+  }
+  rest<-setdiff(partynames,partyl)
+  restcols<-allcols[1:length(rest)]
+  partyl<-c(partyl,rest)
+  colors<-c(colors,restcols)
+  
+  pal<- leaflet::colorFactor(colors,levels=partyl,na.color = "white")
+  return(pal)
+  
+}
+
 ############################################VoteShareMap######################################################3
 voteShareMapLegendList<- function(){
   return(c("<10%","10%-20%","20%-30%","30%-40%",">40%"))
