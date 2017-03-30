@@ -157,7 +157,7 @@ partyPositionsMap <- function(input, output, session, parentsession,statename_re
           current_filters$coords<<-coordinates(shape)
           winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"),)
           #assertthat::are_equal(nrow(shape),nrow(winners))
-          winners<-addPopupInfopartys(winners)
+          winners<-addPopupInfo(winners)
           #store merged frame in the current setting
           current_filters$mergedframe<<-winners
          #winners<-current_filters$mergedframe %>% filter(party1==party)
