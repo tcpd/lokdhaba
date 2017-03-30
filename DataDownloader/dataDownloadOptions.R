@@ -1,7 +1,7 @@
 source('utils/utils-datadownloader.R')
 library(DT)
 # library(shinyTree)
-dataDownloadOptions <- function(input, output, session,dname) {
+dataDownloadOptions <- function(input, output, session,dname,conmanager) {
 
   ##Variable to store the values used across functions
   current_filters<-c()
@@ -13,22 +13,17 @@ dataDownloadOptions <- function(input, output, session,dname) {
     if(!is.null(input$dd_electiontype_selector) && trimws(input$dd_electiontype_selector)!=""){
     
       a<-getValidStateNamesForElectionType(input$dd_electiontype_selector)
-      print(a)
+      #print(paste0('Reading state lists for election type ',input$dd_electiontype_selector))
       b<-lapply((a),function(x) gsub("_"," ",x))
-      #message(paste0('input value is ',input$dd_electiontype_selector))      
       if(input$dd_electiontype_selector=="GE"){
         current_filters$electiontype<<-"GE"
         b<-c("All",b)
-        #Create a selection input box
-        #print(b)
-        shiny::updateSelectizeInput(session,"dd_state_selector",choices = c("Select"="",b),selected="")
-        
+        shiny::updateSelectizeInput(session,"dd_state_selector",choices = c("Select"="",b),selected=conmanager$getval("dd_state_selector",""))
         ##get the statnames present in general election mastersheet file and update
         ##dd_state_selector control with these name.. make sure to add All as well.
-        ##set current selected as empty one
       }else if(input$dd_electiontype_selector=="AE"){
         current_filters$electiontype<<-"AE"
-        shiny::updateSelectizeInput(session,"dd_state_selector",choices = c("Select"="",b),selected="")
+        shiny::updateSelectizeInput(session,"dd_state_selector",choices = c("Select"="",b),selected=conmanager$getval("dd_state_selector",""))
         ##get the statnames present in assembly election mastersheet file and update
         ##dd_state_selector control with these name.. make sure to add All as well.
         ##set current selection as empty one
@@ -45,12 +40,11 @@ dataDownloadOptions <- function(input, output, session,dname) {
 # cat(file=stderr(),query,"\n")
 
     if(!is.null(input$dd_state_selector) && trimws(input$dd_state_selector)!=""){
-      #print('state selected')
       current_filters$statename<<-input$dd_state_selector
-      #print(current_filters$statename)
       f<-getYearList(current_filters$statename,type=current_filters$electiontype)
       ##Now use this list to fill in the tree
-      shiny::updateCheckboxGroupInput(session,"dd_year_selector",choices=f,selected=f)
+
+      shiny::updateCheckboxGroupInput(session,"dd_year_selector",choices=f,selected=conmanager$getval("dd_year_selector",f))
       #structure(list("11","33"),stselected=F))
       ####MAKE DT visible on the condition that at least one element in the tree is selected..
       }else{

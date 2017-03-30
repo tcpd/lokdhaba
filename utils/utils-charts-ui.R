@@ -3,7 +3,7 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
   subtitle<-'Source: Adapted from <a href="www.eci.nic.in">ECI Data</a><br><a href="www.tcpd.ashoka.edu.in">Trivedi Centre for Political Data, Ashoka University</a>'                          
   
   base %>%
-    layout(title = title, xanchor="center",
+    layout(title = title, #xanchor="center",
          font=list(family= 'Droid Serif, serif',size=16,color=rgb(.2,.2,.2)),
          xaxis = list(title=xtitle,
            tickangle=45, type="category",categoryorder="category ascending",titlefont=list(

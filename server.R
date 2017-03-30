@@ -7,77 +7,100 @@ library(DT)
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
+source("utils/utils-classes.R")
 shinyServer(function(input, output, session) {
-# enableBookmarking("url")
-# testf<-function(){
-# cat(file=stderr(),"---restoring to old state----","\n")
-# #cat(file=stderr(),state,"\n")
-# }
-# testff<-function(){
-# 	cat(file=stderr(),"---Session ended---","\n")
-# }
-# session$onRestored(function(state){
-# #	message("message onrestored\n")
-#   #updateSelectizeInput("dd_state_selector",selected="Madras")
-#  testf 
-# })   
+  
+  ########################Allow server to reconnect to client after network
+  ###########failure provided that the client browser is still open
+  session$allowReconnect("force") 
+  
+  # ###########Adds resource path
+  # addResourcePath("myassets", "www/assets")
+  
+  #######################Connection reset management#######################
+  ######## When server process restarts after connection failure of over 15 
+  ####### seconds then all inputs are sent again by browser to server.
+  ####### We need to capture them here so that server can again start rendering
+  ####### from the last saved state of the browser.. This solves the problem of 
+  ####### connection failure.
+  ##Create an object of connectionmanager class
+  cls<-getRefClass("ConnectionRestoreManager")
+  conmanager<-cls$new()
+  
+  isolate({
+    lapply(names(input),function(x){
+      #print(paste0('value of element ',x,' is ',input[[x]]))
+      conmanager$setval(x,input[[x]])
+      #shinyjs::reset(x)
+      #resetvalues[[x]]<<-input[[x]]
+    })
+    #print(paste(names(query), query, sep = "=", collapse=", "))
+  })
 
-# session$onSessionEnded({
-#   #message("message on session end\n")
-#   #updateSelectizeInput("dd_state_selector",selected="Madras")
-#   testff  
-# })   
-#cat(file=stderr(),"Testing of cat","\n")
-  addResourcePath("myassets", "www/assets")
-###Call aeOptionsInput.R's function
-  #pass input, output and session. That function will
-  aeOptionsInput(input,output,session,"AE/")
+  #print(conmanager$restoredvals)
+  
+  #print('----inputs---')
+
+  #isolate({
+   # lapply(names(input),function(x){
+    #  print(paste0('value of element ',x,' is ',input[[x]]))
+      # conmanager$setval(x,input[[x]])
+      # shinyjs::reset(x)
+      #resetvalues[[x]]<<-input[[x]]
+   # })
+    #print(paste(names(query), query, sep = "=", collapse=", "))
+  #})
+  
+  
+  ###Call aeOptionsInput.R's function
+  #pass input, output and session and connection restore manager object. It does the following,
   #1. render AE specific ui components, state_selection, ae_uitype_selection, and ae_filter_selection(it's children will do that)
   #2. During this process it will also callmodule for each UI component.  
   
-###Call geoptionsInput.R's function
+  #aeOptionsInput(input,output,session,"AE/",conmanager)
+  aeOptionsInput(input,output,session,"AE/")
+  
+  ###Call geoptionsInput.R's function
   #pass input, output and session. That function will
-  geOptionsInput(input,output,session,"GE/")
+  ##It does the following 
   #1. render GE specific ui components, ge_uitype_selection, and ge_filter_selection(it's children will do that)
   #2. During this process it will also callmodule for each UI component.  
+  
+  #geOptionsInput(input,output,session,"GE/",conmanager)
+  geOptionsInput(input,output,session,"GE/")
   
   observe({
     if(input$electionType=="GE"){
       #browser()
       #clean AE slate
-      updateSelectizeInput(session,"ge_I_chart_map_name",selected="")
+      updateSelectizeInput(session,"ae_I_chart_map_name",selected="")
       
     }else{
       #clean GE slate
       #browser()
-      updateSelectizeInput(session,"ae_I_chart_map_name",selected="")
+      updateSelectizeInput(session,"ge_I_chart_map_name",selected="")
       
     }
   })
-  # output$UPSummary<-renderUI({
-  #   ##Render the summary report of UP election written in rmd file format.
-  #   includeHTML("www/Reports/Gilles/UP-2017/Report.html")
-  # })
-  # 
-  # output$PBSummary<-renderUI({
-  #   ##Render the summary report of UP election written in rmd file format.
-  #   includeHTML("www/Reports/Gilles/Punjab-2017/Report.html")
-  # })
   
-  dataDownloadOptions(input,output,session,"AE/")
+  ####################Handling UI and event handlings for data download tab 
+  ####################of index.html
+  dataDownloadOptions(input,output,session,"AE/",conmanager)
 
+  ###################Rendering of contact us tab by reading the html from html file
    output$contactus<-renderUI({
      ##Render the summary report of UP election written in rmd file format.
      includeHTML("ContactUs.html")
    })
-   
+
+   ################Rendering of how to cite us tab by reading the html file   
    output$howtocite<-renderUI({
      ##Render the summary report of UP election written in rmd file format.
      includeHTML("HowToCite.html")
    })
 
- 
-session$allowReconnect("force") 
+   
+
 })
   
 
