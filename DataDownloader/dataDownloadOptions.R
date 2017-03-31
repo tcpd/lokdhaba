@@ -65,15 +65,15 @@ dataDownloadOptions <- function(input, output, session,dname,conmanager) {
 
   ##implementation of select all functionality
   observeEvent(input$dd_select_all_assemblies,{
-	cat(file=stderr(),"--inside observer","\n")
- cat(file=stderr(),input$dd_select_all_assemblies,"\n")
+	#cat(file=stderr(),"--inside observer","\n")
+ #cat(file=stderr(),input$dd_select_all_assemblies,"\n")
      if(!is.null(input$dd_select_all_assemblies)){
 	if(input$dd_select_all_assemblies==T){
-	cat(file=stderr(),"--inside true observer","\n")
+	#cat(file=stderr(),"--inside true observer","\n")
 		#select all options in input input$dd_year_selector
 		updateCheckboxGroupInput(session,"dd_year_selector",selected=current_filters$all_years)
 	}else{
-	cat(file=stderr(),"--inside false observer--","\n")
+	#cat(file=stderr(),"--inside false observer--","\n")
 
 		#uncheck all options in input input$dd_year_selector
 		updateCheckboxGroupInput(session,"dd_year_selector",selected="")
