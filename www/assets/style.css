@@ -140,7 +140,7 @@ body {
     font-size: 22px;
     width: 100%;
     line-height: 40px;
-    color: #FFFFFF;
+    color: #000000;
     display: inline;
     padding: 5px;
     text-align: center;
@@ -151,5 +151,5 @@ body {
     border: 1px solid transparent;
     margin: 0 0 1rem 0;
     border-radius: 10px;
-    background-color: #CF0000;
+    background-color: rgba(0,0,0,0.075);
 }

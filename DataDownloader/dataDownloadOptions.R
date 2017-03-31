@@ -43,9 +43,9 @@ dataDownloadOptions <- function(input, output, session,dname,conmanager) {
       current_filters$statename<<-input$dd_state_selector
       f<-getYearList(current_filters$statename,type=current_filters$electiontype)
       ##Now use this list to fill in the tree
-
+      current_filters$all_years<<-f
+    
       shiny::updateCheckboxGroupInput(session,"dd_year_selector",choices=f,selected=conmanager$getval("dd_year_selector",f))
-      #structure(list("11","33"),stselected=F))
       ####MAKE DT visible on the condition that at least one element in the tree is selected..
       }else{
 
@@ -62,6 +62,28 @@ dataDownloadOptions <- function(input, output, session,dname,conmanager) {
       #current_filters$partynames<<-input$filter_pname
     }
   })
+
+  ##implementation of select all functionality
+  observeEvent(input$dd_select_all_assemblies,{
+	cat(file=stderr(),"--inside observer","\n")
+ cat(file=stderr(),input$dd_select_all_assemblies,"\n")
+     if(!is.null(input$dd_select_all_assemblies)){
+	if(input$dd_select_all_assemblies==T){
+	cat(file=stderr(),"--inside true observer","\n")
+		#select all options in input input$dd_year_selector
+		updateCheckboxGroupInput(session,"dd_year_selector",selected=current_filters$all_years)
+	}else{
+	cat(file=stderr(),"--inside false observer--","\n")
+
+		#uncheck all options in input input$dd_year_selector
+		updateCheckboxGroupInput(session,"dd_year_selector",selected="")
+
+	}
+    }
+   })
+
+
+  ##Rendering of variable information table
   output$dd_variablenames_selector<-DT::renderDataTable(
     datatable(getVariableInfo(input$dd_electiontype_selector),#current_filters$electiontype),
               rownames=F,
