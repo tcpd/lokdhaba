@@ -6,6 +6,7 @@
 # 
 #    http://shiny.rstudio.com/
 #
+source('utils/utils-datadownloader.R')
 options(shiny.sanitize.errors = FALSE)
 
 aeOptionsInput <- function(input, output, session,dname) {
@@ -19,11 +20,12 @@ aeOptionsInput <- function(input, output, session,dname) {
   ###Get's triggered on initialization of state_selection UI
   output$state_selection<-renderUI({
     #read statename csv file
-    a<-read.csv(paste0(dname,"StateNameNormalized.csv"))%>%
-      subset(select=c("State_name"))%>% unique
+lst<-getValidStateNamesForElectionType("AE")
+   # a<-read.csv(paste0(dname,"StateNameNormalized.csv"))%>%
+   #   subset(select=c("State_name"))%>% unique
     #for display purpose replace _ with " "
     #print(a$state)
-    b<-lapply((a$State_name),function(x) gsub("_"," ",x))
+    b<-lapply((lst),function(x) gsub("_"," ",x))
     #Create a selection input box
     #print(b)
     selectInput("I_state_name","State Name",c("State Name"="",b),selectize = TRUE)

@@ -45,7 +45,7 @@ dataDownloadOptions <- function(input, output, session,dname,conmanager) {
       ##Now use this list to fill in the tree
       current_filters$all_years<<-f
     
-      shiny::updateCheckboxGroupInput(session,"dd_year_selector",choices=f,selected=conmanager$getval("dd_year_selector",f))
+      shiny::updateCheckboxGroupInput(session,"dd_year_selector",choices=f,selected=conmanager$getval("dd_year_selector",""))
       ####MAKE DT visible on the condition that at least one element in the tree is selected..
       }else{
 

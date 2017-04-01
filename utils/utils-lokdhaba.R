@@ -432,7 +432,7 @@ PartyPositionsMapLegendList<- function(){
 }
 
 PartyPositionsMapBreakupList<- function(){
-  return(c(0,1,2,3,4))
+  return(c(0,2,3,4,200))
 }
 
 PartyPositionsMapLegendColor<-function(inp){
