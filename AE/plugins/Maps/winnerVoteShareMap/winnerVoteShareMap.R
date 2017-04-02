@@ -142,7 +142,13 @@ winnerVoteShareMap <- function(input, output, session, parentsession,statename_r
           current_filters$partys<<-partys
           #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
           #for creating a new leaflet map. Set this leaflet map in the current setting variable
+	  if("ASSEMBLY" %in% names(shape)){
           winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
+	}else{
+
+          winners<-merge(shape,winners,by.x=c("ASSEMBLY_N"),by.y=c("ac_no"))
+
+	}
           assertthat::are_equal(nrow(shape),nrow(winners))
           winners<-addPopupInfo(winners)
           #store merged frame in the current setting
