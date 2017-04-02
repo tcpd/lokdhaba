@@ -74,7 +74,7 @@ geseatShareChart <- function(input, output, session, parentsession,dname) {
       }
       
       b<-readSeatShareFile("ge")
-      pivotdata<-dcast(b,year~party)
+      pivotdata<-dcast(b,year~party,value.var=c('seats'))
       #create a base line chart with year as the x-axis
       current_filters$base<<-plot_ly(pivotdata, x = ~year)
       

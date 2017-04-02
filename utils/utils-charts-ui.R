@@ -1,7 +1,8 @@
 preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
   
   subtitle<-'Source: Adapted from <a href="www.eci.nic.in">ECI Data</a><br><a href="www.tcpd.ashoka.edu.in">Trivedi Centre for Political Data, Ashoka University</a>'                          
-  
+ 
+  xtitle<-'Year (Assembly number)'
   base %>%
     layout(title = title, #xanchor="center",
          font=list(family= 'Droid Serif, serif',size=16,color=rgb(.2,.2,.2)),
@@ -27,7 +28,7 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
          margin=list(
            l=60,
            t=100,
-           b=50,
+           b=100,
            pad=1
          ))
 }
@@ -48,13 +49,20 @@ readVoteShareFile<-function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_voteshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares.csv")
     print(paste0('reading from ',filename))
     
     m<-read.csv(filename)
-    m<-subset(m,select=c("state","year","party","votes"))
+    m<-subset(m,select=c("state","year","sa_no","party","votes"))
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
     return(m)
   }
 }
@@ -66,12 +74,20 @@ readSeatShareFile<-function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_seatshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_seatshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m<-subset(m,select=c("state","year","party","seats"))
+    m<-subset(m,select=c("state","year","sa_no","party","seats"))
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }
 }
@@ -81,12 +97,20 @@ readVoterTurnoutFile<-function(statename){
   if(statename=="ge"){
     filename<-paste0("../tcpd_data/data/GE/ge_voter_turnouts.csv")
     print(paste0('reading from ',filename))
-    m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
+      m<-read.csv(filename)
     return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/ae_voter_turnouts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename) %>% filter(state==statename)
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }
 }
@@ -98,11 +122,19 @@ readPartiesContestedRepresentedFile<-function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_parties_contests.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_parties_contests.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }
 }
@@ -116,11 +148,19 @@ readCandidatesContestedDepositLostFile<-function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_contested_deposit_losts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_contested_deposit_losts.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+    
     return(m)
   }
 }

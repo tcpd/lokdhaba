@@ -32,7 +32,8 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
       print(dirname)
       print(paste('Voteshare-stchange: statename is ',st))
         b<-readVoteShareFile(st)
-        pivotdata<-dcast(b,year~party)
+        #browser()
+        pivotdata<-dcast(b,year~party,value.var=c('votes'))
         #create a base line chart with year as the x-axis
         current_filters$base<<-plot_ly(pivotdata, x = ~year)
         #print(paste('before',values$statename))
@@ -94,14 +95,15 @@ voteShareChart <- function(input, output, session, parentsession,statename_react
       #   print(paste('stale names','returning'))
       #   return()
       # }
-      print(paste('selected',selectedpartynames))
+      #print(paste('selected',selectedpartynames))
       #read base that was set when state name changed.
       base<-current_filters$base
+      #browser()
       # #for each selected party in the input "filter_pname" id (checkbox) add a new trace
       # #corresponding to that party
       lapply(selectedpartynames,function(x) {
-        print(paste('adding',x));
-        base<<-add_trace(base,y=~get(x),name=x,mode='lines+markers',showlegend=TRUE)
+        #print(paste('adding',x));
+        base<<-add_trace(base,y=~get(x),name=x,type='scatter',mode='lines+markers',showlegend=TRUE)
         }
         )
       sname<-current_filters$sname
