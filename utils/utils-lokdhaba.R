@@ -32,6 +32,7 @@ addPopupInfo<- function(winnersframe,type="state"){
 
 addTitleLeaflet<-function(map,titlemessage){
  winners<-getMapData(map)
+titlemessage<-gsub("#","Assembly #",titlemessage)
  winners$Lat<-as.vector(coordinates(winners)[,2])
  winners$Long<-as.vector(coordinates(winners)[,1]) 
 
@@ -50,11 +51,17 @@ readStateWinnersFile<- function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    return(m) 
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+     return(m) 
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
     return(m)
   }
 }
@@ -67,12 +74,18 @@ readPartyPositionsFile<- function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_partys.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    return(m)
+    m$newyear<-paste0(m$year," (#",m$ga_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+     return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_partys.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    return(m)
+    m$newyear<-paste0(m$year," (#",m$sa_no,")")
+    m$year<-NULL
+    names(m)[names(m)=="newyear"]<-"year"
+     return(m)
   }
   
 }

@@ -74,7 +74,7 @@ gevoteShareChart <- function(input, output, session, parentsession,dname) {
       #else from the csv file read in the information regarding this state in another dataframe
       b<-readVoteShareFile("ge")
       #b$yearga<-paste0(b$year,"#",b$ga_no)
-      pivotdata<-dcast(b,year~party)
+      pivotdata<-dcast(b,year~party,value.var=c('votes'))
       #create a base line chart with year as the x-axis
       current_filters$base<<-plot_ly(pivotdata, x = ~sort(year))
       

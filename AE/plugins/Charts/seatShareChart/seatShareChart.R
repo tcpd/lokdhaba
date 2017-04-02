@@ -36,7 +36,7 @@ seatShareChart <- function(input, output, session, parentsession,statename_react
       print(paste('seatshare: statename is ',st))
       
         b<-readSeatShareFile(st)
-        pivotdata<-dcast(b,year~party)
+        pivotdata<-dcast(b,year~party,value.var=c('seats'))
         #create a base line chart with year as the x-axis
         current_filters$base<<-plot_ly(pivotdata, x = ~year)
         current_filters$sname<<-st
