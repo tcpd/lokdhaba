@@ -53,7 +53,9 @@ winnerGenderMap <- function(input, output, session, parentsession,statename_reac
         #store it in the filter setting variable
         current_filters$dframewinners<<-m
         #get the year of elections for this state from current drame set 
-        years<-unique(current_filters$dframewinners$year)
+        years<-getYearsForMap(current_filters$dframewinners)
+      
+  #years<-unique(current_filters$dframewinners$year)
         current_filters$yearlist<<-years
         values$gendernames<-c()#for removing the rendered map
         isolate({

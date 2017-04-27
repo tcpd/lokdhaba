@@ -46,7 +46,9 @@ numCandidatesMap <- function(input, output, session, parentsession,statename_rea
         #store it in the filter setting variable
         current_filters$dframewinners<<-m
         #get the year of elections for this state from current drame set 
-        years<-unique(current_filters$dframewinners$year)
+        years<-getYearsForMap(current_filters$dframewinners)
+    
+    #years<-unique(current_filters$dframewinners$year)
         #reset the year selection UI by filling it appropriately
         current_filters$yearlist<<-years
         values$count<-c()#for removing the rendered map

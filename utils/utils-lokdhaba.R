@@ -66,6 +66,12 @@ readStateWinnersFile<- function(statename){
   }
 }
 
+#
+getYearsForMap<-function(dframe){
+        all<-unique(dframe$year)
+	return(Filter(function(x) x>=2009,all))
+
+}
 
 #read ae_partys.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_maps.csv
 
