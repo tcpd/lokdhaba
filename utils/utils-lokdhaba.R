@@ -13,6 +13,24 @@ readShapeFile<- function(sname, year){
   }
 }
 
+  isvalid<-function(obj,type){
+    if(!is.null(obj)){
+      if(type=="bool"){
+        return(obj)
+      }
+      if(type=="string"){
+        if(trimws(obj)==""){return(F)}else{return(T)}  
+      }
+      if(type=="list"){
+        if(length(obj)==0){return(F)}else{return(T)}
+      }
+      if(type=="numeric"){
+          if(obj==-1){return(F)}else{return(T)}
+          }
+    }else{
+      return(F)
+    }
+  }
 
 
 addPopupInfo<- function(winnersframe,type="state"){
