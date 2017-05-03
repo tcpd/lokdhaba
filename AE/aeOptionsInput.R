@@ -9,7 +9,7 @@
 source('utils/utils-datadownloader.R')
 options(shiny.sanitize.errors = FALSE)
 
-aeOptionsInput <- function(input, output, session,dname) {
+aeOptionsInput <- function(input, output, session,dname,conmanager) {
   ####Global environement variable#######
   g_env<-new.env()
   last_ui_type<-""
@@ -28,7 +28,7 @@ lst<-getValidStateNamesForElectionType("AE")
     b<-lapply((lst),function(x) gsub("_"," ",x))
     #Create a selection input box
     #print(b)
-    selectInput("I_state_name","State Name",c("State Name"="",b),selectize = TRUE)
+    selectInput("I_state_name","State Name",c("State Name"="",b),selectize = TRUE,selected=conmanager$getval("I_state_name",""))
     
   })
   
@@ -58,8 +58,10 @@ lst<-getValidStateNamesForElectionType("AE")
       source(filename)
       modname=(trimws(as.character(x$modulename)))
       print(paste("calling callModule",modname))
-      r=callModule(get(modname),modname,session,streactive,dirname) 
-      r$HideAll()
+      r=callModule(get(modname),modname,session,streactive,dirname,conmanager) 
+      #r$Setup()
+      ##Really needed these two lines(above and below)??    
+      #r$HideAll()
       title=trimws(as.character(x$title))
       
       assign(title,r,envir=g_env)
@@ -72,7 +74,7 @@ lst<-getValidStateNamesForElectionType("AE")
     #Create a selection input box
     #print(titles)
     chartmaptitles<<-titles
-    selectInput("ae_I_chart_map_name","Visualization Type",c("Chart/Map"="",titles),selectize = TRUE)
+    selectInput("ae_I_chart_map_name","Visualization Type",c("Chart/Map"="",titles),selectize = TRUE,selected=conmanager$getval("ae_I_chart_map_name",""))
     
   })
 
@@ -89,8 +91,11 @@ lst<-getValidStateNamesForElectionType("AE")
        print('Hiding the ui of previous chart option')
        lastselection$HideAll()
      }
-     currselection<-get(input$ae_I_chart_map_name,envir =  g_env)
-     currselection$ShowAll()
+    currselection<-get(input$ae_I_chart_map_name,envir =  g_env)
+    currselection$Setup()
+     #currselection$SetupOutputRendering()
+    # print('setup done for new one')
+     #currselection$ShowAll()
      #set the current selection as the last_ui_type global variable which will be used to hide
      #this ui when ui type change happens
      last_ui_type<<-input$ae_I_chart_map_name
