@@ -73,14 +73,14 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
         </div>
      <div class="collapse navbar-collapse" id="navbar-ex-collapse">
        <ul class="nav navbar-nav">
-        <li class="active">
+<!--        <li class="active">
           <a href="#tab-5312-5" data-toggle="tab" data-value="HOME">
             Home
           </a>
-        </li>
-        <li class="dropdown">
+        </li>-->
+        <li class="active">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Election Data
+            Browse Data
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
@@ -90,15 +90,16 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
               </a>
             </li>
             <li>
-              <a href="#tab-5312-3" data-toggle="tab" data-value="DLD">
-                Data Download
+              <a href="#tab-5312-3" data-toggle="tab" data-value="BRS">
+                Data Browse
               </a>
             </li>
           </ul>
         </li>
 	<!-- </ul> -->
         <!-- <ul> -->
-	  <li><a href="#tab-3246-1" data-toggle="tab" data-value="CONTACTUS">Contact us</a></li>
+	  <li><a href="#tab-3246-1" data-toggle="tab"
+        data-value="DLD">Data Download</a></li> -->
 	  <li><a href="#tab-3246-2" data-toggle="tab" data-value="CITE">How to cite us</a></li>
 	</ul>
        </div>
@@ -107,7 +108,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
   <div class="container-fluid">
     <div class="tab-content">
 <!-- Home page tab, Active by default on the site opening -->
-    <div class="tab-pane active" data-value="HOME" id="tab-5312-5">
+<!--    <div class="tab-pane active" data-value="HOME" id="tab-5312-5">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -124,13 +125,13 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
       </div>
     </div>
       <!--<div class="tcpd-buttons-wrap">
-        <a href="javascript:void(0)" class="tcpd-button primary" id="get-started">Get Started</a>
+<!--        <a href="javascript:void(0)" class="tcpd-button primary" id="get-started">Get Started</a>
         <a href="search.html" class="tcpd-button primary">Enter</a>
       </div>-->
-	</div>
-      </div>
+<!--	</div>
+      </div> -->
 <!-- data visualization tab -->
-    <div class="tab-pane" data-value="EDV" id="tab-5312-2">
+    <div class="tab-pane active" data-value="EDV" id="tab-5312-2">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -173,7 +174,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
         </div>
       </div>
 <!-- Data download tab  -->
-    <div class="tab-pane" data-value="DLD" id="tab-5312-3">
+    <div class="tab-pane" data-value="DLD" id="tab-3246-1">
   <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -265,7 +266,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 
 	  </div>
     </div>
-      <div class="tab-pane" data-value="CONTACTUS" id="tab-3246-1">
+<!--      <div class="tab-pane" data-value="CONTACTUS" id="tab-3246-1">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -274,7 +275,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 
           <div id="contactus" class="shiny-html-output"></div>
         </div>
-      </div>
+      </div> -->
       <div class="tab-pane" data-value="CITE" id="tab-3246-2">
         <div class="container-fluid">
 	  <div class="banner">
