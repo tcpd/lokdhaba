@@ -109,10 +109,18 @@ plotMap<-function(state, year, margins, plot, envr){
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("wmarginI_year"),"Select Year", c() , selectize = TRUE),
-shinyjs::hidden(checkboxGroupInput(ns("wmargin_names") , "Select margins ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("wmarginI_year"),"Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ checkboxGroupInput(ns("wmargin_names") , "Select margins ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("wmargin_names") , "Select margins ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2) 
+ })
 SetupOutputRendering()
 }
 

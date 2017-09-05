@@ -105,10 +105,18 @@ plotMap<-function(state, year, options, plot, envr){
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("wgenderI_year"),"Select Year", c() , selectize = TRUE),
-shinyjs::hidden(checkboxGroupInput(ns("wgender_names") , "Select gender type ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("wgenderI_year"),"Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ checkboxGroupInput(ns("wgender_names") , "Select gender type ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("wgender_names") , "Select gender type ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2) 
+ })
 SetupOutputRendering()
 }
 

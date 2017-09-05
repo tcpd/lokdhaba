@@ -7,8 +7,9 @@ getYears<-function(state, years, envr){
     m<-readStateWinnersFile(st)
         
     yearlist<-unique(m$year)
-
-    assign(years,yearlist,env=envr)
+    #removing years in which NOTA was not present
+    yl <- yearlist[which(yearlist >=2014)] 
+    assign(years,yl,env=envr)
   }
 
 getOptions<-function(state, year, options,envr){
@@ -110,10 +111,18 @@ plotMap<-function(state, year, options, plot, envr){
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("notaI_year"),"Select Year", c() , selectize = TRUE),
-shinyjs::hidden(checkboxGroupInput(ns("nota_names") , "Select range ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("notaI_year"),"Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ checkboxGroupInput(ns("nota_names") , "Select range ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("nota_names") , "Select range ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2) 
+ })
 SetupOutputRendering()
 }
 

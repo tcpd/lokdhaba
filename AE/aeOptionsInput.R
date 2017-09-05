@@ -92,10 +92,11 @@ lst<-getValidStateNamesForElectionType("AE")
        lastselection$HideAll()
      }
     currselection<-get(input$ae_I_chart_map_name,envir =  g_env)
+    #browser()
     currselection$Setup()
      #currselection$SetupOutputRendering()
     # print('setup done for new one')
-     #currselection$ShowAll()
+     currselection$ShowAll()
      #set the current selection as the last_ui_type global variable which will be used to hide
      #this ui when ui type change happens
      last_ui_type<<-input$ae_I_chart_map_name

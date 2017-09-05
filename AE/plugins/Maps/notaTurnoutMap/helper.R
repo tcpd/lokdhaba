@@ -6,8 +6,9 @@ getYears<-function(state, years, envr){
     m<-readStateWinnersFile(st)
         
     yearlist<-unique(m$year)
-
-    assign(years,yearlist,env=envr)
+    #removing years in which NOTA was not present
+    yl <- yearlist[which(yearlist >=2014)] 
+    assign(years,yl,env=envr)
   }
 
 getOptions<-function(state, year, options,envr){

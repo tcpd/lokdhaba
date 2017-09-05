@@ -17,21 +17,11 @@ getPartyNames<-function(state, year, parties, envr){
        st<-gsub(" ","_",st)
 
        yr<-get(year,envr)
-       winners<-readPartyPositionsFile(st)%>%filter(year==yr)
+       cands<-readPartyPositionsFile(st)%>%filter(year==yr)
 
-       partys<-unique(winners$party1)
+       partys<-unique(cands$party1)
        assign(parties,partys,env=envr)
 
-       shape<-readShapeFile(st, yr)
-       #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
-       #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
-        assertthat::are_equal(nrow(shape),nrow(winners))
-        winners<-addPopupInfo(winners)
-        winners$Lat<-as.vector(coordinates(shape)[,2])
-        winners$Long<-as.vector(coordinates(shape)[,1])
-        assign("mergedwinners",winners,env=envr)
-    
 
     }
 
@@ -41,16 +31,29 @@ getOptions<-function(state,year,party,options,envr){
 
        yr<-get(year,envr)
        partyname<-get(party,envr)
-    
-       winners<-get("mergedwinners",envr)
-       winners$position[winners$party1!=partyname]<-NA
+       
+       party_wise <-   readPartyPositionsFile(st)%>%filter(year==yr & party1 == partyname)
+       shape<-readShapeFile(st, yr)
+       #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
+       #for creating a new leaflet map. Set this leaflet map in the current setting variable
+       party_wise<-merge(shape,party_wise,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
+        assertthat::are_equal(nrow(shape),nrow(party_wise))
+        party_wise<-addPopupInfo(party_wise)
+        party_wise$Lat<-as.vector(coordinates(shape)[,2])
+        party_wise$Long<-as.vector(coordinates(shape)[,1])
+        #assign("mergedwinners",winners,env=envr)
 
-        base<-leaflet(winners)
+
+    
+       #winners<-get("mergedwinners",envr)
+       #winners$position[winners$party1!=partyname]<-NA
+
+        base<-leaflet(party_wise)
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
 
 #set the count of  seats for each option
-        tm<-winners
+        tm<-party_wise
         tm<-subset(tm,select=c("year","position"))
         tm<-PartyPositionsMapLegendCount(tm)
         assign("countedframe",tm,env=envr)
@@ -123,11 +126,25 @@ assign(plot, base,env=envr)
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("partyposI_year") ,  "Select Year", c() , selectize = TRUE),
-shinyjs::hidden(selectInput(ns("partyposI_party") , "Select Party" , c() , selectize = TRUE)),
-shinyjs::hidden(checkboxGroupInput(ns("partyposoptions") , "Select positions ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("partyposI_year") ,  "Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ selectInput(ns("partyposI_party") , "Select Party" , c() , selectize = TRUE)
+ } 
+ else {
+shinyjs::hidden(selectInput(ns("partyposI_party") , "Select Party" , c() , selectize = TRUE)) 
+ }
+ tmp3 <- if( T  & isvalid(currentvalues$selected_party,"string")){
+ checkboxGroupInput(ns("partyposoptions") , "Select positions ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("partyposoptions") , "Select positions ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2,
+ tmp3) 
+ })
 SetupOutputRendering()
 }
 

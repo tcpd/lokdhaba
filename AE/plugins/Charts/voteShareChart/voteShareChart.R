@@ -48,9 +48,11 @@ voteShareChart<-function(input, output, session, parentsession,statename_reactiv
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("party_names") , "Select voteshare for ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("party_names") , "Select voteshare for ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 

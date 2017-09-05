@@ -52,38 +52,24 @@ constructHidAllFunction<-function(plotarea){
     return(code)
     }
 
-constructSetupFunction<-function(filteroutputarea,filterc,inputtable){
+constructSetupFunction<-function(filteroutputarea,filterc){
 
-    innercode <<- paste0(filteroutputarea,"<-renderUI({\n #ShowAll()")
+    innercode<-paste0(filteroutputarea,"<-renderUI({\n ShowAll()","\n tagList(")
     ##add construction code for filter ui components here..
     apply(filterc,1,function(row){
         if(trimws(row["isinit"])==T){
-          innercode <<- paste0(innercode, "\n tmp",row["filterid"], " <-", gsub(":",",",row["construction"]))
-            #innercode<<-paste0(innercode,"\n",gsub(":",",",row["construction"]),",")
+            innercode<<-paste0(innercode,"\n",gsub(":",",",row["construction"]),",")
         }else if(trimws(row["isinit"])==F){
-          fid <- row["filterid"]
-          dep_inp <- filter(inputtable,filterid == fid) 
-          innercode <<- paste0(innercode,"\n ","tmp",row["filterid"] ," <- if( T ")
-          apply(dep_inp,1,function(inp_row){
-            innercode <<- paste0(innercode," & isvalid(currentvalues$",inp_row["alias"],",\"",inp_row["type"],"\")")
-          })
-          innercode <<- paste0(innercode,"){")
-            
-          innercode <<- paste0(innercode,"\n ",gsub(":",",",row["construction"]),"\n } \n else {")
-          innercode<<-paste0(innercode,"\nshinyjs::hidden(",gsub(":",",",row["construction"]),") \n }")
+            innercode<<-paste0(innercode,"\nshinyjs::hidden(",gsub(":",",",row["construction"]),"),")
         }else{
             stop('some serious error, isinit tag should be either T or F')
         }
         })
-    innercode <<- paste0(innercode,"\n tagList (")
-    apply(filterc,1,function(row){
-      innercode <<- paste0(innercode,"\n tmp",row["filterid"],",")
-    })
     ##as we have an extra "," at the end (do we have that alwasy?? yes at least one filter must be there-- but keep it in mind)
-    innercode <<-  substr(innercode, 1, nchar(innercode)-1)
-    innercode <<-paste0(innercode,") \n })\n")
+    innercode<-  substr(innercode, 1, nchar(innercode)-1)
+    innercode<-paste0(innercode,") })\n")
     ##call setupoutputrendering also..
-    innercode <<-paste0(innercode,"SetupOutputRendering()","\n")
+    innercode<-paste0(innercode,"SetupOutputRendering()","\n")
     code<-paste0("Setup","<-","function(){\n",innercode,"}","\n")
     return(code)
     }
@@ -225,7 +211,7 @@ constructFunctions<-function(inputtable,outputtable,funtable,filteroutputarea,fi
   filterc<-fread(filters)
 
     code<-paste0(constructVariables(filterc),"\n\n")
-  code<-paste0(code,constructSetupFunction(filteroutputarea,filterc,inputc),"\n\n")
+  code<-paste0(code,constructSetupFunction(filteroutputarea,filterc),"\n\n")
 
     code<-paste0(code,constructShowAllFunction(plotarea),"\n\n")
 

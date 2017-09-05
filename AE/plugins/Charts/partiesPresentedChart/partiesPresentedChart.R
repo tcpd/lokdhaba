@@ -50,9 +50,11 @@ partiesPresentedChart<-function(input, output, session, parentsession,statename_
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("pc_options") , "Select  ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("pc_options") , "Select  ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 

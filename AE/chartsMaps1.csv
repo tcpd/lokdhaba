@@ -1,6 +1,6 @@
 title,type,filename,modulename
-Party wise vote share: Chart,Chart,voteShareChart.R,voteShareChart
 Party wise seat share: Chart,Chart,seatShareChart.R,seatShareChart
+Party wise vote share: Chart,Chart,voteShareChart.R,voteShareChart
 Voter Turnout Timeline: Chart,Chart,voterTurnoutChart.R,voterTurnoutChart
 Candidates who saved their deposits: Chart,Chart,contestedDepositSavedChart.R,contestedDepositSavedChart
 Parties contested and represented: Chart,Chart,partiesPresentedChart.R,partiesPresentedChart

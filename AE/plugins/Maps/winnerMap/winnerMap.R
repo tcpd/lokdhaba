@@ -99,10 +99,18 @@ plotMap<-function(state, year, parties, plot, envr){
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("wmI_year"),"Select Year", c() , selectize = TRUE),
-shinyjs::hidden(checkboxGroupInput(ns("wmparty_names") , "Select parties ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("wmI_year"),"Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ checkboxGroupInput(ns("wmparty_names") , "Select parties ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("wmparty_names") , "Select parties ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2) 
+ })
 SetupOutputRendering()
 }
 

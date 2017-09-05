@@ -109,10 +109,18 @@ plotMap<-function(state, year, options, plot, envr){
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("numcandI_year"),"Select Year", c() , selectize = TRUE),
-shinyjs::hidden(checkboxGroupInput(ns("numcand_names") , "Select number of candidates ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("numcandI_year"),"Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ checkboxGroupInput(ns("numcand_names") , "Select number of candidates ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("numcand_names") , "Select number of candidates ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2) 
+ })
 SetupOutputRendering()
 }
 

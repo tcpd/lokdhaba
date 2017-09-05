@@ -128,11 +128,25 @@ plotMap<-function(state, year, party, options, plot, envr){
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-selectInput(ns("wvmI_year") ,  "Select Year", c() , selectize = TRUE),
-shinyjs::hidden(selectInput(ns("wvmI_party") , "Select Party" , c() , selectize = TRUE)),
-shinyjs::hidden(checkboxGroupInput(ns("wvmoptions") , "Select voteshare range ", c()))) })
+ #ShowAll()
+ tmp1 <-selectInput(ns("wvmI_year") ,  "Select Year", c() , selectize = TRUE)
+ tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
+ selectInput(ns("wvmI_party") , "Select Party" , c() , selectize = TRUE)
+ } 
+ else {
+shinyjs::hidden(selectInput(ns("wvmI_party") , "Select Party" , c() , selectize = TRUE)) 
+ }
+ tmp3 <- if( T  & isvalid(currentvalues$selected_party,"string")){
+ checkboxGroupInput(ns("wvmoptions") , "Select voteshare range ", c())
+ } 
+ else {
+shinyjs::hidden(checkboxGroupInput(ns("wvmoptions") , "Select voteshare range ", c())) 
+ }
+ tagList (
+ tmp1,
+ tmp2,
+ tmp3) 
+ })
 SetupOutputRendering()
 }
 

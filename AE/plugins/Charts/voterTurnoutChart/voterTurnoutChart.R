@@ -43,9 +43,11 @@ voterTurnoutChart<-function(input, output, session, parentsession,statename_reac
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("gender_names") , "Select turnout for ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("gender_names") , "Select turnout for ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 
