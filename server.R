@@ -9,6 +9,11 @@ source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
 source("DataDownloader/browseDataOptions.R")
 source("utils/utils-classes.R")
+source("utils/utils-lokdhaba.R")
+library(rgdal)
+library(dplyr)
+library(leaflet.extras)
+
 shinyServer(function(input, output, session) {
   
   ########################Allow server to reconnect to client after network
@@ -17,7 +22,7 @@ shinyServer(function(input, output, session) {
   
   # ###########Adds resource path
   # addResourcePath("myassets", "www/assets")
-  
+useShinyjs(html = TRUE)  
   #######################Connection reset management#######################
   ######## When server process restarts after connection failure of over 15 
   ####### seconds then all inputs are sent again by browser to server.
@@ -58,8 +63,8 @@ shinyServer(function(input, output, session) {
   #1. render AE specific ui components, state_selection, ae_uitype_selection, and ae_filter_selection(it's children will do that)
   #2. During this process it will also callmodule for each UI component.  
   
-  #aeOptionsInput(input,output,session,"AE/",conmanager)
-  aeOptionsInput(input,output,session,"AE/")
+  aeOptionsInput(input,output,session,"AE/",conmanager)
+  #aeOptionsInput(input,output,session,"AE/")
   
   ###Call geoptionsInput.R's function
   #pass input, output and session. That function will
