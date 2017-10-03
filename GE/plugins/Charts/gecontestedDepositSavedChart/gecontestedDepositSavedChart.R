@@ -79,14 +79,14 @@ gecontestedDepositSavedChart <- function(input, output, session, parentsession,d
       #else from the csv file read in the information regarding this state in another dataframe
       b<-readCandidatesContestedDepositLostFile("ge")
       #create a base line chart with year as the x-axis
-      current_filters$base<<-plot_ly(b, x = ~year)
+      current_filters$base<<-plot_ly(b, x = ~Year)
       
-      optionnames<-c("total candidates","deposit saved")
+      optionnames<-c("Total Candidates","Deposit Saved")
       #stale_filters$partynames<<-current_filters$partynames
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$optionnames<-c()
       checkboxGroupInput(ns("filter_pname"), "Filter by ",
-                         optionnames)
+                         optionnames,selected=optionnames)
       
     })
     

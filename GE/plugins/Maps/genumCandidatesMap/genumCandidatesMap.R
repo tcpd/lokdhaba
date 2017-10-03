@@ -102,7 +102,7 @@ genumCandidatesMap <- function(input, output, session, parentsession,dirname) {
             #store it in the filter setting variable
             current_filters$dframewinners<<-m
             #get the year of elections for this state from current drame set
-            years<-unique(current_filters$dframewinners$year)
+            years<-unique(current_filters$dframewinners$Year)
             years<-sort(years)
             #reset the year selection UI by filling it appropriately
             current_filters$yearlist<<-years
@@ -116,18 +116,18 @@ genumCandidatesMap <- function(input, output, session, parentsession,dirname) {
         print(paste0('year change detected',yr))
         shape<-readShapeFile("ge", yr)
         #get winners name from winners dataframe stored for this state for the given year
-        winners<-current_filters$dframewinners %>% filter(year==yr)
+        winners<-current_filters$dframewinners %>% filter(Year==yr)
         print(nrow(winners))
         #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
         #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("STATE_UT","PC_NO"),by.y=c("state","pc_no"))
+        winners<-merge(shape,winners,by.x=c("STATE_UT","PC_NO"),by.y=c("State_Name","Constituency_No"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners,type="ge")
         current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
         #set the count of winning seats for each victory margin
         tm<-winners
-        tm<-subset(tm,select=c("year","n_cand"))
+        tm<-subset(tm,select=c("Year","N_Cand"))
         tm<-NumCandidatesMapLegendCount(tm)
         current_filters$countedframe<<-tm
         
@@ -187,7 +187,7 @@ genumCandidatesMap <- function(input, output, session, parentsession,dirname) {
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.numeric(((n_cand)))), popup=~(popup)) %>%
+                    fillColor = ~pal(as.numeric(((N_Cand)))), popup=~(popup)) %>%
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Number of contesting candidates"
         )%>%
         addTitleLeaflet(title)
@@ -203,4 +203,4 @@ genumCandidatesMap <- function(input, output, session, parentsession,dirname) {
   return (ret)
   ################################################################################################################################
 
-}
+}                                                                      

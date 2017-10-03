@@ -74,11 +74,11 @@ gevoteShareChart <- function(input, output, session, parentsession,dname) {
       #else from the csv file read in the information regarding this state in another dataframe
       b<-readVoteShareFile("ge")
       #b$yearga<-paste0(b$year,"#",b$ga_no)
-      pivotdata<-dcast(b,year~party,value.var=c('votes'))
+      pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
       #create a base line chart with year as the x-axis
-      current_filters$base<<-plot_ly(pivotdata, x = ~sort(year))
+      current_filters$base<<-plot_ly(pivotdata, x = ~sort(Year))
       
-      partynames<-unique(b$party)
+      partynames<-unique(b$Party)
       #stale_filters$partynames<<-current_filters$partynames
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$partynames<-c()

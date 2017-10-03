@@ -176,6 +176,65 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 
         </div>
       </div>
+<!-- Browse Data Tab -->
+<div class="tab-pane" data-value="BRS" id="tab-5312-3">
+<!-- code pasted from ui.R -->
+<div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+	  <div class="row" >
+	    <div class="col-sm-3">
+	      <form class="well">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="bd_electiontype_selector">Election Type</label>
+       <div>
+        <select id="bd_electiontype_selector" class="form-control">
+          <option value="" selected>Select Election Type</option>
+          <option value="GE">General Elections</option>
+          <option value="AE">Assembly Elections</option></select>
+          <script type="application/json" data-for="bd_electiontype_selector">{}</script>
+       </div>
+    </div>
+    <div data-display-if="input.bd_electiontype_selector!=&#39;&#39;" data-ns-prefix="">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="bd_state_selector">State Name</label>
+      <div>
+        <select id="bd_state_selector" class="form-control">
+          <option value="" selected>Select State</option></select>
+        <script type="application/json" data-for="bd_state_selector">{}</script>
+      </div>
+    </div>
+    </div>
+    <div data-display-if="input.bd_state_selector!=&#39;&#39;" >
+      <label class="control-label" for="id">Select Assembly</label>                                                                   
+      <div class="form-group shiny-input-container">
+        <div class="checkbox">
+          <label>
+            <input id="bd_select_all_assemblies" type="checkbox"/> 
+            <span>Select All</span>
+          </label>
+        </div>
+      </div>
+      <div id="bd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+        <div class="shiny-options-group"></div>
+      </div>
+
+    </div>
+  </form>
+  </div>
+	    <div class="col-sm-9">
+    <div data-display-if="input.bd_year_selector.length!=0" data-ns-prefix=""> 
+      <div id="bd_variablenames_selector" style="width:100%; height:auto;"
+        class="datatables html-widget html-widget-output">
+      </div>
+    </div>
+</div>
+</div>
+</div>
+<!--paste till here -->
+</div>
 <!-- Data download tab  -->
     <div class="tab-pane" data-value="DLD" id="tab-3246-1">
   <div class="container-fluid">
@@ -207,10 +266,19 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
           </div>
           <div data-display-if="input.dd_state_selector!=&#39;&#39;">
                      <label class="control-label" for="id">Select Assembly</label>                                                                   
-<div class="form-group shiny-input-container">                                                                                                         <div class="checkbox">                                                                                                                                 <label>                                                                                                                                                <input id="dd_select_all_assemblies" type="checkbox"/>                                                                                               <span>Select All</span>                                                                                                                                   </label>                                                                                                                                           </div>                                                                                                                                             </div>
-                   <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">                                                         <div class="shiny-options-group"></div>                                                                                                            </div>
+<div class="form-group shiny-input-container">
+  <div class="checkbox">
+    <label>                                                                                                                                                
+      <input id="dd_select_all_assemblies" type="checkbox"/>                                                                                               
+      <span>Select All</span>
+    </label> 
+</div>
+</div>
+                  <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+                   <div class="shiny-options-group"></div>
+                 </div>
 	    <span style="font-size:12px">*After selecting one or more assemblies please scroll down to accept terms and conditions and download the electoral data</span>
-          </div>
+    </div>
 	  </div>
 	    </form>
 	    <div class="col-sm-9">

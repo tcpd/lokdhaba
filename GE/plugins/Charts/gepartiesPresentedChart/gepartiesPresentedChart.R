@@ -75,9 +75,9 @@ gepartiesPresentedChart <- function(input, output, session, parentsession,dname)
       b<-readPartiesContestedRepresentedFile("ge")
       #pivotdata<-dcast(b,year~party)
       #create a base line chart with year as the x-axis
-      current_filters$base<<-plot_ly(b, x = ~year)
+      current_filters$base<<-plot_ly(b, x = ~Year)
       
-      optionnames<-c("parties contested","parties represented")
+      optionnames<-c("Parties Contested","Parties Represented")
       #stale_filters$partynames<<-current_filters$partynames
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$optionnames<-c()

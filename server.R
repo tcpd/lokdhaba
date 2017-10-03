@@ -7,6 +7,7 @@ library(DT)
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
+source("DataDownloader/browseDataOptions.R")
 source("utils/utils-classes.R")
 shinyServer(function(input, output, session) {
   
@@ -86,6 +87,7 @@ shinyServer(function(input, output, session) {
   ####################Handling UI and event handlings for data download tab 
   ####################of index.html
   dataDownloadOptions(input,output,session,"AE/",conmanager)
+  browseDataOptions(input,output,session,conmanager)
 
   ###################Rendering of contact us tab by reading the html from html file
    output$contactus<-renderUI({

@@ -122,7 +122,7 @@ genotaTurnoutMap <- function(input, output, session, parentsession,dirname) {
             #store it in the filter setting variable
             current_filters$dframewinners<<-m
             #get the year of elections for this state from current drame set
-            years<-unique(current_filters$dframewinners$year)
+            years<-unique(current_filters$dframewinners$Year)
             years<-sort(years)
             current_filters$yearlist<<-years
 
@@ -139,14 +139,14 @@ genotaTurnoutMap <- function(input, output, session, parentsession,dirname) {
         print(nrow(winners))
         #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
         #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("STATE_UT","PC_NO"),by.y=c("state","pc_no"))
+        winners<-merge(shape,winners,by.x=c("STATE_UT","PC_NO"),by.y=c("State_Name","Constituency_No"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners,type="ge")
         current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
         #set the count of winning seats for each victory margin
         tm<-winners
-        tm<-subset(tm,select=c("year","nota_percent"))
+        tm<-subset(tm,select=c("Year","NOTA_Percentage"))
         tm<-NotaTurnoutMapLegendCount(tm)
         current_filters$countedframe<<-tm
         

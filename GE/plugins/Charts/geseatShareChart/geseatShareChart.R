@@ -74,11 +74,11 @@ geseatShareChart <- function(input, output, session, parentsession,dname) {
       }
       
       b<-readSeatShareFile("ge")
-      pivotdata<-dcast(b,year~party,value.var=c('seats'))
+      pivotdata<-dcast(b,Year~Party,value.var=c('Seats'))
       #create a base line chart with year as the x-axis
-      current_filters$base<<-plot_ly(pivotdata, x = ~year)
+      current_filters$base<<-plot_ly(pivotdata, x = ~Year)
       
-      partynames<-unique(b$party)
+      partynames<-unique(b$Party)
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$partynames<-c()
       

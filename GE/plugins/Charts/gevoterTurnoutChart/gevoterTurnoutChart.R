@@ -5,6 +5,7 @@ source("utils/utils-charts-ui.R")
 gevoterTurnoutChart <- function(input, output, session, parentsession,dname) {
   ##################################### Values is a container to keep reactive values. These values are### 
   ##################use to trigger UI component renderings (like filters and chart area)##################
+  #browser()
   values<-reactiveValues(gendernames=c(),filterreset=T)
   ##Variable to store the values used across functions
   current_filters<-c()
@@ -58,7 +59,7 @@ gevoterTurnoutChart <- function(input, output, session, parentsession,dname) {
     #shinyjs::disable(ns("pname_filter"))
     shinyjs::hide(ns("filter_pname")) #may be this hiding not possible..check it later
     shinyjs::hide("distPlot")
-    print('ge Voteshar[]=e: Hidden all')
+    print('ge Voteshare: Hidden all')
   }
   ShowAll<-function(){
     ##show all components 
@@ -75,14 +76,14 @@ gevoterTurnoutChart <- function(input, output, session, parentsession,dname) {
       b<-readVoterTurnoutFile("ge")
       #pivotdata<-dcast(b,year~party)
       #create a base line chart with year as the x-axis
-      current_filters$base<<-plot_ly(b, x = ~year)
+      current_filters$base<<-plot_ly(b, x = ~Year)
       
       gendernames<-c("male","female","total")
       #stale_filters$partynames<<-current_filters$partynames
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$gendernames<-c()
       checkboxGroupInput(ns("filter_pname"), "Select Voter Turnout options for ",
-                         gendernames)
+                         gendernames,selected = gendernames)
       
     })
     

@@ -122,7 +122,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
             #store it in the filter setting variable
             current_filters$dframewinners<<-m
             #get the year of elections for this state from current drame set
-            years<-unique(current_filters$dframewinners$year)
+            years<-unique(current_filters$dframewinners$Year)
             years<-sort(years)
             #reset the year selection UI by filling it appropriately
             current_filters$yearlist<<-years
@@ -136,22 +136,22 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
         print(paste0('year change detected',yr))
         shape<-readShapeFile("ge", yr)
         #get winners name from winners dataframe stored for this state for the given year
-        winners<-current_filters$dframewinners %>% filter(year==yr)
+        winners<-current_filters$dframewinners %>% filter(Year==yr)
         print(nrow(winners))
-        partys<-unique(winners$party1)
+        partys<-unique(winners$Party)
         #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
         #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("STATE_UT","PC_NO"),by.y=c("state","pc_no"))
+        winners<-merge(shape,winners,by.x=c("STATE_UT","PC_NO"),by.y=c("State_Name","Constituency_No"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners,type="ge")
         current_filters$leaflet<<-leaflet(winners)
         print('leaflet value is set')
         #set the count of winning seats for each party
         tm<-winners
-        tm<-subset(tm,select=c("year","party1"))
+        tm<-subset(tm,select=c("Year","Party"))
         tm$count<-1
         tm<-aggregate(count~year+party1,tm,function(x) length(x))
-        tm$legend<-paste0(tm$party1,"(",tm$count,")")
+        tm$legend<-paste0(tm$Party,"(",tm$count,")")
 	tm<-arrange(tm,desc(count))
         tm$count<-NULL
         current_filters$countedframe<<-tm
@@ -189,8 +189,8 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
       pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
       
       counted<-current_filters$countedframe
-      sset<-subset(counted,counted$party1 %in% selectedpartynames)
-      sset$color<-pal(as.character(sset$party1))
+      sset<-subset(counted,counted$Party %in% selectedpartynames)
+      sset$color<-pal(as.character(sset$Party))
     
       #addpolygon for coloured display and add legend
       title<-paste0("Constituency wise Party winners for General Elections in ",current_filters$year)
@@ -199,7 +199,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.character(party1)), popup=~(popup)) %>%
+                    fillColor = ~pal(as.character(Party)), popup=~(popup)) %>%
         addLegend("topright",color=sset$color, opacity= 1, labels=sset$legend,title="Party",
         )%>% 
         addTitleLeaflet(title)
