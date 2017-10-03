@@ -23,67 +23,43 @@ gevoteShareChart <- function(input, output, session, parentsession,dname) {
       }
     #print(paste("observer_filter",input$filter_pname))
   },suspended=TRUE)
-  # 
-  # obs_sname<-observe({
-  #   st<-statename_reactive()
-  #   ###get statename from the reactive passed from the parent module
-  #   if(!is.null(st) && trimws(st)!=""){
-  #     st<-gsub(" ","_",st)
-  #     print(dirname)
-  #     print(paste('Voteshare-stchange: statename is ',st))
-  #       b<-readVoteShareFile(st)
-  #       pivotdata<-dcast(b,year~party)
-  #       #create a base line chart with year as the x-axis
-  #       current_filters$base<<-plot_ly(pivotdata, x = ~year)
-  #       #print(paste('before',values$statename))
-  #       current_filters$sname<<-st
-  #       values$statename<-st
-  #       #print(paste('after',values$statename))
-  # 
-  #   }
-  # },suspended=TRUE)
-  # 
+  
   
   
   #######################################Fixed part: ##########################################################################
   #############Every component must provide two functions. HideAll and showAll. These functions will be called by the main dashobard
   #############to ensure that proper shutdown and startup takes place when a UI type (chart/map visualization) changes
   HideAll<-function(){
-    values$partynames<-c()
-    values$filterreset<-T
     ##disable all observers
     obs_partynames$suspend()
-    # obs_sname$suspend()
+    #obs_sname$suspend()
     ##hide all components (pname_filter in this case)
     #shinyjs::disable(ns("pname_filter"))
     shinyjs::hide(ns("filter_pname")) #may be this hiding not possible..check it later
     shinyjs::hide("distPlot")
-    print('ge Voteshar[]=e: Hidden all')
+    print('Voteshare: Hidden all')
   }
   ShowAll<-function(){
     ##show all components 
     
     shinyjs::show("distPlot")
-    values$filterreset<-F
+    values$filterreset <- F
     ####setting up filter triggered on change in the state name##############################################
     parentsession$output$ge_filter_selection<-renderUI({
-      if(values$filterreset==T){
+      if(values$filterreset == T){
         return()
       }
-      
       #else from the csv file read in the information regarding this state in another dataframe
       b<-readVoteShareFile("ge")
-      #b$yearga<-paste0(b$year,"#",b$ga_no)
-      pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
-      #create a base line chart with year as the x-axis
+      pivotdata <- dcast(b,Year~Party,value.var = c("Votes")) 
       current_filters$base<<-plot_ly(pivotdata, x = ~sort(Year))
-      
+
       partynames<-unique(b$Party)
       #stale_filters$partynames<<-current_filters$partynames
       #Writing to the following reactive value triggers plotly rendering which vanishes the previously drawn chart
       values$partynames<-c()
       checkboxGroupInput(ns("filter_pname"), "Select voteshare for ",
-                         partynames)
+                         partynames,selected=partynames)
       
     })
     
@@ -91,7 +67,7 @@ gevoteShareChart <- function(input, output, session, parentsession,dname) {
     parentsession$output$distPlot <- renderPlotly({
       selectedpartynames<-values$partynames
       if(length(selectedpartynames)==0){
-        print('ge voteshare: returning')
+        print('voteshare: returning')
         return()
       }
       # if( length(stale_filters$partynames)!=0)
@@ -100,14 +76,15 @@ gevoteShareChart <- function(input, output, session, parentsession,dname) {
       #   print(paste('stale names','returning'))
       #   return()
       # }
-      print(paste('selected',selectedpartynames))
+      #print(paste('selected',selectedpartynames))
       #read base that was set when state name changed.
       base<-current_filters$base
+      #browser()
       # #for each selected party in the input "filter_pname" id (checkbox) add a new trace
       # #corresponding to that party
       lapply(selectedpartynames,function(x) {
-        print(paste('adding',x));
-        base<<-add_trace(base,y=~get(x),name=x,mode='lines+markers',showlegend=TRUE)
+        #print(paste('adding',x));
+        base<<-add_trace(base,y=~get(x),name=x,type='scatter',mode='lines+markers',showlegend=TRUE)
         }
         )
       thistitle<-paste0('Party wise voteshare across years in General Elections')
@@ -118,9 +95,8 @@ gevoteShareChart <- function(input, output, session, parentsession,dname) {
     })
     ##enable all observers
     obs_partynames$resume()
-    # obs_sname$resume()
     
-    print('ge Voteshare: Enabled all')
+    print('Voteshare: Enabled all')
   }
   
   ##Return these two functions to callers
