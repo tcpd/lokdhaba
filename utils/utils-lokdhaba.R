@@ -34,7 +34,7 @@ readShapeFile<- function(sname, year){
 
 
 addPopupInfo<- function(winnersframe,type="state"){
-  browser() #Check for Assembly_1 and pc_ name
+  #browser() #Check for Assembly_1 and pc_ name
   cand<-paste0("<b>Candidate:</b> ", winnersframe$Candidate)
   marginp<-paste0("<b>Margin Percentage :</b> ",
                   paste0(winnersframe$Margin_Percentage,"%"))
@@ -58,7 +58,7 @@ titlemessage<-gsub("#","Assembly #",titlemessage)
 
 addControl(map,html=paste0(titlemessage,"<br>",
                                     "<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle",Position="topleft")%>%
+                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle")%>%
  addCircleMarkers(data=winners,lng=~ Long, lat= ~ Lat,fill=F, stroke=F,
                   color='#000000',opacity= 0, label=~ Constituency_Name,group='const')%>%
         addSearchMarker(targetGroup = 'const',options=searchMarkersOptions(textPlaceholder='Search Constituency', zoom=10,autoCollapse=T, autoCollapseTime=1600 , hideMarkerOnCollapse=T))
@@ -72,7 +72,7 @@ readStateWinnersFile<- function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m$newyear<-paste0(m$year," (#",m$Assembly_No,")")
+    m$newyear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newyear"]<-"Year"
      return(m) 
@@ -80,7 +80,7 @@ readStateWinnersFile<- function(statename){
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m$newyear<-paste0(m$year," (#",m$Assembly_No,")")
+    m$newyear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newyear"]<-"Year"
     return(m)

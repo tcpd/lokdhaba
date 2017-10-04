@@ -5,7 +5,7 @@ getYears<-function(state, years, envr){
     st<-gsub(" ","_",st)
     print(st)
 	m<-readPartyPositionsFile(st)
-        yearlist<-unique(m$year)
+        yearlist<-unique(m$Year)
 
 
     assign(years,yearlist,env=envr)
@@ -17,9 +17,9 @@ getPartyNames<-function(state, year, parties, envr){
        st<-gsub(" ","_",st)
 
        yr<-get(year,envr)
-       cands<-readPartyPositionsFile(st)%>%filter(year==yr)
+       cands<-readPartyPositionsFile(st)%>%filter(Year==yr)
 
-       partys<-unique(cands$party1)
+       partys<-unique(cands$Party)
        assign(parties,partys,env=envr)
 
 
@@ -32,11 +32,11 @@ getOptions<-function(state,year,party,options,envr){
        yr<-get(year,envr)
        partyname<-get(party,envr)
        
-       party_wise <-   readPartyPositionsFile(st)%>%filter(year==yr & party1 == partyname)
+       party_wise <-   readPartyPositionsFile(st)%>%filter(Year==yr & Party == partyname)
        shape<-readShapeFile(st, yr)
        #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
        #for creating a new leaflet map. Set this leaflet map in the current setting variable
-       party_wise<-merge(shape,party_wise,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
+       party_wise<-merge(shape,party_wise,by.x=c("ASSEMBLY"),by.y=c("Constituency_No"))
         assertthat::are_equal(nrow(shape),nrow(party_wise))
         party_wise<-addPopupInfo(party_wise)
         party_wise$Lat<-as.vector(coordinates(shape)[,2])
@@ -54,7 +54,7 @@ getOptions<-function(state,year,party,options,envr){
 
 #set the count of  seats for each option
         tm<-party_wise
-        tm<-subset(tm,select=c("year","position"))
+        tm<-subset(tm,select=c("Year","Position"))
         tm<-PartyPositionsMapLegendCount(tm)
         assign("countedframe",tm,env=envr)
         
@@ -98,7 +98,7 @@ pal<-leaflet::colorBin(cols,bins=PartyPositionsMapBreakupList(),na.color="white"
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.numeric(position)), popup=~(popup)) %>%
+                    fillColor = ~pal(as.numeric(Position)), popup=~(popup)) %>%
         #addLegend("topright",pal=pal, values=(selectedfilters),opacity=1,title="Positions")
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Positions "
                   )%>%

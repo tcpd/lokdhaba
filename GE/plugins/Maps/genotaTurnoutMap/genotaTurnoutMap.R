@@ -124,6 +124,7 @@ genotaTurnoutMap <- function(input, output, session, parentsession,dirname) {
             #get the year of elections for this state from current drame set
             years<-unique(current_filters$dframewinners$Year)
             years<-sort(years)
+            years <- years[which(years >=2014)]
             current_filters$yearlist<<-years
 
       #create year selection box, also set it to the currently set value
@@ -131,11 +132,11 @@ genotaTurnoutMap <- function(input, output, session, parentsession,dirname) {
         selectInput(ns("I_year"),"Select Year",c("Year"="",years),selectize = TRUE)
       }else{
         yr<-values$yearselected
-	current_filters$year<<-yr
+	      current_filters$year<<-yr
         print(paste0('year change detected',yr))
         shape<-readShapeFile("ge", yr)
         #get winners name from winners dataframe stored for this state for the given year
-        winners<-current_filters$dframewinners %>% filter(year==yr)
+        winners<-current_filters$dframewinners %>% filter(Year==yr)
         print(nrow(winners))
         #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
         #for creating a new leaflet map. Set this leaflet map in the current setting variable
@@ -204,8 +205,9 @@ genotaTurnoutMap <- function(input, output, session, parentsession,dirname) {
       base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.numeric(((nota_percent)))), popup=~(popup)) %>%
-        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
+                    fillColor = ~pal(as.numeric(((NOTA_Percentage)))), popup=~(popup)) %>%
+        addLegend(colors=legendcolors,
+                  labels=legendvalues,opacity=1,title="Percentage of NOTA"
         )%>%
         addTitleLeaflet(title)
       

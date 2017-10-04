@@ -5,7 +5,7 @@ getYears<-function(state, years, envr){
     print(st)
     m<-readStateWinnersFile(st)
         
-    yearlist<-unique(m$year)
+    yearlist<-unique(m$Year)
 
     assign(years,yearlist,env=envr)
   }
@@ -16,7 +16,7 @@ getOptions<-function(state, year, options,envr){
        st<-gsub(" ","_",st)
 
        yr<-get(year,envr)
-       winners<-readStateWinnersFile(st)%>%filter(year==yr)
+       winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
 
    assign(options,WinnerGenderMapLegendList(),env=envr)
@@ -24,7 +24,7 @@ getOptions<-function(state, year, options,envr){
        shape<-readShapeFile(st, yr)
        #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
        #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
+        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("Constituency_No"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners)
         winners$Lat<-as.vector(coordinates(shape)[,2])
@@ -37,7 +37,7 @@ getOptions<-function(state, year, options,envr){
    #set the count of winning seats for each gender
         tm<-winners
         #browser()
-        tm<-subset(tm,select=c("year","sex1"))
+        tm<-subset(tm,select=c("Year","Sex"))
         tm<-WinnerGenderMapLegendCount(tm)
         assign("countedframe",tm,env=envr)
     
@@ -68,11 +68,11 @@ plotMap<-function(state, year, options, plot, envr){
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.character(trimws((sex1)))), popup=~(popup)) %>%
+                    fillColor = ~pal(as.character(trimws((Sex)))), popup=~(popup)) %>%
         addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedgendersnames),title="Gender",
                   labFormat = labelFormat(transform=function(x) {
                     lapply(x,function(y){
-                      counted$legend[(trimws(counted$sex1))==y]
+                      counted$legend[(trimws(counted$Sex))==y]
                     });
                   })
         )%>%

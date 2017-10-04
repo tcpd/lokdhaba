@@ -5,7 +5,7 @@ getYears<-function(state, years, envr){
     print(st)
     m<-readStateWinnersFile(st)
         
-    yearlist<-unique(m$year)
+    yearlist<-unique(m$Year)
 
     assign(years,yearlist,env=envr)
   }
@@ -16,15 +16,15 @@ getPartyNames<-function(state, year, parties, envr){
        st<-gsub(" ","_",st)
 
        yr<-get(year,envr)
-       winners<-readStateWinnersFile(st)%>%filter(year==yr)
+       winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
-       partys<-unique(winners$party1)
+       partys<-unique(winners$Party)
        assign(parties,partys,env=envr)
 
        shape<-readShapeFile(st, yr)
        #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
        #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
+        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("Constituency_No"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners)
         winners$Lat<-as.vector(coordinates(shape)[,2])
@@ -45,7 +45,7 @@ getOptions<-function(state,year,party,options,envr){
        partyname<-get(party,envr)
     
        winners<-get("mergedwinners",envr)
-       winners$vote_percent[winners$party1!=partyname]<-NA
+       winners$vote_percent[winners$Party!=partyname]<-NA
 
         base<-leaflet(winners)
         print('leaflet value is set')
@@ -53,7 +53,7 @@ getOptions<-function(state,year,party,options,envr){
     
         #set the count of  seats for each option
         tm<-winners
-        tm<-subset(tm,select=c("year","vote_percent"))
+        tm<-subset(tm,select=c("Year","Vote_Share_Percentage"))
         tm<-VoteShareMapLegendCount(tm)
         assign("countedframe",tm,env=envr)
         
@@ -99,7 +99,7 @@ plotMap<-function(state, year, party, options, plot, envr){
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.numeric(vote_percent)), popup=~(popup)) %>%
+                    fillColor = ~pal(as.numeric(Vote_Share_Percentage)), popup=~(popup)) %>%
         #addLegend("topright",pal=pal, values=(selectedfilters),opacity=1,title="Percentage vote share of winners")
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
                   )%>%

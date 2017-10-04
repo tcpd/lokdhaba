@@ -124,6 +124,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
             #get the year of elections for this state from current drame set
             years<-unique(current_filters$dframewinners$Year)
             years<-sort(years)
+            years <- years[which(years >=2008)]
             #reset the year selection UI by filling it appropriately
             current_filters$yearlist<<-years
             print(years)
@@ -150,7 +151,7 @@ gewinnerMap <- function(input, output, session, parentsession,dirname) {
         tm<-winners
         tm<-subset(tm,select=c("Year","Party"))
         tm$count<-1
-        tm<-aggregate(count~year+party1,tm,function(x) length(x))
+        tm<-aggregate(count~Year+Party,tm,function(x) length(x))
         tm$legend<-paste0(tm$Party,"(",tm$count,")")
 	tm<-arrange(tm,desc(count))
         tm$count<-NULL

@@ -1,9 +1,6 @@
 #############################Helper functions for this map visualization################################
-getYears<-function(state, years, envr){
-    st<-get(state,envr)
-    st<-gsub(" ","_",st)
-    print(st)
-    m<-readStateWinnersFile(st)
+getYears<-function(years, envr){
+    m<-readStateWinnersFile("ge")
         
     yearlist<-unique(m$Year)
     #removing years in which NOTA was not present
@@ -11,13 +8,11 @@ getYears<-function(state, years, envr){
     assign(years,yl,env=envr)
   }
 
-getOptions<-function(state, year, options,envr){
+getOptions<-function(year, options,envr){
 
-       st<-get(state,envr)
-       st<-gsub(" ","_",st)
 
        yr<-get(year,envr)
-       winners<-readStateWinnersFile(st)%>%filter(Year==yr)
+       winners<-readStateWinnersFile("ge")%>%filter(Year==yr)
 
 
    assign(options,NotaTurnoutMapLegendList(),env=envr)
@@ -25,18 +20,18 @@ getOptions<-function(state, year, options,envr){
        shape<-readShapeFile(st, yr)
        #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
        #for creating a new leaflet map. Set this leaflet map in the current setting variable
-        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("Constituency_No"))
+        winners<-merge(shape,winners,by.x=c("ASSEMBLY"),by.y=c("ac_no"))
         assertthat::are_equal(nrow(shape),nrow(winners))
         winners<-addPopupInfo(winners)
         winners$Lat<-as.vector(coordinates(shape)[,2])
         winners$Long<-as.vector(coordinates(shape)[,1])
         
-	      base<-leaflet(winners)
+	base<-leaflet(winners)
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
      #set the count of winning seats for each nota range
         tm<-winners
-        tm<-subset(tm,select=c("Year","Nota_Percentage"))
+        tm<-subset(tm,select=c("Year","NOTA_Percentage"))
         tm<-NotaTurnoutMapLegendCount(tm)
           
         assign("countedframe",tm,env=envr)
@@ -45,10 +40,8 @@ getOptions<-function(state, year, options,envr){
 
 }
 
-plotMap<-function(state, year, options, plot, envr){
-       st<-get(state,envr)
+plotMap<-function(year, options, plot, envr){
        yr<-get(year,envr)
-        st<-gsub(" ","_",st)
 
         selectedpercentage<-get(options,envr)
 
@@ -75,13 +68,14 @@ plotMap<-function(state, year, options, plot, envr){
       });
       
       #addpolygon for coloured display and add legend
-      title<-paste0("NOTA turnout for ",gsub("_"," ",st)," in ",yr)
+      title<-paste0("NOTA turnout for loksabha in ",yr)
 
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.numeric(((nota_percent)))), popup=~(popup)) %>%
-        addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="NOTA turnout"
+                    fillColor = ~pal(as.numeric(((NOTA_Percentage)))), popup=~(popup)) %>%
+        addLegend("topright",colors=legendcolors,
+                  labels=legendvalues,opacity=1,title="NOTA Turnout"
         )%>%
         addTitleLeaflet(title)
      

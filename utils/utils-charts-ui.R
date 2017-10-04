@@ -59,7 +59,7 @@ readVoteShareFile<-function(statename){
     print(paste0('reading from ',filename))
     
     m<-read.csv(filename)
-    m<-subset(m,select=c("state","Year","Assembly_No","party","votes"))
+    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","votes"))
     m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newYear"]<-"Year"
@@ -83,7 +83,7 @@ readSeatShareFile<-function(statename){
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_seatshares.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m<-subset(m,select=c("state","Year","Assembly_No","party","seats"))
+    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","Seats"))
     m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newYear"]<-"Year"
