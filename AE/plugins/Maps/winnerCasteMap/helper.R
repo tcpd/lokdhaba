@@ -6,7 +6,7 @@ getYears<-function(state, years, envr){
     m<-readStateWinnersFile(st)
         
     yearlist<-unique(m$Year)
-
+    yearlist <- yearlist[which(yearlist >= 2008)]
     assign(years,yearlist,env=envr)
   }
 
