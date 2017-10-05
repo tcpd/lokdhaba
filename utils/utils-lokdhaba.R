@@ -386,11 +386,12 @@ NotaTurnoutMapLegendColor<-function(inp){
 
 
 ##########################################Voter Turnout Map#################################################
-VoterTurnoutMapLegendList <- function(){return (c("<40%","40%-50%","50%-60%","60%-70%",">70%"))}
+VoterTurnoutMapLegendList <- function(){return
+(c("<40%","40%-50%","50%-60%","60%-70%","70%-80%",">80%"))}
 
 
 VoterTurnoutMapBreakupList<- function(){
-  return(c(0,40,50,60,70,100))
+  return(c(0,40,50,60,70,80,100))
 }
 
 VoterTurnoutMapLegendCount<- function(dframe){
@@ -399,7 +400,9 @@ VoterTurnoutMapLegendCount<- function(dframe){
   dframe$tmp[dframe$Turnout_Percentage>=40 & dframe$Turnout_Percentage<50]<-"40%-50%"
   dframe$tmp[dframe$Turnout_Percentage>=50 & dframe$Turnout_Percentage<60]<-"50%-60%"
   dframe$tmp[dframe$Turnout_Percentage>=60 & dframe$Turnout_Percentage<70]<-"60%-70%"
-  dframe$tmp[dframe$Turnout_Percentage>=70]<-">70%"
+  dframe$tmp[dframe$Turnout_Percentage>=70 &
+             dframe$Turnout_Percentage<80]<-"70%-80%"
+  dframe$tmp[dframe$Turnout_Percentage>=80]<-">80%"
   #browser()
   dframe$Turnout_Percentage<-NULL
   dframe$count<-1
@@ -427,10 +430,13 @@ VoterTurnoutMapLegendColor<-function(inp){
     return('#757fa9')
   }else if(inp=="60%-70%"){
     return('#5c6295')
-  }else if(inp==">70%"){
+  }else if(inp=="70%-80%"){
     return('#434681')
+  }else if(inp==">80%"){
+    return('#374B63')
   }else{
-    stop('passed argument should be either <40%, 40%-50%,50%-60%,60%-70% or >70%')
+    stop('passed argument should be either <40%, 40%-50%,50%-60%,60%-70%,
+         70%-80% or >80%')
   }
 }
 
