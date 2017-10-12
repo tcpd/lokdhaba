@@ -96,13 +96,14 @@ constructReturnCode<-function(){
     }
 
 constructObserversRenderers<-function(inputc,outputc,func){
-
+  
   code<-""
   observercode<-""
   renderingcode<-""
   resetrenderingcode<-""
   #run for reach filter id obtained from input,output,function table..
   tmp<-lapply(unique(inputc$filterid), function(fid){
+    #browser()
     isObserver<-T
     inputcc<-filter(inputc,filterid==fid)
     outputcc<-filter(outputc,filterid==fid)
@@ -118,11 +119,14 @@ constructObserversRenderers<-function(inputc,outputc,func){
     ###Get input values and store that in alias variables..
    
     inputvalidcheckexpression<-paste0("T && isvalid(values$triggerfor_",fid,",\"numeric\")")
-    apply(inputcc,1,function(row){
-      code<<-paste0(code,"currentvalues$",row["alias"],"<<-",row["name"],"\n")
-      ###construct validity checking expression variable and type
-      inputvalidcheckexpression<<-paste0(inputvalidcheckexpression," && isvalid(","currentvalues$",row["alias"],",\"",row["type"],"\")")
-    })
+    if(!is.na(inputcc[["name"]])){
+      apply(inputcc,1,function(row){
+        code<<-paste0(code,"currentvalues$",row["alias"],"<<-",row["name"],"\n")
+        ###construct validity checking expression variable and type
+        inputvalidcheckexpression<<-paste0(inputvalidcheckexpression," && isvalid(","currentvalues$",row["alias"],",\"",row["type"],"\")")
+      })
+    }
+    
     ##Check the validity of input
     code<<-paste0(code,"if(",inputvalidcheckexpression,")\n{","\n")
     #{

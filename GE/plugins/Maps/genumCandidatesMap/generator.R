@@ -2,33 +2,33 @@ source("utils/utils-metaprog.R")
 library(data.table)
 library(dplyr)
 
-componentname="genotaTurnoutMap"
+componentname="genumCandidatesMap"
 componentarguments="input, output, session, parentsession,dname,conmanager"
 plotarea="mapPlot"
 filteroutput="parentsession$output$ge_filter_selection"
 
 filters = "filterid,construction,isinit
            1,selectInput(ns(\"I_year\"):\"Select Year\": c() : selectize = TRUE),T
-           2,checkboxGroupInput(ns(\"filter_pname\") : \"Select range \": c()),F"
+           2,checkboxGroupInput(ns(\"filter_pname\") : \"Select number of candidates \": c()),F"
     
 inputtable="filterid,name,type,alias
             1,NA,NA,NA 
             2,input$I_year,string,selected_year
             3,input$I_year,string,selected_year
-            3,input$filter_pname,list,selected_range"
+            3,input$filter_pname,list,selected_numbers"
 
 ##default can be allmultiple/allsingle/emptymultiple/emptysingle/NA.
 outputtable="filterid,name,type,alias,default,label 
             1,I_year, updateSelectInput,yearlist,emptysingle,\"Select Year\"
-            2,filter_pname, updateCheckboxGroupInput,notaoptions,allmultiple,\"Select range\"
+            2,filter_pname, updateCheckboxGroupInput,numoptions,allmultiple,\"Select number of candidates\"
             3,parentsession$output$mapPlot,renderLeaflet,leafletmap,NA,NA"
 
 
 
 functiontable="filterid,funname
               1,getYears(years=\"yearlist\" : currentvalues)
-              2,getOptions(year=\"selected_year\": options=\"notaoptions\" : currentvalues)
-              3,plotMap(year=\"selected_year\": options=\"selected_range\" : plot=\"leafletmap\" : currentvalues)"
+              2,getOptions(year=\"selected_year\": options=\"numoptions\" : currentvalues)
+              3,plotMap(year=\"selected_year\": options=\"numoptions\" : plot=\"leafletmap\" : currentvalues)"
 ##########################################################################
 
 

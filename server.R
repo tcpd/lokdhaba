@@ -10,6 +10,7 @@ source("DataDownloader/dataDownloadOptions.R")
 source("DataDownloader/browseDataOptions.R")
 source("utils/utils-classes.R")
 source("utils/utils-lokdhaba.R")
+#source("utils/utils-charts-ui.R")
 library(rgdal)
 library(dplyr)
 library(leaflet.extras)
@@ -73,7 +74,7 @@ useShinyjs(html = TRUE)
   #2. During this process it will also callmodule for each UI component.  
   
   #geOptionsInput(input,output,session,"GE/",conmanager)
-  geOptionsInput(input,output,session,"GE/")
+  geOptionsInput(input,output,session,"GE/",conmanager)
   
   observe({
     if(input$electionType=="GE"){

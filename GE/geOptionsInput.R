@@ -6,13 +6,14 @@
 # 
 #    http://shiny.rstudio.com/
 #
+source('utils/utils-datadownloader.R')
 options(shiny.sanitize.errors = FALSE)
 
-geOptionsInput <- function(input, output, session,dname) {
+geOptionsInput <- function(input, output, session,dname,conmanager) {
   ####Global environement variable#######
   g_env<-new.env()
   last_ui_type<-""
-  chartmaptitles<-c()
+ # chartmaptitles<-c()
   
   #######################################
   
@@ -26,19 +27,19 @@ geOptionsInput <- function(input, output, session,dname) {
     #read chartmaps csv file
     chartmap<-read.csv(paste0(dname,"chartsMaps.csv"))
     ###Also iterate over all chart types.. call their module functions and store their return types in something...
-    
+    #browser()
     titles<-list()
     for(i in seq_len(nrow(chartmap))) {
-      x <- chartmap[i,]
+      x = chartmap[i,]
       # do stuff with row
-      filename<-(trimws(as.character(x$filename)))
-      dirname<-paste0(dname,"plugins/",trimws(x$type),"s/",trimws(x$modulename),"/")
-      filename<-paste0(dirname,filename)
+      filename = (trimws(as.character(x$filename)))
+      dirname = paste0(dname,"plugins/",trimws(x$type),"s/",trimws(x$modulename),"/")
+      filename = paste0(dirname,filename)
       print(paste("loading source file ",filename))
       source(filename)
-      modname<-(trimws(as.character(x$modulename)))
+      modname = (trimws(as.character(x$modulename)))
       print(paste("calling callModule",modname))
-      r<-callModule(get(modname),modname,session,dirname) 
+      r = callModule(get(modname),modname,session,dirname,conmanager) 
       r$HideAll()
       title<-trimws(as.character(x$title))
       
@@ -51,7 +52,9 @@ geOptionsInput <- function(input, output, session,dname) {
     
     #Create a selection input box
     chartmaptitles<<-titles
-    selectInput("ge_I_chart_map_name","Visualization Type",c("Chart/Map"="",titles),selectize = TRUE)
+    selectInput("ge_I_chart_map_name","Visualization
+                Type",c("Chart/Map"="",titles),selectize =
+    TRUE,selected=conmanager$getval("ge_I_chart_map_name",""))
     
   })
 
@@ -72,10 +75,12 @@ geOptionsInput <- function(input, output, session,dname) {
      }
      print(input$ge_I_chart_map_name)
      currselection<-get(input$ge_I_chart_map_name,envir =  g_env)
+     #browser()
+     currselection$Setup()
      currselection$ShowAll()
      #set the current selection as the last_ui_type global variable which will be used to hide
      #this ui when ui type change happens
-     last_ui_type<<-input$ge_I_chart_map_name
+     last_ui_type <<- input$ge_I_chart_map_name
    }else{
       #call hide on the last selected one. This will be used when we will switch from AE
      #to GE option type and that will require cleaning up of AE charts/maps

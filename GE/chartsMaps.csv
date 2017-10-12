@@ -7,4 +7,3 @@ Parties contested and represented,Chart,gepartiesPresentedChart.R,gepartiesPrese
 Nota Turnout,Map,genotaTurnoutMap.R,genotaTurnoutMap
 Constituency wise party winners,Map,gewinnerMap.R,gewinnerMap
 Number of candidates,Map,genumCandidatesMap.R,genumCandidatesMap
-

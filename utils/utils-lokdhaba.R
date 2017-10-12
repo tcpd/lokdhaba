@@ -348,12 +348,12 @@ NotaTurnoutMapBreakupList<- function(){
 
 NotaTurnoutMapLegendCount<- function(dframe){
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$NOTA_Percentage<1]<-"<1%"
-  dframe$tmp[dframe$NOTA_Percentage>=1 & dframe$NOTA_Percentage<3]<-"1%-3%"
-  dframe$tmp[dframe$NOTA_Percentage>=3 & dframe$NOTA_Percentage<5]<-"3%-5%"
-  dframe$tmp[dframe$NOTA_Percentage>=5]<-">5%"
+  dframe$tmp[dframe$Nota_Percentage<1]<-"<1%"
+  dframe$tmp[dframe$Nota_Percentage>=1 & dframe$Nota_Percentage<3]<-"1%-3%"
+  dframe$tmp[dframe$Nota_Percentage>=3 & dframe$Nota_Percentage<5]<-"3%-5%"
+  dframe$tmp[dframe$Nota_Percentage>=5]<-">5%"
   #browser()
-  dframe$NOTA_Percentage<-NULL
+  dframe$Nota_Percentage<-NULL
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))

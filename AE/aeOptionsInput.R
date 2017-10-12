@@ -61,7 +61,7 @@ lst<-getValidStateNamesForElectionType("AE")
       r=callModule(get(modname),modname,session,streactive,dirname,conmanager) 
       #r$Setup()
       ##Really needed these two lines(above and below)??    
-      #r$HideAll()
+      r$HideAll()
       title=trimws(as.character(x$title))
       
       assign(title,r,envir=g_env)

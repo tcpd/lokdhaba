@@ -12,7 +12,6 @@ getYears<-function(state, years, envr){
   }
 
 getOptions<-function(state, year, options,envr){
-
        st<-get(state,envr)
        st<-gsub(" ","_",st)
 
