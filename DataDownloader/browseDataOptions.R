@@ -90,7 +90,7 @@ browseDataOptions <- function(input, output, session,conmanager) {
   ##Rendering of variable information table
   output$bd_variablenames_selector<- renderDataTable(
     options= list(pageLength=100,sDom = '<"top">lrt<"bottom">ip'),
-    filter="top",selection= "multiple",{
+    filter="top",selection= "multiple",rownames=F,{
       print("rerendring browse data.")
       print(paste(current_filters$electiontype,current_filters$statename,input$bd_year_selector))
       dframe <- getMastersheetData(current_filters$electiontype,current_filters$statename,input$bd_year_selector)
