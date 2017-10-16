@@ -97,6 +97,9 @@ browseDataOptions <- function(input, output, session,conmanager) {
       c_names <- colnames(dframe)
       prior <- c("State_Name","Year","Candidate","Sex","Party","Constituency_Name","Position")
       last <- c("ENOP","DelimID","Assembly_No","Constituency_No","month")
+      if("poll_no" %in% c_names){
+        last <- c(last,"poll_no")
+      }
       set <- c(prior,c_names[which(!c_names %in% c(prior,last))],last)
       sub <- subset(dframe,select=set)
       return(sub)
