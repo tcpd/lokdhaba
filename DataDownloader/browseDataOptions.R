@@ -89,11 +89,16 @@ browseDataOptions <- function(input, output, session,conmanager) {
 
   ##Rendering of variable information table
   output$bd_variablenames_selector<- renderDataTable(
-    options= list(pagelength=10,sDom = '<"top">lrt<"bottom">ip'),
+    options= list(pageLength=100,sDom = '<"top">lrt<"bottom">ip'),
     filter="top",selection= "multiple",{
       print("rerendring browse data.")
       print(paste(current_filters$electiontype,current_filters$statename,input$bd_year_selector))
-      return(getMastersheetData(current_filters$electiontype,current_filters$statename,input$bd_year_selector))
+      dframe <- getMastersheetData(current_filters$electiontype,current_filters$statename,input$bd_year_selector)
+      c_names <- colnames(dframe)
+      prior <- c("State_Name","Year","Candidate","Sex","Party","Constituency_Name","Position")
+      set <- c(prior,c_names[which(!c_names %in% prior)])
+      sub <- subset(dframe,select=set)
+      return(sub)
     #datatable(getVariableInfo(input$bd_electiontype_selector),#current_filters$electiontype),
     #          rownames=F,
     #          style='bootstrap',
