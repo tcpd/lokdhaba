@@ -41,11 +41,8 @@ addPopupInfo<- function(winnersframe,type="state"){
   numcand<-paste0("<b>Total Candidates :</b> ", paste0(winnersframe$N_Cand))
   party<-paste0("<b>Party :</b> ", paste0(winnersframe$Party))
   
-  if(type=="state"){
-    assembly<-paste0("<b>Constituency :</b> ", winnersframe$ASSEMBLY_1)
-  }else{
-    assembly<-paste0("<b>Constituency :</b> ", winnersframe$pc_name)
-  }
+    assembly<-paste0("<b>Constituency :</b> ", winnersframe$Constituency_Name)
+  
   winnersframe$popup<-paste(cand,assembly,party,numcand,marginp,sep="<br>")
   return(winnersframe)
 }
