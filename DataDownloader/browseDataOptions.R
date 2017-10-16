@@ -96,7 +96,8 @@ browseDataOptions <- function(input, output, session,conmanager) {
       dframe <- getMastersheetData(current_filters$electiontype,current_filters$statename,input$bd_year_selector)
       c_names <- colnames(dframe)
       prior <- c("State_Name","Year","Candidate","Sex","Party","Constituency_Name","Position")
-      set <- c(prior,c_names[which(!c_names %in% prior)])
+      last <- c("ENOP","DelimID","Assembly_No","Constituency_No","month")
+      set <- c(prior,c_names[which(!c_names %in% c(prior,last))],last)
       sub <- subset(dframe,select=set)
       return(sub)
     #datatable(getVariableInfo(input$bd_electiontype_selector),#current_filters$electiontype),
