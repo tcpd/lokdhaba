@@ -493,7 +493,8 @@ PartyPositionsMapLegendColor<-function(inp){
 }
 
 PartyPositionsMapLegendCount<-function(dframe){
-  
+  #browser()
+  #dframe <- unique(dframe)
   ##set a new column same as legend based on the percentage.
   dframe$tmp[dframe$Position==1]<-"1"
   dframe$tmp[dframe$Position==2]<-"2"
@@ -501,7 +502,7 @@ PartyPositionsMapLegendCount<-function(dframe){
   dframe$tmp[dframe$Position>3]<-">3"
   dframe$Position<-NULL
   dframe$count<-1
-  dframe<-aggregate(count~year+tmp,dframe,function(x) length(x))
+  dframe<-aggregate(count~Year+tmp,dframe,function(x) length(x))
   dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #add missing legends. They might be missing because no value was between the corresponding percentage
