@@ -446,7 +446,8 @@ WinnerCasteMapLegendCount<-function(dframe){
   dframe<-aggregate(count~Year+Constituency_Type,dframe,function(x) length(x))
   dframe$legend<-paste0(trimws(dframe$Constituency_Type),"(",dframe$count,")")
   dframe$count<-NULL
-  dframe$year<-NULL
+  dframe$Year<-NULL
+  #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerCasteMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$Constituency_Type==x))==0){
