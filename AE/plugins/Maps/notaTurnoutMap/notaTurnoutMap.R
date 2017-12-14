@@ -81,7 +81,7 @@ plotMap<-function(state, year, options, plot, envr){
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
-                    fillColor = ~pal(as.numeric(((nota_percent)))), popup=~(popup)) %>%
+                    fillColor = ~pal(as.numeric(((Nota_Percentage)))), popup=~(popup)) %>%
         addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="NOTA turnout"
         )%>%
         addTitleLeaflet(title)
