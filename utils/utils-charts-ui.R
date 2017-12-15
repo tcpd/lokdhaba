@@ -112,6 +112,31 @@ readcVoteShareFile<-function(statename){
     return(m)
   }
 }
+
+#read ae_strike_rate.csv file for this state
+
+readStrikeRateFile<-function(statename){
+  if(statename=="ge"){
+    #filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_voteshares_cont.csv")
+    print(paste0('Strike rate not processed for ge'))
+    #m<-read.csv(filename)
+    #m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
+    #m$Year<-NULL
+    #names(m)[names(m)=="newYear"]<-"Year"
+    
+    return(NULL)
+  }else{
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_strike_rate.csv")
+    print(paste0('reading from ',filename))
+    
+    m<-read.csv(filename)
+    m<-subset(m,select=c("Year","Assembly_No","Party","Strike_Rate"))
+    m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newYear"]<-"Year"
+    return(m)
+  }
+}
 #read ae_seatshares.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_seatshares.csv
 
 readSeatShareFile<-function(statename){
