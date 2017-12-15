@@ -1,15 +1,16 @@
 title,type,filename,modulename
-Party wise vote share: Chart,Chart,voteShareChart.R,voteShareChart
-Party wise seat share: Chart,Chart,seatShareChart.R,seatShareChart
-Voter Turnout Timeline: Chart,Chart,voterTurnoutChart.R,voterTurnoutChart
-Candidates who saved their deposits: Chart,Chart,contestedDepositSavedChart.R,contestedDepositSavedChart
-Parties contested and represented: Chart,Chart,partiesPresentedChart.R,partiesPresentedChart
-Gender wise party winners: Map,Map,winnerGenderMap.R,winnerGenderMap
-Constituency wise party winners: Map,Map,winnerMap.R,winnerMap
-Vote share of party winners: Map,Map,winnerVoteShareMap.R,winnerVoteShareMap
-Winning margin of party winners: Map,Map,winnerMarginMap.R,winnerMarginMap
-Number of candidates: Map,Map,numCandidatesMap.R,numCandidatesMap
-Nota Turnout: Map,Map,notaTurnoutMap.R,notaTurnoutMap
-Party wise positions: Map,Map,partyPositionsMap.R,partyPositionsMap
-Voter Turnout Map: Map,Map,voterTurnoutMap.R,voterTurnoutMap
-Constituency type wise winners: Map,Map,winnerCasteMap.R,winnerCasteMap
+Chart : Voter Turnout,Chart,voterTurnoutChart.R,voterTurnoutChart
+Chart : Party vote share (contested),Chart,cvoteShareChart.R,cvoteShareChart
+Chart : Party vote share (all seats),Chart,tvoteShareChart.R,tvoteShareChart
+Chart : Party seat share,Chart,seatShareChart.R,seatShareChart
+Chart : Parties contested and represented: Chart,Chart,partiesPresentedChart.R,partiesPresentedChart
+Chart : Candidates contested /deposit saved,Chart,contestedDepositSavedChart.R,contestedDepositSavedChart
+Map : Constituency type , Map,winnerCasteMap.R,winnerCasteMap
+Map : Number of candidates,Map,numCandidatesMap.R,numCandidatesMap
+Map : Voter Turnout, Map,voterTurnoutMap.R,voterTurnoutMap
+Map : Winners by Party,Map,winnerMap.R,winnerMap
+Map : Winners by Gender,Map,winnerGenderMap.R,winnerGenderMap
+Map : Victory Margin,Map,winnerMarginMap.R,winnerMarginMap
+Map : Vote share of winners,Map,winnerVoteShareMap.R,winnerVoteShareMap
+Map : Party-wise positions,Map,partyPositionsMap.R,partyPositionsMap
+Map : NOTA Vote,Map,notaTurnoutMap.R,notaTurnoutMap

@@ -67,6 +67,51 @@ readVoteShareFile<-function(statename){
   }
 }
 
+
+readtVoteShareFile<-function(statename){
+  if(statename=="ge"){
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_voteshares_total.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newYear"]<-"Year"
+    
+    return(m)
+  }else{
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares_total.csv")
+    print(paste0('reading from ',filename))
+    
+    m<-read.csv(filename)
+    m<-subset(m,select=c("Year","Assembly_No","Party","Votes"))
+    m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newYear"]<-"Year"
+    return(m)
+  }
+}
+readcVoteShareFile<-function(statename){
+  if(statename=="ge"){
+    filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_voteshares_cont.csv")
+    print(paste0('reading from ',filename))
+    m<-read.csv(filename)
+    m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newYear"]<-"Year"
+    
+    return(m)
+  }else{
+    filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_voteshares_cont.csv")
+    print(paste0('reading from ',filename))
+    
+    m<-read.csv(filename)
+    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","votes"))
+    m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newYear"]<-"Year"
+    return(m)
+  }
+}
 #read ae_seatshares.csv file for this state tcpd_data/AE/Data/ + st + /derived/lokdhaba/ae_seatshares.csv
 
 readSeatShareFile<-function(statename){
