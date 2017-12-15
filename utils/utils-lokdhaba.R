@@ -141,24 +141,145 @@ getColorFactorParty<-function(partynames){
             '#de7c78')
   partyl<-c()
   colors<-c()
+  #color_file <- paste0("../tcpd_data/data/colours.csv")
+  #c <- read.csv(color_file)
+  #allcols <- c$Color
+  #c_parties <- c$Party 
+  #ind <- which(c_parties %in% partynames)
+  #partyl <- c$Party[ind]
+  #colors <- c$Color[ind]
+  #browser()
   if("BJP"%in% partynames){
-    partyl<-c("BJP")
-    colors<-c('#ff6600')
+    partyl<-c(partyl,"BJP")
+    colors<-c(colors,'#ff9933')
+  }
+  if("INC"%in% partynames){
+    partyl<-c(partyl,"INC")
+    colors<-c(colors,'#138808')
+  }
+  if("INC(I)"%in% partynames){
+    partyl<-c(partyl,"INC(I)")
+    colors<-c(colors,'#138808')
   }
   if("BSP"%in% partynames){
     partyl<-c(partyl,"BSP")
-    colors<-c(colors,'#0000ff')
+    colors<-c(colors,'#003399')
   }
   if("SP"%in% partynames){
     partyl<-c(partyl,"SP")
-    colors<-c(colors,'#228B22')
+    colors<-c(colors,'#990000')
   }
   if("SAD"%in% partynames){
     partyl<-c(partyl,"SAD")
-    colors<-c(colors,'#0000aa')
+    colors<-c(colors,'#0000ff')
+  }
+  if("BLD"%in% partynames){
+    partyl<-c(partyl,"BLD")
+    colors<-c(colors,'#00ff99')
+  }
+  if("JD"%in% partynames){
+    partyl<-c(partyl,"JD")
+    colors<-c(colors,'#90f887')
+  }
+  if("JNP(S)"%in% partynames){
+    partyl<-c(partyl,"JNP(S)")
+    colors<-c(colors,'#bf4080')
+  }
+  if("BJS"%in% partynames){
+    partyl<-c(partyl,"BJS")
+    colors<-c(colors,'#ff9933')
+  }
+  if("CPM"%in% partynames){
+    partyl<-c(partyl,"CPM")
+    colors<-c(colors,'#991f00')
+  }
+  if("SWA"%in% partynames){
+    partyl<-c(partyl,"SWA")
+    colors<-c(colors,'#0066cc')
+  }
+  if("JNP"%in% partynames){
+    partyl<-c(partyl,"JNP")
+    colors<-c(colors,'#602040')
+  }
+  if("ADMK"%in% partynames){
+    partyl<-c(partyl,"ADMK")
+    colors<-c(colors,'#37f226')
+  }
+  if("AITC"%in% partynames){
+    partyl<-c(partyl,"AITC")
+    colors<-c(colors,'#ffad33')
+  }
+  if("JS"%in% partynames){
+    partyl<-c(partyl,"JS")
+    colors<-c(colors,'#339966')
+  }
+  if("TDP"%in% partynames){
+    partyl<-c(partyl,"TDP")
+    colors<-c(colors,'#ffff00')
+  }
+  if("DMK"%in% partynames){
+    partyl<-c(partyl,"DMK")
+    colors<-c(colors,'#b3b300')
+  }
+  if("BJD"%in% partynames){
+    partyl<-c(partyl,"BJD")
+    colors<-c(colors,'#4df43e')
+  }
+  if("JD(U)"%in% partynames){
+    partyl<-c(partyl,"JD(U)")
+    colors<-c(colors,'#90f887')
+  }
+  if("CPI"%in% partynames){
+    partyl<-c(partyl,"CPI")
+    colors<-c(colors,'#ff3300')
+  }
+  if("TMC(M)"%in% partynames){
+    partyl<-c(partyl,"TMC(M)")
+    colors<-c(colors,'#993366')
+  }
+  if("RJD"%in% partynames){
+    partyl<-c(partyl,"RJD")
+    colors<-c(colors,'#cc0066')
+  }
+  if("IND"%in% partynames){
+    partyl<-c(partyl,"IND")
+    colors<-c(colors,'#808080')
+  }
+  if("ADK"%in% partynames){
+    partyl<-c(partyl,"ADK")
+    colors<-c(colors,'#37f226')
+  }
+  if("NCP"%in% partynames){
+    partyl<-c(partyl,"NCP")
+    colors<-c(colors,'#99003d')
+  }
+  if("AIRJP"%in% partynames){
+    partyl<-c(partyl,"AIRJP")
+    colors<-c(colors,'#009999')
+  }
+  
+  if("AAP"%in% partynames){
+    partyl<-c(partyl,"AAP")
+    colors<-c(colors,'#b35900')
+  }
+  if("AAAP"%in% partynames){
+    partyl<-c(partyl,"AAAP")
+    colors<-c(colors,'#b35900')
+  }
+  if("GPP"%in% partynames){
+    partyl<-c(partyl,"GPP")
+    colors<-c(colors,'#ffcc00')
+  }
+  if("BJNKP"%in% partynames){
+    partyl<-c(partyl,"BJNKP")
+    colors<-c(colors,'#333300')
   }
   rest<-setdiff(partynames,partyl)
-  restcols<-allcols[1:length(rest)]
+  if(length(rest)==0){
+    restcols <- c()
+  }else{
+    restcols<-allcols[1:length(rest)]
+  }
   partyl<-c(partyl,rest)
   colors<-c(colors,restcols)
   
