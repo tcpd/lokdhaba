@@ -30,7 +30,7 @@ getMarginOptions<-function(state, year, margins,envr){
         winners$Lat<-as.vector(coordinates(shape)[,2])
         winners$Long<-as.vector(coordinates(shape)[,1])
         
-	base<-leaflet(winners)
+	base<-leaflet(winners,options = leafletOptions(minZoom=6,maxZoom=10))
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
     
