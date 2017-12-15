@@ -10,32 +10,27 @@ filteroutput="parentsession$output$ae_filter_selection"
 
 filters = "filterid,construction,isinit
            1,selectInput(ns(\"wvmI_year\") :  \"Select Year\": c() : selectize = TRUE),T
-           2,selectInput(ns(\"wvmI_party\") : \"Select Party\" : c() : selectize = TRUE),F
-           3,checkboxGroupInput(ns(\"wvmoptions\") : \"Select voteshare range \": c()),F"
+           2,checkboxGroupInput(ns(\"wvmoptions\") : \"Select voteshare range \": c()),F"
     
-       #1, checkboxGroupInput(ns(\"party_names\") : \"Select seatshare for \": c())"
     
 inputtable="filterid,name,type,alias
             1,statename_reactive(),string,selected_stname 
             2,input$wvmI_year,string,selected_year
-            3,input$wvmI_party,string,selected_party
-            4,input$wvmI_party,string,selected_party
-            4,input$wvmoptions,list,selected_options"
+            3,input$wvmI_year,string,selected_year
+            3,input$wvmoptions,list,selected_options"
 
 ##default can be allmultiple/allsingle/emptymultiple/emptysingle/NA.
 outputtable="filterid,name,type,alias,default,label 
             1,wvmI_year, updateSelectInput,yearlist,emptysingle,\"Select Year\"
-            2,wvmI_party,updateSelectInput,partynames,emptysingle,\"Select Party\"
-            3,wvmoptions, updateCheckboxGroupInput,optionlist,allmultiple,\"Select voteshare range\"
-            4,parentsession$output$mapPlot,renderLeaflet,leafletmap,NA,NA"
+            2,wvmoptions, updateCheckboxGroupInput,optionlist,allmultiple,\"Select voteshare range\"
+            3,parentsession$output$mapPlot,renderLeaflet,leafletmap,NA,NA"
 
 
 
 functiontable="filterid,funname
               1,getYears(state=\"selected_stname\" : years=\"yearlist\" : currentvalues)
-              2,getPartyNames(state=\"selected_stname\" : year=\"selected_year\": parties=\"partynames\" : currentvalues)
-              3,getOptions(state=\"selected_stname\" : year=\"selected_year\" : party=\"selected_party\" : options=\"optionlist\" : currentvalues)
-              4,plotMap(state=\"selected_stname\" : year=\"selected_year\": party=\"selected_party\" : options=\"selected_options\" : plot=\"leafletmap\" : currentvalues)"
+              2,getOptions(state=\"selected_stname\" : year=\"selected_year\" : options=\"optionlist\" : currentvalues)
+              3,plotMap(state=\"selected_stname\" : year=\"selected_year\" : options=\"selected_options\" : plot=\"leafletmap\" : currentvalues)"
 ##########################################################################
 
 

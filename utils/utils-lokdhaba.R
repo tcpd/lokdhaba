@@ -38,12 +38,14 @@ addPopupInfo<- function(winnersframe,type="state"){
   cand<-paste0("<b>Candidate:</b> ", winnersframe$Candidate)
   marginp<-paste0("<b>Margin Percentage :</b> ",
                   paste0(winnersframe$Margin_Percentage,"%"))
+  vsp <- paste0("<b>Vote Share
+                :</b>",paste0(winnersframe$Vote_Share_Percentage,"%"))
   numcand<-paste0("<b>Total Candidates :</b> ", paste0(winnersframe$N_Cand))
   party<-paste0("<b>Party :</b> ", paste0(winnersframe$Party))
   
     assembly<-paste0("<b>Constituency :</b> ", winnersframe$Constituency_Name)
   
-  winnersframe$popup<-paste(cand,assembly,party,numcand,marginp,sep="<br>")
+  winnersframe$popup<-paste(cand,assembly,party,numcand,vsp,marginp,sep="<br>")
   return(winnersframe)
 }
 
@@ -290,37 +292,41 @@ getColorFactorParty<-function(partynames){
 
 ############################################VoteShareMap######################################################3
 voteShareMapLegendList<- function(){
-  return(c("<10%","10%-20%","20%-30%","30%-40%",">40%"))
+  return(c("<20%","20%-30%","30%-40%","40%-50%","50%-60%",">60%"))
 }
 
 voteShareMapBreakupList<- function(){
-  return(c(0,10,20,30,40,100))
+  return(c(0,20,30,40,50,60,100))
 }
 
 VoteShareMapLegendColor<-function(inp){
-  if(inp=="<10%"){
-    return('#ff3739')
-  }else if(inp=="10%-20%"){
-    return('#d62728')
+  if(inp=="<20%"){
+    return('#eff3ff')
   }else if(inp=="20%-30%"){
-    return('#ad1717')
+    return('#c6dbef')
   }else if(inp=="30%-40%"){
-    return('#840706')
-  }else if(inp==">40%"){
-    return('#5b0000')
+    return('#9ecae1')
+  }else if(inp=="40%-50%"){
+    return('#6baed6')
+  }else if(inp=="50%-60%"){
+    return('#3182bd')
+  }else if(inp==">60%"){
+    return('#08519c')
   }else{
-    stop('passed argument should be either <10%, 10%-20%, 20%-30%,30%-40% or >40%')
+    stop('passed argument should be either <20%, 20%-30%,
+         30%-40%,40%-60%,50%-60% or >60%')
   }
 }
 
 VoteShareMapLegendCount<-function(dframe){
   
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$Vote_Share_Percentage<10]<-"<10%"
-  dframe$tmp[dframe$Vote_Share_Percentage>=10 & dframe$Vote_Share_Percentage<20]<-"10%-20%"
+  dframe$tmp[dframe$Vote_Share_Percentage<20]<-"<20%"
   dframe$tmp[dframe$Vote_Share_Percentage>=20 & dframe$Vote_Share_Percentage<30]<-"20%-30%"
   dframe$tmp[dframe$Vote_Share_Percentage>=30 & dframe$Vote_Share_Percentage<40]<-"30%-40%"
-  dframe$tmp[dframe$Vote_Share_Percentage>=40]<-">40%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=40 & dframe$Vote_Share_Percentage<50]<-"40%-50%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=50 & dframe$Vote_Share_Percentage<60]<-"50%-60%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=60]<-">60%"
   dframe$Vote_Share_Percentage<-NULL
   dframe$count<-1
   dframe<-aggregate(count~Year+tmp,dframe,function(x) length(x))
