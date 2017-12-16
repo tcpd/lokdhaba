@@ -362,11 +362,11 @@ WinnerGenderMapLegendCount<-function(dframe){
 
 WinnerGenderMapLegendColor<-function(inp){
   if(inp=="Male"){
-    return('#1f77b4')
+    return('#1f78b4')
   }else if(inp=="Female"){
-    return('#8c564b')
+    return('#b2df8a')
   }else if(inp=="Others"){
-    return('#433e66')
+    return('#a6cee3')
   }else{
     stop('passed argument should be either Male, Female or Others')
   }
@@ -407,13 +407,13 @@ WinnerMarginMapLegendCount<- function(dframe){
 
 WinnerMarginMapLegendColor<-function(inp){
   if(inp=="<5%"){
-    return('#a798fc')
+    return('#f1eef6')
   }else if(inp=="5%-10%"){
-    return('#756bb1')
+    return('#bdc9e1')
   }else if(inp=="10%-20%"){
-    return('#433e66')
+    return('#74a9cf')
   }else if(inp==">20%"){
-    return('#000000')
+    return('#0570b0')
   }else{
     stop('passed argument should be either <5%, 5%-10%, 10%-20% or >20%')
   }
@@ -424,7 +424,7 @@ NumCandidatesMapLegendList <- function(){return (c("<5","5-15",">15"))}
 
 
 NumCandidatesMapBreakupList<- function(){
-  return(c(0,5,15,1000))
+  return(c(0,5,15,100))
 }
 
 NumCandidatesMapLegendCount<- function(dframe){
@@ -452,11 +452,11 @@ NumCandidatesMapLegendCount<- function(dframe){
 
 NumCandidatesMapLegendColor<-function(inp){
   if(inp=="<5"){
-    return('#bc5533')
+    return('#ece7f2')
   }else if(inp=="5-15"){
-    return('#843c41')
+    return('#a6bddb')
   }else if(inp==">15"){
-    return('#140109')
+    return('#2b8cbe')
   }else{
     stop('passed argument should be either <5, 5-15, or >15')
   }
@@ -496,13 +496,13 @@ NotaTurnoutMapLegendCount<- function(dframe){
 
 NotaTurnoutMapLegendColor<-function(inp){
   if(inp=="<1%"){
-    return('#a798fc')
+    return('#f1eef6')
   }else if(inp=="1%-3%"){
-    return('#756bb1')
+    return('#bdc9e1')
   }else if(inp=="3%-5%"){
-    return('#11111b')
+    return('#74a9cf')
   }else if(inp==">5%"){
-    return('#000000')
+    return('#0570b0')
   }else{
     stop('passed argument should be either <1%, 1%-3%, 3%-5% or >5%')
   }
@@ -547,17 +547,17 @@ VoterTurnoutMapLegendCount<- function(dframe){
 
 VoterTurnoutMapLegendColor<-function(inp){
   if(inp=="<40%"){
-    return('#f1ffff')
+    return('#f1eef6')
   }else if(inp=="40%-50%"){
-    return('#8d9bbe')
+    return('#d0d1e6')
   }else if(inp=="50%-60%"){
-    return('#757fa9')
+    return('#a6bddb')
   }else if(inp=="60%-70%"){
-    return('#5c6295')
+    return('#74a9cf')
   }else if(inp=="70%-80%"){
-    return('#434681')
+    return('#2b8cbe')
   }else if(inp==">80%"){
-    return('#374B63')
+    return('#045a8d')
   }else{
     stop('passed argument should be either <40%, 40%-50%,50%-60%,60%-70%,
          70%-80% or >80%')
@@ -587,11 +587,11 @@ WinnerCasteMapLegendCount<-function(dframe){
 WinnerCasteMapLegendColor<- function(inp){
   
   if(inp=="General"){
-    return('#1f77b4')
+    return('#1f78b4')
   }else if(inp=="SC"){
-    return('#ff7f0e')
+    return('#a6cee3')
   }else if(inp=="ST"){
-    return('#2ca02c')
+    return('#b2df8a')
   }else{
     stop('passed argument should be either 1,2,3 or >3')
   }
@@ -603,18 +603,18 @@ PartyPositionsMapLegendList<- function(){
 }
 
 PartyPositionsMapBreakupList<- function(){
-  return(c(0,2,3,4,200))
+  return(c(0,2,3,4,100))
 }
 
 PartyPositionsMapLegendColor<-function(inp){
   if(inp=="1"){
-    return('#696ddf')
+    return('#0570b0')
   }else if(inp=="2"){
-    return('#5154ac')
+    return('#74a9cf')
   }else if(inp=="3"){
-    return('#393b79')
+    return('#bdc9e1')
   }else if(inp==">3"){
-    return('#212246')
+    return('#f1eef6')
   }else{
     stop('passed argument should be either 1,2,3 or >3')
   }
