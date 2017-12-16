@@ -330,12 +330,12 @@ VoteShareMapLegendCount<-function(dframe){
   dframe$Vote_Share_Percentage<-NULL
   dframe$count<-1
   dframe<-aggregate(count~Year+tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(voteShareMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -348,13 +348,13 @@ WinnerGenderMapLegendList<- function(){return (c("Male","Female","Others"))}
 WinnerGenderMapLegendCount<-function(dframe){
   dframe$count<-1
   dframe<-aggregate(count~Year+Sex,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$Sex),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$Sex)," (",dframe$count,")")
   dframe$count<-NULL
   dframe$Year<-NULL
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerGenderMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$Sex==x))==0){
-      dframe<<-rbind(dframe,data.frame(Sex=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(Sex=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -392,13 +392,13 @@ WinnerMarginMapLegendCount<- function(dframe){
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerMarginMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -436,13 +436,13 @@ NumCandidatesMapLegendCount<- function(dframe){
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(NumCandidatesMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   
@@ -481,13 +481,13 @@ NotaTurnoutMapLegendCount<- function(dframe){
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(NotaTurnoutMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -532,13 +532,13 @@ VoterTurnoutMapLegendCount<- function(dframe){
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(VoterTurnoutMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -571,14 +571,14 @@ WinnerCasteMapLegendList<- function(){return (c("General","SC","ST"))}
 WinnerCasteMapLegendCount<-function(dframe){
   dframe$count<-1
   dframe<-aggregate(count~Year+Constituency_Type,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$Constituency_Type),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$Constituency_Type)," (",dframe$count,")")
   dframe$count<-NULL
   dframe$Year<-NULL
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerCasteMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$Constituency_Type==x))==0){
-      dframe<<-rbind(dframe,data.frame(Constituency_Type=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(Constituency_Type=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -631,12 +631,12 @@ PartyPositionsMapLegendCount<-function(dframe){
   dframe$Position<-NULL
   dframe$count<-1
   dframe<-aggregate(count~Year+tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(PartyPositionsMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
