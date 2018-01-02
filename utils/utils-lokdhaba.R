@@ -530,7 +530,7 @@ VoterTurnoutMapLegendCount<- function(dframe){
   #browser()
   dframe$Turnout_Percentage<-NULL
   dframe$count<-1
-  #browser()
+  browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
   dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))

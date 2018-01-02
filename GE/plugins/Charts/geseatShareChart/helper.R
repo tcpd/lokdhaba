@@ -3,6 +3,7 @@
   getPartyNames<-function(parties,envr){
     #browser()
     b<-readSeatShareFile("ge")
+    b <- b[order(-b$Seats),]
     assign(parties,as.vector(unique(b$Party)),env=envr)
   }
 

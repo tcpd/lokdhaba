@@ -1,29 +1,27 @@
-cvoteShareChart<-function(input, output, session, parentsession,statename_reactive,dname,conmanager){
+gevoteShareChart<-function(input, output, session, parentsession,dname,conmanager){
   ###################Specific for voteshare chart visualization##########################################
-  getPartyNames<-function(state,parties,envr){
+  getPartyNames<-function(parties,envr){
     #browser()
-    sname<-gsub(" ","_",get(state,envr))
-    b<-readcVoteShareFile(sname)
+    b<-readVoteShareFile("ge")
     
     assign(parties,as.list(unique(b$Party)),env=envr)
   }
 
-  plotChart<-function(state, parties , plot,envr){
+  plotChart<-function( parties , plot,envr){
     selectedpartynames<-get(parties,envr)
-    sname<-gsub(" ","_",get(state,envr))
-    b<-readcVoteShareFile(sname)
+    #sname<-gsub(" ","_",get(state,envr))
+    b<-readVoteShareFile("ge")
     #browser()
-    pivotdata<-dcast(b,Year~Party,value.var=c('votes'))
+    pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
 
     #create a base line chart with year as the x-axis
     base<-plot_ly(pivotdata, x = ~Year)
     #print(paste('selected',selectedpartynames))
     # #for each selected party in the input "filter_pname" id (checkbox) add a new trace
     # #corresponding to that party
-    lapply(selectedpartynames,function(x)
-           {print(paste('adding',x));base<<-add_trace(base,y=~get(x),name=as.character(x),type='scatter',mode='lines+markers')})
-    sname<-gsub("_"," ",sname)
-    thistitle<-paste0('Party wise voteshare in seats contested across years in ',sname)
+    lapply(selectedpartynames,function(x) {print(paste('adding',x));base<<-add_trace(base,y=~get(x),name=x,type='scatter',mode='lines+markers')})
+    #sname<-gsub("_"," ",sname)
+    thistitle<-paste0('Party wise voteshare across years in GE')
     xtitle<-''
     ytitle<-'Vote share %'
     yrange<-c(0,100)
@@ -48,9 +46,9 @@ cvoteShareChart<-function(input, output, session, parentsession,statename_reacti
 
 
 Setup<-function(){
-parentsession$output$ae_filter_selection<-renderUI({
+parentsession$output$ge_filter_selection<-renderUI({
  #ShowAll()
- tmp1 <-checkboxGroupInput(ns("party_names") , "Select voteshare for ", c())
+ tmp1 <-checkboxGroupInput(ns("filter_pnames") , "Select voteshare for ", c())
  tagList (
  tmp1) 
  })
@@ -72,18 +70,17 @@ shinyjs::hide("distPlot")
 
 
 observe({
-currentvalues$selected_stname<<-statename_reactive()
-if(T && isvalid(values$triggerfor_1,"numeric") && isvalid(currentvalues$selected_stname,"string"))
+if(T && isvalid(values$triggerfor_1,"numeric"))
 {
-getPartyNames(state="selected_stname" , parties="partynames" , currentvalues)
-updateCheckboxGroupInput(parentsession,ns("party_names"),choices=currentvalues$partynames,selected=conmanager$getval(ns("party_names"),c()))
-shinyjs::show("party_names")
+getPartyNames( parties="gepartynames" , currentvalues)
+updateCheckboxGroupInput(parentsession,ns("filter_pnames"),choices=currentvalues$gepartynames,selected=conmanager$getval(ns("filter_pnames"),c()))
+shinyjs::show("filter_pnames")
 isolate({
  values$triggerfor_2<<-(values$triggerfor_2+1)%%2
 })
 }else{
-updateCheckboxGroupInput(parentsession,ns("party_names"),choices=c(),selected=c())
-shinyjs::hide("party_names")
+updateCheckboxGroupInput(parentsession,ns("filter_pnames"),choices=c(),selected=c())
+shinyjs::hide("filter_pnames")
 }
 })
 
@@ -91,10 +88,10 @@ shinyjs::hide("party_names")
 
 SetupOutputRendering<-function(){
 parentsession$output$distPlot<-renderPlotly({
-currentvalues$selected_parties<<-input$party_names
+currentvalues$selected_parties<<-input$filter_pnames
 if(T && isvalid(values$triggerfor_2,"numeric") && isvalid(currentvalues$selected_parties,"list"))
 {
-plotChart(state="selected_stname" , parties="selected_parties" , plot="plotlychart" , currentvalues)
+plotChart(parties="selected_parties" , plot="plotlychart" , currentvalues)
 currentvalues$plotlychart
 }else{
 return()
