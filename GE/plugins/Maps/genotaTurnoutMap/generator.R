@@ -8,7 +8,7 @@ plotarea="mapPlot"
 filteroutput="parentsession$output$ge_filter_selection"
 
 filters = "filterid,construction,isinit
-           1,selectInput(ns(\"I_year\"):\"Select Year\": c() : selectize = TRUE),T
+           1,selectInput(ns(\"I_year\"):\"Select Year(NOTA was only implemented in 2013)\": c() : selectize = TRUE),T
            2,checkboxGroupInput(ns(\"filter_pname\") : \"Select range \": c()),F"
     
 inputtable="filterid,name,type,alias

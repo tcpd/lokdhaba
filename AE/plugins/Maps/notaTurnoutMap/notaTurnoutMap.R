@@ -112,7 +112,7 @@ plotMap<-function(state, year, options, plot, envr){
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
  #ShowAll()
- tmp1 <-selectInput(ns("notaI_year"),"Select Year", c() , selectize = TRUE)
+ tmp1 <-selectInput(ns("notaI_year"),"Select Year(NOTA was only implemented in 2013)", c() , selectize = TRUE)
  tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
  checkboxGroupInput(ns("nota_names") , "Select range ", c())
  } 
