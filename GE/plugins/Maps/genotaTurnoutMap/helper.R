@@ -27,7 +27,7 @@ getOptions<-function( year, options,envr){
         winners$Lat<-as.vector(coordinates(shape)[,2])
         winners$Long<-as.vector(coordinates(shape)[,1])
         
-	      base<-leaflet(winners,options = leafletOptions(minZoom=5,maxZoom=11))
+	      base<-leaflet(winners,options = leafletOptions(minZoom=5,maxZoom=11,zoomSnap=0.2,zoomDelta=0.2,scrollWheelZoom=F,touchZoom=F))
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
      #set the count of winning seats for each nota range

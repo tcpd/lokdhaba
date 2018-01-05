@@ -47,7 +47,7 @@ getOptions<-function(state,year,party,options,envr){
        #winners<-get("mergedwinners",envr)
        #winners$position[winners$party1!=partyname]<-NA
 
-        base<-leaflet(party_wise,options = leafletOptions(minZoom=6,maxZoom=10))
+        base<-leaflet(party_wise,options = leafletOptions(minZoom=6,maxZoom=10,zoomSnap=0.2,zoomDelta=0.2,scrollWheelZoom=F,touchZoom=F))
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
 

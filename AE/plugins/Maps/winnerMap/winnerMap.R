@@ -31,7 +31,7 @@ getPartyNames<-function(state, year, parties, envr){
         winners$Lat<-as.vector(coordinates(shape)[,2])
         winners$Long<-as.vector(coordinates(shape)[,1])
         
-	base<-leaflet(winners,options = leafletOptions(minZoom=6,maxZoom=10)) 
+	base<-leaflet(winners,options = leafletOptions(minZoom=6,maxZoom=10,zoomSnap=0.2,zoomDelta=0.2,scrollWheelZoom=F,touchZoom=F)) 
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
     
