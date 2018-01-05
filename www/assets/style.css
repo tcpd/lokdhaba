@@ -1,6 +1,7 @@
 @import url("//fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
     background: #C1CDC1;
   }
 
@@ -65,8 +66,8 @@ body {
     position: relative;
     padding-top: 80px; 
     padding-bottom: 45px;
-    font-family: 'Droid Serif', serif;
-    /*background: url("watermark.svg");*/
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    background: url("watermark.svg");
     background-repeat: no-repeat;
 }
 
@@ -75,12 +76,13 @@ body {
 }
 
 .leaflet-right .leaflet-control {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
     margin-top: 50px;
     margin-right: 18px;
 }
 
 .leaflet-tcpd{
-   font-family: "Droid Serif,serif"; 
+   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
    font-size: 10px; 
    text-align:center;
    fill: rgb(51, 51, 51); 
@@ -96,7 +98,7 @@ body {
     text-align: center;
     left:100px;
     top:-65px;
-    font-family: 'Droid Serif',serif; 
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
     font-size: 20px; 
     fill: rgb(51, 51, 51); 
     opacity: 1; 

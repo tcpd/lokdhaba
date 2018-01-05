@@ -41,11 +41,12 @@ addPopupInfo<- function(winnersframe,type="state"){
   vsp <- paste0("<b>Vote Share
                 :</b>",paste0(winnersframe$Vote_Share_Percentage,"%"))
   numcand<-paste0("<b>Total Candidates :</b> ", paste0(winnersframe$N_Cand))
-  party<-paste0("<b>Party :</b> ", paste0(winnersframe$Party))
+  party<-paste0("<b>Party :</b> ", paste0(winnersframe$Party))             
+  voter_turnout <- paste0("<b>Turnout :</b> ",paste0(winnersframe$Turnout_Percentage,"%"))
   
-    assembly<-paste0("<b>Constituency :</b> ", winnersframe$Constituency_Name)
+  assembly<-paste0("<b>Constituency :</b> ", winnersframe$Constituency_Name)
   
-  winnersframe$popup<-paste(cand,assembly,party,numcand,vsp,marginp,sep="<br>")
+  winnersframe$popup<-paste(cand,assembly,party,numcand,vsp,marginp,voter_turnout,sep="<br>")
   return(winnersframe)
 }
 
@@ -530,7 +531,7 @@ VoterTurnoutMapLegendCount<- function(dframe){
   #browser()
   dframe$Turnout_Percentage<-NULL
   dframe$count<-1
-  browser()
+  #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
   dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))

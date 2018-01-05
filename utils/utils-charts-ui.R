@@ -5,14 +5,14 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
   xtitle<-'Year (Assembly number)'
   base %>%
     layout(title = title, #xanchor="center",
-         font=list(family= 'Droid Serif, serif',size=16,color=rgb(.2,.2,.2)),
+         font=list(family= 'Helvetica Neue,Helvetica,Arial,sans-serif',size=16,color=rgb(.2,.2,.2)),
          xaxis = list(title=xtitle,
            tickangle=45, type="category",categoryorder="category ascending",titlefont=list(
-             family='Droid Serif, serif',
+             family='"Helvetica Neue",Helvetica,Arial,sans-serif',
              size=16
            ),zeroline=T,showline=T),
          yaxis = list (title = ytitle, titlefont=list(
-           family='Droid Serif, serif',
+           family='Helvetica Neue,Helvetica,Arial,sans-serif',
            size=16
          ),zeroline=T,showline=T,range=yrange),
          annotations=list(text=subtitle,
@@ -21,7 +21,7 @@ preparechartlayout<-function(base,title,xtitle,ytitle,yrange){
                           xref='paper',
                           yref='paper',
                           font=list(
-                            family='Droid Serif, serif',
+                            family='Helvetica Neue,Helvetica,Arial,sans-serif',
                             size=10
                           )
          ),
