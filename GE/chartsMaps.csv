@@ -5,6 +5,12 @@ Chart: Party vote share (all seats),Chart,gevoteShareChart_t.R,gevoteShareChart_
 Chart: Party seat share,Chart,geseatShareChart.R,geseatShareChart
 Chart: Parties contested and represented,Chart,gepartiesPresentedChart.R,gepartiesPresentedChart
 Chart: Candidates contested /deposit saved,Chart,gecontestedDepositSavedChart.R,gecontestedDepositSavedChart
+Map: Constituency type ,Map,constituencyTypeMap.R,constituencyTypeMap
 Map: Number of candidates,Map,genumCandidatesMap.R,genumCandidatesMap
+Map: Voter Turnout,Map,voterTurnoutMap.R,voterTurnoutMap
 Map: Winners by Party,Map,gewinnerMap.R,gewinnerMap
+Map: Winners by Gender,Map,winnerGenderMap.R,winnerGenderMap
+Map: Victory Margin,Map,winnerMarginMap.R,winnerMarginMap
+Map: Vote share of winners,Map,winnerVoteShareMap.R,winnerVoteShareMap
+Map: Party-wise positions,Map,partyPositionsMap.R,partyPositionsMap
 Map: NOTA Vote,Map,genotaTurnoutMap.R,genotaTurnoutMap
