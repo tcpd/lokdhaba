@@ -15,7 +15,7 @@ inputtable="filterid,name,type,alias
             1,NA,NA,NA 
             2,input$I_year,string,selected_year
             3,input$I_year,string,selected_year
-            3,input$filter_pnames,list,selected_margins"
+            3,input$filter_pname,list,selected_margins"
 
 ##default can be allmultiple/allsingle/emptymultiple/emptysingle/NA.
 outputtable="filterid,name,type,alias,default,label 

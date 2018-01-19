@@ -40,7 +40,7 @@ getMarginOptions<-function( year, margins,envr){
 
 }
 
-plotMap<-function(state, year, margins, plot, envr){
+plotMap<-function(year, margins, plot, envr){
        yr<-get(year,envr)                                                
 
         selectedpercentage<-get(margins,envr)
@@ -169,7 +169,7 @@ shinyjs::hide("filter_pname")
 SetupOutputRendering<-function(){
 parentsession$output$mapPlot<-renderLeaflet({
 currentvalues$selected_year<<-input$I_year
-currentvalues$selected_margins<<-input$filter_pnames
+currentvalues$selected_margins<<-input$filter_pname
 if(T && isvalid(values$triggerfor_3,"numeric") && isvalid(currentvalues$selected_year,"string") && isvalid(currentvalues$selected_margins,"list"))
 {
 plotMap(year="selected_year", margins="selected_margins" , plot="leafletmap" , currentvalues)

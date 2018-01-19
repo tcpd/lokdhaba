@@ -39,7 +39,7 @@ getMarginOptions<-function( year, margins,envr){
 
 }
 
-plotMap<-function(state, year, margins, plot, envr){
+plotMap<-function(year, margins, plot, envr){
        yr<-get(year,envr)                                                
 
         selectedpercentage<-get(margins,envr)

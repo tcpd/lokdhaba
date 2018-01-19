@@ -102,12 +102,12 @@ plotMap<-function(year,  options, plot, envr){
 Setup<-function(){
 parentsession$output$ge_filter_selection<-renderUI({
  #ShowAll()
- tmp1 <-selectInput(ns("wvmI_year") ,  "Select Year", c() , selectize = TRUE)
+ tmp1 <-selectInput(ns("I_year") ,  "Select Year", c() , selectize = TRUE)
  tmp2 <- if( T  & isvalid(currentvalues$selected_year,"string")){
- checkboxGroupInput(ns("wvmoptions") , "Select voteshare range ", c())
+ checkboxGroupInput(ns("options") , "Select voteshare range ", c())
  } 
  else {
-shinyjs::hidden(checkboxGroupInput(ns("wvmoptions") , "Select voteshare range ", c())) 
+shinyjs::hidden(checkboxGroupInput(ns("options") , "Select voteshare range ", c())) 
  }
  tagList (
  tmp1,
@@ -134,32 +134,32 @@ observe({
 if(T && isvalid(values$triggerfor_1,"numeric"))
 {
 getYears(years="yearlist" , currentvalues)
-updateSelectInput(parentsession,ns("wvmI_year"),choices=currentvalues$yearlist,selected=conmanager$getval(ns("wvmI_year"),""))
-shinyjs::show("wvmI_year")
+updateSelectInput(parentsession,ns("I_year"),choices=currentvalues$yearlist,selected=conmanager$getval(ns("I_year"),""))
+shinyjs::show("I_year")
 isolate({
  values$triggerfor_2<<-(values$triggerfor_2+1)%%2
 })
 }else{
-updateSelectInput(parentsession,ns("wvmI_year"),choices="",selected="")
-shinyjs::hide("wvmI_year")
+updateSelectInput(parentsession,ns("I_year"),choices="",selected="")
+shinyjs::hide("I_year")
 }
 })
 
 
 
 observe({
-currentvalues$selected_year<<-input$wvmI_year
+currentvalues$selected_year<<-input$I_year
 if(T && isvalid(values$triggerfor_2,"numeric") && isvalid(currentvalues$selected_year,"string"))
 {
 getOptions(year="selected_year" , options="optionlist" , currentvalues)
-updateCheckboxGroupInput(parentsession,ns("wvmoptions"),choices=currentvalues$optionlist,selected=conmanager$getval(ns("wvmoptions"),currentvalues$optionlist))
-shinyjs::show("wvmoptions")
+updateCheckboxGroupInput(parentsession,ns("options"),choices=currentvalues$optionlist,selected=conmanager$getval(ns("options"),currentvalues$optionlist))
+shinyjs::show("options")
 isolate({
  values$triggerfor_3<<-(values$triggerfor_3+1)%%2
 })
 }else{
-updateCheckboxGroupInput(parentsession,ns("wvmoptions"),choices=c(),selected=c())
-shinyjs::hide("wvmoptions")
+updateCheckboxGroupInput(parentsession,ns("options"),choices=c(),selected=c())
+shinyjs::hide("options")
 }
 })
 
@@ -167,8 +167,8 @@ shinyjs::hide("wvmoptions")
 
 SetupOutputRendering<-function(){
 parentsession$output$mapPlot<-renderLeaflet({
-currentvalues$selected_year<<-input$wvmI_year
-currentvalues$selected_options<<-input$wvmoptions
+currentvalues$selected_year<<-input$I_year
+currentvalues$selected_options<<-input$options
 if(T && isvalid(values$triggerfor_3,"numeric") && isvalid(currentvalues$selected_year,"string") && isvalid(currentvalues$selected_options,"list"))
 {
 plotMap(year="selected_year" , options="selected_options" , plot="leafletmap" , currentvalues)

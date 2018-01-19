@@ -9,20 +9,20 @@ filteroutput="parentsession$output$ge_filter_selection"
 #plotarea="distPlot"
 
 filters = "filterid,construction,isinit
-           1,selectInput(ns(\"wvmI_year\") :  \"Select Year\": c() : selectize = TRUE),T
-           2,checkboxGroupInput(ns(\"wvmoptions\") : \"Select voteshare range \": c()),F"
+           1,selectInput(ns(\"I_year\") :  \"Select Year\": c() : selectize = TRUE),T
+           2,checkboxGroupInput(ns(\"options\") : \"Select voteshare range \": c()),F"
     
     
 inputtable="filterid,name,type,alias
             1,NA,NA,NA 
-            2,input$wvmI_year,string,selected_year
-            3,input$wvmI_year,string,selected_year
-            3,input$wvmoptions,list,selected_options"
+            2,input$I_year,string,selected_year
+            3,input$I_year,string,selected_year
+            3,input$options,list,selected_options"
 
 ##default can be allmultiple/allsingle/emptymultiple/emptysingle/NA.
 outputtable="filterid,name,type,alias,default,label 
-            1,wvmI_year, updateSelectInput,yearlist,emptysingle,\"Select Year\"
-            2,wvmoptions, updateCheckboxGroupInput,optionlist,allmultiple,\"Select voteshare range\"
+            1,I_year, updateSelectInput,yearlist,emptysingle,\"Select Year\"
+            2,options, updateCheckboxGroupInput,optionlist,allmultiple,\"Select voteshare range\"
             3,parentsession$output$mapPlot,renderLeaflet,leafletmap,NA,NA"
 
 
