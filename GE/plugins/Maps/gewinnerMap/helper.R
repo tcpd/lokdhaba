@@ -34,7 +34,7 @@ getPartyNames<-function( year, parties, envr){
         tm<-subset(tm,select=c("Year","Party"))
         tm$count<-1
         tm<-aggregate(count~Year+Party,tm,function(x) length(x))
-        tm$legend<-paste0(tm$Party,"(",tm$count,")")
+        tm$legend<-paste0(tm$Party," (",tm$count,")")
         tm<-arrange(tm,desc(count))
         tm$count<-NULL
         assign("countedframe",tm,env=envr)
