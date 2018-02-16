@@ -105,7 +105,7 @@ browseDataOptions <- function(input, output, session,conmanager) {
       if("pid" %in% names(sub) )
       {sub$pid <- as.character(sub$pid)}
       n <- names(sub)
-      n[which(n=="State_Name")] <- "State Name"
+      n[which(n=="State_Name")] <- "State"
       n[which(n=="Constituency_Name")] <- "Constituency Name"
       n[which(n=="Candidate_Type")] <- "Cand. Type"
       n[which(n=="Valid_Votes")] <- "Valid Votes"
