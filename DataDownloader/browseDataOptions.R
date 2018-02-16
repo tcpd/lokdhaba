@@ -102,6 +102,22 @@ browseDataOptions <- function(input, output, session,conmanager) {
       }
       set <- c(prior,c_names[which(!c_names %in% c(prior,last))],last)
       sub <- subset(dframe,select=set)
+      if("pid" %in% names(sub) )
+      {sub$pid <- as.character(sub$pid)}
+      n <- names(sub)
+      n[which(n=="State_Name")] <- "State Name"
+      n[which(n=="Constituency_Name")] <- "Constituency Name"
+      n[which(n=="Candidate_Type")] <- "Cand. Type"
+      n[which(n=="Valid_Votes")] <- "Valid Votes"
+      n[which(n=="Constituency_Type")] <- "Const. Type"
+      n[which(n=="District_Name")] <- "District"
+      n[which(n=="Turnout_Percentage")] <- "Turnout %"
+      n[which(n=="Margin_Percentage")] <- "Margin %"
+      n[which(n=="Vote_Share_Percentage")] <- "Vote Share %"
+      n[which(n=="Constituency_No")] <- "Const. No."
+      n[which(n=="Deposit_Lost")] <- "Deposit Lost"
+
+      names(sub) <- n
       return(sub)
     #datatable(getVariableInfo(input$bd_electiontype_selector),#current_filters$electiontype),
     #          rownames=F,
