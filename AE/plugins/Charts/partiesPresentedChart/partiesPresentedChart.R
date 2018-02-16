@@ -2,7 +2,7 @@ partiesPresentedChart<-function(input, output, session, parentsession,statename_
   ###################Specific for voteshare chart visualization##########################################
   getOptions<-function(options,envr){
     #browser()
-    assign(options,c("parties contested","parties represented"),env=envr)
+    assign(options,c("Parties Contested","Parties Represented"),env=envr)
   }
 
   plotChart<-function(state, options , plot,envr){
@@ -13,7 +13,7 @@ partiesPresentedChart<-function(input, output, session, parentsession,statename_
         b<-readPartiesContestedRepresentedFile(sname)
         #pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
-        base<-plot_ly(b, x = ~year)
+        base<-plot_ly(b, x = ~Year)
 
       lapply(selectedoptionnames,function(x) {
         n<-gsub(" ","_",x)
@@ -50,9 +50,11 @@ partiesPresentedChart<-function(input, output, session, parentsession,statename_
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("pc_options") , "Select  ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("pc_options") , "Select  ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 

@@ -52,24 +52,38 @@ constructHidAllFunction<-function(plotarea){
     return(code)
     }
 
-constructSetupFunction<-function(filteroutputarea,filterc){
+constructSetupFunction<-function(filteroutputarea,filterc,inputtable){
 
-    innercode<-paste0(filteroutputarea,"<-renderUI({\n ShowAll()","\n tagList(")
+    innercode <<- paste0(filteroutputarea,"<-renderUI({\n #ShowAll()")
     ##add construction code for filter ui components here..
     apply(filterc,1,function(row){
         if(trimws(row["isinit"])==T){
-            innercode<<-paste0(innercode,"\n",gsub(":",",",row["construction"]),",")
+          innercode <<- paste0(innercode, "\n tmp",row["filterid"], " <-", gsub(":",",",row["construction"]))
+            #innercode<<-paste0(innercode,"\n",gsub(":",",",row["construction"]),",")
         }else if(trimws(row["isinit"])==F){
-            innercode<<-paste0(innercode,"\nshinyjs::hidden(",gsub(":",",",row["construction"]),"),")
+          fid <- row["filterid"]
+          dep_inp <- filter(inputtable,filterid == fid) 
+          innercode <<- paste0(innercode,"\n ","tmp",row["filterid"] ," <- if( T ")
+          apply(dep_inp,1,function(inp_row){
+            innercode <<- paste0(innercode," & isvalid(currentvalues$",inp_row["alias"],",\"",inp_row["type"],"\")")
+          })
+          innercode <<- paste0(innercode,"){")
+            
+          innercode <<- paste0(innercode,"\n ",gsub(":",",",row["construction"]),"\n } \n else {")
+          innercode<<-paste0(innercode,"\nshinyjs::hidden(",gsub(":",",",row["construction"]),") \n }")
         }else{
             stop('some serious error, isinit tag should be either T or F')
         }
         })
+    innercode <<- paste0(innercode,"\n tagList (")
+    apply(filterc,1,function(row){
+      innercode <<- paste0(innercode,"\n tmp",row["filterid"],",")
+    })
     ##as we have an extra "," at the end (do we have that alwasy?? yes at least one filter must be there-- but keep it in mind)
-    innercode<-  substr(innercode, 1, nchar(innercode)-1)
-    innercode<-paste0(innercode,") })\n")
+    innercode <<-  substr(innercode, 1, nchar(innercode)-1)
+    innercode <<-paste0(innercode,") \n })\n")
     ##call setupoutputrendering also..
-    innercode<-paste0(innercode,"SetupOutputRendering()","\n")
+    innercode <<-paste0(innercode,"SetupOutputRendering()","\n")
     code<-paste0("Setup","<-","function(){\n",innercode,"}","\n")
     return(code)
     }
@@ -82,13 +96,14 @@ constructReturnCode<-function(){
     }
 
 constructObserversRenderers<-function(inputc,outputc,func){
-
+  
   code<-""
   observercode<-""
   renderingcode<-""
   resetrenderingcode<-""
   #run for reach filter id obtained from input,output,function table..
   tmp<-lapply(unique(inputc$filterid), function(fid){
+    #browser()
     isObserver<-T
     inputcc<-filter(inputc,filterid==fid)
     outputcc<-filter(outputc,filterid==fid)
@@ -104,11 +119,14 @@ constructObserversRenderers<-function(inputc,outputc,func){
     ###Get input values and store that in alias variables..
    
     inputvalidcheckexpression<-paste0("T && isvalid(values$triggerfor_",fid,",\"numeric\")")
-    apply(inputcc,1,function(row){
-      code<<-paste0(code,"currentvalues$",row["alias"],"<<-",row["name"],"\n")
-      ###construct validity checking expression variable and type
-      inputvalidcheckexpression<<-paste0(inputvalidcheckexpression," && isvalid(","currentvalues$",row["alias"],",\"",row["type"],"\")")
-    })
+    if(!is.na(inputcc[["name"]])){
+      apply(inputcc,1,function(row){
+        code<<-paste0(code,"currentvalues$",row["alias"],"<<-",row["name"],"\n")
+        ###construct validity checking expression variable and type
+        inputvalidcheckexpression<<-paste0(inputvalidcheckexpression," && isvalid(","currentvalues$",row["alias"],",\"",row["type"],"\")")
+      })
+    }
+    
     ##Check the validity of input
     code<<-paste0(code,"if(",inputvalidcheckexpression,")\n{","\n")
     #{
@@ -211,7 +229,7 @@ constructFunctions<-function(inputtable,outputtable,funtable,filteroutputarea,fi
   filterc<-fread(filters)
 
     code<-paste0(constructVariables(filterc),"\n\n")
-  code<-paste0(code,constructSetupFunction(filteroutputarea,filterc),"\n\n")
+  code<-paste0(code,constructSetupFunction(filteroutputarea,filterc,inputc),"\n\n")
 
     code<-paste0(code,constructShowAllFunction(plotarea),"\n\n")
 

@@ -5,16 +5,16 @@ seatShareChart<-function(input, output, session, parentsession,statename_reactiv
     #browser()
     sname<-gsub(" ","_",get(state,envr))
     b<-readSeatShareFile(sname)
-    assign(parties,as.vector(unique(b$party)),env=envr)
+    assign(parties,as.vector(unique(b$Party)),env=envr)
   }
 
   plotChart<-function(state, parties , plot,envr){
     selectedpartynames<-get(parties,envr)
     sname<-gsub(" ","_",get(state,envr))
     b<-readSeatShareFile(sname)
-    pivotdata<-dcast(b,year~party,value.var=c('seats'))
+    pivotdata<-dcast(b,Year~Party,value.var=c('Seats'))
     #create a base line chart with year as the x-axis
-    base<-plot_ly(pivotdata, x = ~year)
+    base<-plot_ly(pivotdata, x = ~Year)
     #print(paste('selected',selectedpartynames))
     # #for each selected party in the input "filter_pname" id (checkbox) add a new trace
     # #corresponding to that party
@@ -46,9 +46,11 @@ seatShareChart<-function(input, output, session, parentsession,statename_reactiv
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("party_names") , "Select seatshare for ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("party_names") , "Select seatshare for ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 

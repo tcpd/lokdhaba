@@ -34,17 +34,19 @@ readShapeFile<- function(sname, year){
 
 
 addPopupInfo<- function(winnersframe,type="state"){
-  cand<-paste0("<b>Candidate:</b> ", winnersframe$cand1)
-  marginp<-paste0("<b>Margin Percentage :</b> ", paste0(winnersframe$margin_percent,"%"))
-  numcand<-paste0("<b>Total Candidates :</b> ", paste0(winnersframe$n_cand))
-  party<-paste0("<b>Party :</b> ", paste0(winnersframe$party1))
+  #browser() #Check for Assembly_1 and pc_ name
+  cand<-paste0("<b>Candidate:</b> ", winnersframe$Candidate)
+  marginp<-paste0("<b>Margin Percentage :</b> ",
+                  paste0(winnersframe$Margin_Percentage,"%"))
+  vsp <- paste0("<b>Vote Share
+                :</b>",paste0(winnersframe$Vote_Share_Percentage,"%"))
+  numcand<-paste0("<b>Total Candidates :</b> ", paste0(winnersframe$N_Cand))
+  party<-paste0("<b>Party :</b> ", paste0(winnersframe$Party))             
+  voter_turnout <- paste0("<b>Turnout :</b> ",paste0(winnersframe$Turnout_Percentage,"%"))
   
-  if(type=="state"){
-    assembly<-paste0("<b>Constituency :</b> ", winnersframe$ASSEMBLY_1)
-  }else{
-    assembly<-paste0("<b>Constituency :</b> ", winnersframe$pc_name)
-  }
-  winnersframe$popup<-paste(cand,assembly,party,numcand,marginp,sep="<br>")
+  assembly<-paste0("<b>Constituency :</b> ", winnersframe$Constituency_Name)
+  
+  winnersframe$popup<-paste(cand,assembly,party,numcand,vsp,marginp,voter_turnout,sep="<br>")
   return(winnersframe)
 }
 
@@ -56,8 +58,9 @@ titlemessage<-gsub("#","Assembly #",titlemessage)
 
 addControl(map,html=paste0(titlemessage,"<br>",
                                     "<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle",position="topleft")%>%
- addCircleMarkers(data=winners,lng=~ Long, lat= ~ Lat,fill=F, stroke=F, color='#000000',opacity= 0, label=~ ac_name,group='const')%>%
+                                     "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle")%>%
+ addCircleMarkers(data=winners,lng=~ Long, lat= ~ Lat,fill=F, stroke=F,
+                  color='#000000',opacity= 0, label=~ Constituency_Name,group='const')%>%
         addSearchMarker(targetGroup = 'const',options=searchMarkersOptions(textPlaceholder='Search Constituency', zoom=10,autoCollapse=T, autoCollapseTime=1600 , hideMarkerOnCollapse=T))
 
 
@@ -69,24 +72,24 @@ readStateWinnersFile<- function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m$newyear<-paste0(m$year," (#",m$ga_no,")")
-    m$year<-NULL
-    names(m)[names(m)=="newyear"]<-"year"
+    m$newyear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newyear"]<-"Year"
      return(m) 
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_maps.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m$newyear<-paste0(m$year," (#",m$sa_no,")")
-    m$year<-NULL
-    names(m)[names(m)=="newyear"]<-"year"
+    m$newyear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newyear"]<-"Year"
     return(m)
   }
 }
 
 #
 getYearsForMap<-function(dframe){
-        all<-unique(dframe$year)
+        all<-unique(dframe$Year)
 	return(Filter(function(x) x>=2009,all))
 
 }
@@ -98,17 +101,17 @@ readPartyPositionsFile<- function(statename){
     filename<-paste0("../tcpd_data/data/GE/Data/derived/lokdhaba/ge_partys.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m$newyear<-paste0(m$year," (#",m$ga_no,")")
-    m$year<-NULL
-    names(m)[names(m)=="newyear"]<-"year"
+    m$newyear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newyear"]<-"Year"
      return(m)
   }else{
     filename<-paste0("../tcpd_data/data/AE/Data/",statename,"/derived/lokdhaba/ae_partys.csv")
     print(paste0('reading from ',filename))
     m<-read.csv(filename)
-    m$newyear<-paste0(m$year," (#",m$sa_no,")")
-    m$year<-NULL
-    names(m)[names(m)=="newyear"]<-"year"
+    m$newyear<-paste0(m$Year," (#",m$Assembly_No,")")
+    m$Year<-NULL
+    names(m)[names(m)=="newyear"]<-"Year"
      return(m)
   }
   
@@ -141,24 +144,145 @@ getColorFactorParty<-function(partynames){
             '#de7c78')
   partyl<-c()
   colors<-c()
+  #color_file <- paste0("../tcpd_data/data/colours.csv")
+  #c <- read.csv(color_file)
+  #allcols <- c$Color
+  #c_parties <- c$Party 
+  #ind <- which(c_parties %in% partynames)
+  #partyl <- c$Party[ind]
+  #colors <- c$Color[ind]
+  #browser()
   if("BJP"%in% partynames){
-    partyl<-c("BJP")
-    colors<-c('#ff6600')
+    partyl<-c(partyl,"BJP")
+    colors<-c(colors,'#ff9933')
+  }
+  if("INC"%in% partynames){
+    partyl<-c(partyl,"INC")
+    colors<-c(colors,'#138808')
+  }
+  if("INC(I)"%in% partynames){
+    partyl<-c(partyl,"INC(I)")
+    colors<-c(colors,'#138808')
   }
   if("BSP"%in% partynames){
     partyl<-c(partyl,"BSP")
-    colors<-c(colors,'#0000ff')
+    colors<-c(colors,'#003399')
   }
   if("SP"%in% partynames){
     partyl<-c(partyl,"SP")
-    colors<-c(colors,'#228B22')
+    colors<-c(colors,'#990000')
   }
   if("SAD"%in% partynames){
     partyl<-c(partyl,"SAD")
-    colors<-c(colors,'#0000aa')
+    colors<-c(colors,'#0000ff')
+  }
+  if("BLD"%in% partynames){
+    partyl<-c(partyl,"BLD")
+    colors<-c(colors,'#00ff99')
+  }
+  if("JD"%in% partynames){
+    partyl<-c(partyl,"JD")
+    colors<-c(colors,'#90f887')
+  }
+  if("JNP(S)"%in% partynames){
+    partyl<-c(partyl,"JNP(S)")
+    colors<-c(colors,'#bf4080')
+  }
+  if("BJS"%in% partynames){
+    partyl<-c(partyl,"BJS")
+    colors<-c(colors,'#ff9933')
+  }
+  if("CPM"%in% partynames){
+    partyl<-c(partyl,"CPM")
+    colors<-c(colors,'#991f00')
+  }
+  if("SWA"%in% partynames){
+    partyl<-c(partyl,"SWA")
+    colors<-c(colors,'#0066cc')
+  }
+  if("JNP"%in% partynames){
+    partyl<-c(partyl,"JNP")
+    colors<-c(colors,'#602040')
+  }
+  if("ADMK"%in% partynames){
+    partyl<-c(partyl,"ADMK")
+    colors<-c(colors,'#37f226')
+  }
+  if("AITC"%in% partynames){
+    partyl<-c(partyl,"AITC")
+    colors<-c(colors,'#ffad33')
+  }
+  if("JS"%in% partynames){
+    partyl<-c(partyl,"JS")
+    colors<-c(colors,'#339966')
+  }
+  if("TDP"%in% partynames){
+    partyl<-c(partyl,"TDP")
+    colors<-c(colors,'#ffff00')
+  }
+  if("DMK"%in% partynames){
+    partyl<-c(partyl,"DMK")
+    colors<-c(colors,'#b3b300')
+  }
+  if("BJD"%in% partynames){
+    partyl<-c(partyl,"BJD")
+    colors<-c(colors,'#4df43e')
+  }
+  if("JD(U)"%in% partynames){
+    partyl<-c(partyl,"JD(U)")
+    colors<-c(colors,'#90f887')
+  }
+  if("CPI"%in% partynames){
+    partyl<-c(partyl,"CPI")
+    colors<-c(colors,'#ff3300')
+  }
+  if("TMC(M)"%in% partynames){
+    partyl<-c(partyl,"TMC(M)")
+    colors<-c(colors,'#993366')
+  }
+  if("RJD"%in% partynames){
+    partyl<-c(partyl,"RJD")
+    colors<-c(colors,'#cc0066')
+  }
+  if("IND"%in% partynames){
+    partyl<-c(partyl,"IND")
+    colors<-c(colors,'#808080')
+  }
+  if("ADK"%in% partynames){
+    partyl<-c(partyl,"ADK")
+    colors<-c(colors,'#37f226')
+  }
+  if("NCP"%in% partynames){
+    partyl<-c(partyl,"NCP")
+    colors<-c(colors,'#99003d')
+  }
+  if("AIRJP"%in% partynames){
+    partyl<-c(partyl,"AIRJP")
+    colors<-c(colors,'#009999')
+  }
+  
+  if("AAP"%in% partynames){
+    partyl<-c(partyl,"AAP")
+    colors<-c(colors,'#b35900')
+  }
+  if("AAAP"%in% partynames){
+    partyl<-c(partyl,"AAAP")
+    colors<-c(colors,'#b35900')
+  }
+  if("GPP"%in% partynames){
+    partyl<-c(partyl,"GPP")
+    colors<-c(colors,'#ffcc00')
+  }
+  if("BJNKP"%in% partynames){
+    partyl<-c(partyl,"BJNKP")
+    colors<-c(colors,'#333300')
   }
   rest<-setdiff(partynames,partyl)
-  restcols<-allcols[1:length(rest)]
+  if(length(rest)==0){
+    restcols <- c()
+  }else{
+    restcols<-allcols[1:length(rest)]
+  }
   partyl<-c(partyl,rest)
   colors<-c(colors,restcols)
   
@@ -169,46 +293,50 @@ getColorFactorParty<-function(partynames){
 
 ############################################VoteShareMap######################################################3
 voteShareMapLegendList<- function(){
-  return(c("<10%","10%-20%","20%-30%","30%-40%",">40%"))
+  return(c("<20%","20%-30%","30%-40%","40%-50%","50%-60%",">60%"))
 }
 
 voteShareMapBreakupList<- function(){
-  return(c(0,10,20,30,40,100))
+  return(c(0,20,30,40,50,60,100))
 }
 
 VoteShareMapLegendColor<-function(inp){
-  if(inp=="<10%"){
-    return('#ff3739')
-  }else if(inp=="10%-20%"){
-    return('#d62728')
+  if(inp=="<20%"){
+    return('#eff3ff')
   }else if(inp=="20%-30%"){
-    return('#ad1717')
+    return('#c6dbef')
   }else if(inp=="30%-40%"){
-    return('#840706')
-  }else if(inp==">40%"){
-    return('#5b0000')
+    return('#9ecae1')
+  }else if(inp=="40%-50%"){
+    return('#6baed6')
+  }else if(inp=="50%-60%"){
+    return('#3182bd')
+  }else if(inp==">60%"){
+    return('#08519c')
   }else{
-    stop('passed argument should be either <10%, 10%-20%, 20%-30%,30%-40% or >40%')
+    stop('passed argument should be either <20%, 20%-30%,
+         30%-40%,40%-60%,50%-60% or >60%')
   }
 }
 
 VoteShareMapLegendCount<-function(dframe){
   
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$vote_percent<10]<-"<10%"
-  dframe$tmp[dframe$vote_percent>=10 & dframe$vote_percent<20]<-"10%-20%"
-  dframe$tmp[dframe$vote_percent>=20 & dframe$vote_percent<30]<-"20%-30%"
-  dframe$tmp[dframe$vote_percent>=30 & dframe$vote_percent<40]<-"30%-40%"
-  dframe$tmp[dframe$vote_percent>=40]<-">40%"
-  dframe$vote_percent<-NULL
+  dframe$tmp[dframe$Vote_Share_Percentage<20]<-"<20%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=20 & dframe$Vote_Share_Percentage<30]<-"20%-30%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=30 & dframe$Vote_Share_Percentage<40]<-"30%-40%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=40 & dframe$Vote_Share_Percentage<50]<-"40%-50%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=50 & dframe$Vote_Share_Percentage<60]<-"50%-60%"
+  dframe$tmp[dframe$Vote_Share_Percentage>=60]<-">60%"
+  dframe$Vote_Share_Percentage<-NULL
   dframe$count<-1
-  dframe<-aggregate(count~year+tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe<-aggregate(count~Year+tmp,dframe,function(x) length(x))
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(voteShareMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -220,14 +348,14 @@ WinnerGenderMapLegendList<- function(){return (c("Male","Female","Others"))}
 
 WinnerGenderMapLegendCount<-function(dframe){
   dframe$count<-1
-  dframe<-aggregate(count~year+sex1,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$sex1),"(",dframe$count,")")
+  dframe<-aggregate(count~Year+Sex,dframe,function(x) length(x))
+  dframe$legend<-paste0(trimws(dframe$Sex)," (",dframe$count,")")
   dframe$count<-NULL
-  dframe$year<-NULL
+  dframe$Year<-NULL
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerGenderMapLegendList(),function(x){
-    if(nrow(subset(dframe,dframe$sex1==x))==0){
-      dframe<<-rbind(dframe,data.frame(sex1=x,legend=paste0(x,"(0)")))
+    if(nrow(subset(dframe,dframe$Sex==x))==0){
+      dframe<<-rbind(dframe,data.frame(Sex=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -235,11 +363,11 @@ WinnerGenderMapLegendCount<-function(dframe){
 
 WinnerGenderMapLegendColor<-function(inp){
   if(inp=="Male"){
-    return('#1f77b4')
+    return('#1f78b4')
   }else if(inp=="Female"){
-    return('#8c564b')
+    return('#b2df8a')
   }else if(inp=="Others"){
-    return('#433e66')
+    return('#a6cee3')
   }else{
     stop('passed argument should be either Male, Female or Others')
   }
@@ -256,22 +384,22 @@ WinnerMarginMapBreakupList<- function(){
 
 WinnerMarginMapLegendCount<- function(dframe){
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$margin_percent<5]<-"<5%"
-  dframe$tmp[dframe$margin_percent>=5 & dframe$margin_percent<10]<-"5%-10%"
-  dframe$tmp[dframe$margin_percent>=10 & dframe$margin_percent<20]<-"10%-20%"
-  dframe$tmp[dframe$margin_percent>=20]<-">20%"
+  dframe$tmp[dframe$Margin_Percentage<5]<-"<5%"
+  dframe$tmp[dframe$Margin_Percentage>=5 & dframe$Margin_Percentage<10]<-"5%-10%"
+  dframe$tmp[dframe$Margin_Percentage>=10 & dframe$Margin_Percentage<20]<-"10%-20%"
+  dframe$tmp[dframe$Margin_Percentage>=20]<-">20%"
   #browser()
-  dframe$margin_percent<-NULL
+  dframe$Margin_Percentage<-NULL
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerMarginMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -280,13 +408,13 @@ WinnerMarginMapLegendCount<- function(dframe){
 
 WinnerMarginMapLegendColor<-function(inp){
   if(inp=="<5%"){
-    return('#a798fc')
+    return('#f1eef6')
   }else if(inp=="5%-10%"){
-    return('#756bb1')
+    return('#bdc9e1')
   }else if(inp=="10%-20%"){
-    return('#433e66')
+    return('#74a9cf')
   }else if(inp==">20%"){
-    return('#000000')
+    return('#0570b0')
   }else{
     stop('passed argument should be either <5%, 5%-10%, 10%-20% or >20%')
   }
@@ -297,25 +425,25 @@ NumCandidatesMapLegendList <- function(){return (c("<5","5-15",">15"))}
 
 
 NumCandidatesMapBreakupList<- function(){
-  return(c(0,5,15,1000))
+  return(c(0,5,15,100))
 }
 
 NumCandidatesMapLegendCount<- function(dframe){
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$n_cand<5]<-"<5"
-  dframe$tmp[dframe$n_cand>=5 & dframe$n_cand<15]<-"5-15"
-  dframe$tmp[dframe$n_cand>=15]<-">15"
-  dframe$n_cand<-NULL
+  dframe$tmp[dframe$N_Cand<5]<-"<5"
+  dframe$tmp[dframe$N_Cand>=5 & dframe$N_Cand<15]<-"5-15"
+  dframe$tmp[dframe$N_Cand>=15]<-">15"
+  dframe$N_Cand<-NULL
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(NumCandidatesMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   
@@ -325,11 +453,11 @@ NumCandidatesMapLegendCount<- function(dframe){
 
 NumCandidatesMapLegendColor<-function(inp){
   if(inp=="<5"){
-    return('#bc5533')
+    return('#ece7f2')
   }else if(inp=="5-15"){
-    return('#843c41')
+    return('#a6bddb')
   }else if(inp==">15"){
-    return('#140109')
+    return('#2b8cbe')
   }else{
     stop('passed argument should be either <5, 5-15, or >15')
   }
@@ -345,22 +473,22 @@ NotaTurnoutMapBreakupList<- function(){
 
 NotaTurnoutMapLegendCount<- function(dframe){
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$nota_percent<1]<-"<1%"
-  dframe$tmp[dframe$nota_percent>=1 & dframe$nota_percent<3]<-"1%-3%"
-  dframe$tmp[dframe$nota_percent>=3 & dframe$nota_percent<5]<-"3%-5%"
-  dframe$tmp[dframe$nota_percent>=5]<-">5%"
+  dframe$tmp[dframe$Nota_Percentage<1]<-"<1%"
+  dframe$tmp[dframe$Nota_Percentage>=1 & dframe$Nota_Percentage<3]<-"1%-3%"
+  dframe$tmp[dframe$Nota_Percentage>=3 & dframe$Nota_Percentage<5]<-"3%-5%"
+  dframe$tmp[dframe$Nota_Percentage>=5]<-">5%"
   #browser()
-  dframe$nota_percent<-NULL
+  dframe$Nota_Percentage<-NULL
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(NotaTurnoutMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -369,13 +497,13 @@ NotaTurnoutMapLegendCount<- function(dframe){
 
 NotaTurnoutMapLegendColor<-function(inp){
   if(inp=="<1%"){
-    return('#a798fc')
+    return('#f1eef6')
   }else if(inp=="1%-3%"){
-    return('#756bb1')
+    return('#bdc9e1')
   }else if(inp=="3%-5%"){
-    return('#11111b')
+    return('#74a9cf')
   }else if(inp==">5%"){
-    return('#000000')
+    return('#0570b0')
   }else{
     stop('passed argument should be either <1%, 1%-3%, 3%-5% or >5%')
   }
@@ -383,32 +511,35 @@ NotaTurnoutMapLegendColor<-function(inp){
 
 
 ##########################################Voter Turnout Map#################################################
-VoterTurnoutMapLegendList <- function(){return (c("<40%","40%-50%","50%-60%","60%-70%",">70%"))}
+VoterTurnoutMapLegendList <- function(){return
+(c("<40%","40%-50%","50%-60%","60%-70%","70%-80%",">80%"))}
 
 
 VoterTurnoutMapBreakupList<- function(){
-  return(c(0,40,50,60,70,100))
+  return(c(0,40,50,60,70,80,100))
 }
 
 VoterTurnoutMapLegendCount<- function(dframe){
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$turnout<40]<-"<40%"
-  dframe$tmp[dframe$turnout>=40 & dframe$turnout<50]<-"40%-50%"
-  dframe$tmp[dframe$turnout>=50 & dframe$turnout<60]<-"50%-60%"
-  dframe$tmp[dframe$turnout>=60 & dframe$turnout<70]<-"60%-70%"
-  dframe$tmp[dframe$turnout>=70]<-">70%"
+  dframe$tmp[dframe$Turnout_Percentage<40]<-"<40%"
+  dframe$tmp[dframe$Turnout_Percentage>=40 & dframe$Turnout_Percentage<50]<-"40%-50%"
+  dframe$tmp[dframe$Turnout_Percentage>=50 & dframe$Turnout_Percentage<60]<-"50%-60%"
+  dframe$tmp[dframe$Turnout_Percentage>=60 & dframe$Turnout_Percentage<70]<-"60%-70%"
+  dframe$tmp[dframe$Turnout_Percentage>=70 &
+             dframe$Turnout_Percentage<80]<-"70%-80%"
+  dframe$tmp[dframe$Turnout_Percentage>=80]<-">80%"
   #browser()
-  dframe$turnout<-NULL
+  dframe$Turnout_Percentage<-NULL
   dframe$count<-1
   #browser()
   dframe<-aggregate(count~tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(VoterTurnoutMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -417,17 +548,20 @@ VoterTurnoutMapLegendCount<- function(dframe){
 
 VoterTurnoutMapLegendColor<-function(inp){
   if(inp=="<40%"){
-    return('#f1ffff')
+    return('#f1eef6')
   }else if(inp=="40%-50%"){
-    return('#8d9bbe')
+    return('#d0d1e6')
   }else if(inp=="50%-60%"){
-    return('#757fa9')
+    return('#a6bddb')
   }else if(inp=="60%-70%"){
-    return('#5c6295')
-  }else if(inp==">70%"){
-    return('#434681')
+    return('#74a9cf')
+  }else if(inp=="70%-80%"){
+    return('#2b8cbe')
+  }else if(inp==">80%"){
+    return('#045a8d')
   }else{
-    stop('passed argument should be either <40%, 40%-50%,50%-60%,60%-70% or >70%')
+    stop('passed argument should be either <40%, 40%-50%,50%-60%,60%-70%,
+         70%-80% or >80%')
   }
 }
 
@@ -437,14 +571,15 @@ WinnerCasteMapLegendList<- function(){return (c("General","SC","ST"))}
 
 WinnerCasteMapLegendCount<-function(dframe){
   dframe$count<-1
-  dframe<-aggregate(count~year+ac_type,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$ac_type),"(",dframe$count,")")
+  dframe<-aggregate(count~Year+Constituency_Type,dframe,function(x) length(x))
+  dframe$legend<-paste0(trimws(dframe$Constituency_Type)," (",dframe$count,")")
   dframe$count<-NULL
-  dframe$year<-NULL
+  dframe$Year<-NULL
+  #browser()
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(WinnerCasteMapLegendList(),function(x){
-    if(nrow(subset(dframe,dframe$ac_type==x))==0){
-      dframe<<-rbind(dframe,data.frame(ac_type=x,legend=paste0(x,"(0)")))
+    if(nrow(subset(dframe,dframe$Constituency_Type==x))==0){
+      dframe<<-rbind(dframe,data.frame(Constituency_Type=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)
@@ -453,55 +588,56 @@ WinnerCasteMapLegendCount<-function(dframe){
 WinnerCasteMapLegendColor<- function(inp){
   
   if(inp=="General"){
-    return('#1f77b4')
+    return('#1f78b4')
   }else if(inp=="SC"){
-    return('#ff7f0e')
+    return('#a6cee3')
   }else if(inp=="ST"){
-    return('#2ca02c')
+    return('#b2df8a')
   }else{
     stop('passed argument should be either 1,2,3 or >3')
   }
 }
 
-############################################party positions map######################################################3
+############################################party Positions map######################################################3
 PartyPositionsMapLegendList<- function(){
   return(c("1","2","3",">3"))
 }
 
 PartyPositionsMapBreakupList<- function(){
-  return(c(0,2,3,4,200))
+  return(c(0,2,3,4,100))
 }
 
 PartyPositionsMapLegendColor<-function(inp){
   if(inp=="1"){
-    return('#696ddf')
+    return('#0570b0')
   }else if(inp=="2"){
-    return('#5154ac')
+    return('#74a9cf')
   }else if(inp=="3"){
-    return('#393b79')
+    return('#bdc9e1')
   }else if(inp==">3"){
-    return('#212246')
+    return('#f1eef6')
   }else{
     stop('passed argument should be either 1,2,3 or >3')
   }
 }
 
 PartyPositionsMapLegendCount<-function(dframe){
-  
+  #browser()
+  #dframe <- unique(dframe)
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$position==1]<-"1"
-  dframe$tmp[dframe$position==2]<-"2"
-  dframe$tmp[dframe$position==3]<-"3"
-  dframe$tmp[dframe$position>3]<-">3"
-  dframe$position<-NULL
+  dframe$tmp[dframe$Position==1]<-"1"
+  dframe$tmp[dframe$Position==2]<-"2"
+  dframe$tmp[dframe$Position==3]<-"3"
+  dframe$tmp[dframe$Position>3]<-">3"
+  dframe$Position<-NULL
   dframe$count<-1
-  dframe<-aggregate(count~year+tmp,dframe,function(x) length(x))
-  dframe$legend<-paste0(trimws(dframe$tmp),"(",dframe$count,")")
+  dframe<-aggregate(count~Year+tmp,dframe,function(x) length(x))
+  dframe$legend<-paste0(trimws(dframe$tmp)," (",dframe$count,")")
   dframe<-subset(dframe,select=c("tmp","legend"))
   #add missing legends. They might be missing because no value was between the corresponding percentage
   lapply(PartyPositionsMapLegendList(),function(x){
     if(nrow(subset(dframe,dframe$tmp==x))==0){
-      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x,"(0)")))
+      dframe<<-rbind(dframe,data.frame(tmp=x,legend=paste0(x," (0)")))
     }
   }) 
   return(dframe)

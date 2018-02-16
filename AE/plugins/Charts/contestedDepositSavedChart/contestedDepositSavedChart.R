@@ -2,7 +2,7 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
   ###################Specific for voteshare chart visualization##########################################
   getOptions<-function(options,envr){
     #browser()
-    assign(options,c("total candidates","deposit saved"),env=envr)
+    assign(options,c("Total candidates","Deposit Saved"),env=envr)
   }
 
   plotChart<-function(state, options , plot,envr){
@@ -13,7 +13,7 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
      b<-readCandidatesContestedDepositLostFile(sname)
         #pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
-    base<-plot_ly(b, x = ~year)
+    base<-plot_ly(b, x = ~Year)
     lapply(selectedoptionnames,function(x) {
         n<-gsub(" ","_",x)
         print(paste('adding',x));
@@ -49,9 +49,11 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("cd_options") , "Select  ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("cd_options") , "Select  ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 

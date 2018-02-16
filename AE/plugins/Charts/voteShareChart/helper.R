@@ -4,7 +4,7 @@
     sname<-gsub(" ","_",get(state,envr))
     b<-readVoteShareFile(sname)
     
-    assign(parties,as.list(unique(b$party)),env=envr)
+    assign(parties,as.list(unique(b$Party)),env=envr)
   }
 
   plotChart<-function(state, parties , plot,envr){
@@ -12,10 +12,10 @@
     sname<-gsub(" ","_",get(state,envr))
     b<-readVoteShareFile(sname)
     #browser()
-    pivotdata<-dcast(b,year~party,value.var=c('votes'))
+    pivotdata<-dcast(b,Year~Party,value.var=c('votes'))
 
     #create a base line chart with year as the x-axis
-    base<-plot_ly(pivotdata, x = ~year)
+    base<-plot_ly(pivotdata, x = ~Year)
     #print(paste('selected',selectedpartynames))
     # #for each selected party in the input "filter_pname" id (checkbox) add a new trace
     # #corresponding to that party

@@ -33,6 +33,7 @@
 <script src="assets/AdminLTE-2.0.6/AdminLTE.min.css"></script>
 <script src="assets/AdminLTE-2.0.6/_all-skins.min.css"></script>
 <script src="assets/AdminLTE-2.0.6/app.min.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js'></script>
 <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 <script src="assets/datatables-binding-0.2/datatables.js"></script> 
@@ -40,27 +41,25 @@
   <!-- <script src="assets/shinyTree/jsTree-3.0.2/jstree.min.js"></script> -->
   <!-- <script src="assets/shinyTree/shinyTree.js"></script> -->
 
-<!--   <style>.shinyjs-hide { display: none !important; }</style> -->
-<!--   <script>Shiny.addCustomMessageHandler('shinyjs-show', function(params) { shinyjs.debugMessage('shinyjs: calling function "show" with parameters:'); shinyjs.debugMessage(params); shinyjs.show(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-hide', function(params) { shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:'); shinyjs.debugMessage(params); shinyjs.hide(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-toggle', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggle(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-enable', function(params) { shinyjs.debugMessage('shinyjs: calling function "enable" with parameters:'); shinyjs.debugMessage(params); shinyjs.enable(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-disable', function(params) { shinyjs.debugMessage('shinyjs: calling function "disable" with parameters:'); shinyjs.debugMessage(params); shinyjs.disable(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-toggleState', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleState" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleState(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-addClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "addClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.addClass(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-removeClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "removeClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.removeClass(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-toggleClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleClass(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-html', function(params) { shinyjs.debugMessage('shinyjs: calling function "html" with parameters:'); shinyjs.debugMessage(params); shinyjs.html(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-onevent', function(params) { shinyjs.debugMessage('shinyjs: calling function "onevent" with parameters:'); shinyjs.debugMessage(params); shinyjs.onevent(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-alert', function(params) { shinyjs.debugMessage('shinyjs: calling function "alert" with parameters:'); shinyjs.debugMessage(params); shinyjs.alert(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-logjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "logjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.logjs(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-runjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "runjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.runjs(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-reset', function(params) { shinyjs.debugMessage('shinyjs: calling function "reset" with parameters:'); shinyjs.debugMessage(params); shinyjs.reset(params);}); -->
-<!-- Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugMessage('shinyjs: calling function "delay" with parameters:'); shinyjs.debugMessage(params); shinyjs.delay(params);});</script> -->
- <script src="assets/shinyjs/shinyjs-default-funcs.js"></script>
-
-<script src="assets/shinyjs/inject.js"></script>
-  <!-- <script>shinyjs.debug = false;</script> -\-> -->
+  <style>.shinyjs-hide { display: none !important; }</style>
+  <script>Shiny.addCustomMessageHandler('shinyjs-show', function(params) { shinyjs.debugMessage('shinyjs: calling function "show" with parameters:'); shinyjs.debugMessage(params); shinyjs.show(params);});
+Shiny.addCustomMessageHandler('shinyjs-hide', function(params) { shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:'); shinyjs.debugMessage(params); shinyjs.hide(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggle', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggle(params);});
+Shiny.addCustomMessageHandler('shinyjs-enable', function(params) { shinyjs.debugMessage('shinyjs: calling function "enable" with parameters:'); shinyjs.debugMessage(params); shinyjs.enable(params);});
+Shiny.addCustomMessageHandler('shinyjs-disable', function(params) { shinyjs.debugMessage('shinyjs: calling function "disable" with parameters:'); shinyjs.debugMessage(params); shinyjs.disable(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggleState', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleState" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleState(params);});
+Shiny.addCustomMessageHandler('shinyjs-addClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "addClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.addClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-removeClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "removeClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.removeClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggleClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-html', function(params) { shinyjs.debugMessage('shinyjs: calling function "html" with parameters:'); shinyjs.debugMessage(params); shinyjs.html(params);});
+Shiny.addCustomMessageHandler('shinyjs-onevent', function(params) { shinyjs.debugMessage('shinyjs: calling function "onevent" with parameters:'); shinyjs.debugMessage(params); shinyjs.onevent(params);});
+Shiny.addCustomMessageHandler('shinyjs-alert', function(params) { shinyjs.debugMessage('shinyjs: calling function "alert" with parameters:'); shinyjs.debugMessage(params); shinyjs.alert(params);});
+Shiny.addCustomMessageHandler('shinyjs-logjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "logjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.logjs(params);});
+Shiny.addCustomMessageHandler('shinyjs-runjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "runjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.runjs(params);});
+Shiny.addCustomMessageHandler('shinyjs-reset', function(params) { shinyjs.debugMessage('shinyjs: calling function "reset" with parameters:'); shinyjs.debugMessage(params); shinyjs.reset(params);});
+Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugMessage('shinyjs: calling function "delay" with parameters:'); shinyjs.debugMessage(params); shinyjs.delay(params);});</script>
+  <script src="assets/shinyjs/shinyjs-default-funcs.js"></script>
+  <script>shinyjs.debug = false;</script>
   <title>Lok Dhaba</title>
 
 <style>
@@ -74,23 +73,25 @@ table.dataTable tbody th, table.dataTable tbody td {
 <body>
    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
+
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand"><img height="20" alt="Brand" src="assets/logo.png" class="img-responsive"></a>
+          <a href = "https://tcpd.ashoka.edu.in" class="navbar-brand"><img height="20" alt="Brand"
+            src="assets/logo.png" class="img-responsive"></a>
         </div>
      <div class="collapse navbar-collapse" id="navbar-ex-collapse">
        <ul class="nav navbar-nav">
-        <li class="active">
+<!--        <li class="active">
           <a href="#tab-5312-5" data-toggle="tab" data-value="HOME">
             Home
           </a>
-        </li>
-        <li class="dropdown">
+        </li>-->
+<!--        <li class="active">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Election Data
+            Browse Data
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
@@ -100,24 +101,39 @@ table.dataTable tbody th, table.dataTable tbody td {
               </a>
             </li>
             <li>
-              <a href="#tab-5312-3" data-toggle="tab" data-value="DLD">
-                Data Download
+              <a href="#tab-5312-3" data-toggle="tab" data-value="BRS">
+                Data Browse
               </a>
             </li>
           </ul>
-        </li>
+        </li> -->
 	<!-- </ul> -->
         <!-- <ul> -->
-	  <li><a href="#tab-3246-1" data-toggle="tab" data-value="CONTACTUS">Contact us</a></li>
+	  <li class= "active"><a href="#tab-5312-2" data-toggle="tab" data-value="EDV">Data
+      Visualization</a></li> 
+	  <li><a href="#tab-5312-3" data-toggle="tab" data-value="BRS">Browse Data</a></li> 
+	  <li><a href="#tab-3246-1" data-toggle="tab" data-value="DLD">Data Download</a></li> 
 	  <li><a href="#tab-3246-2" data-toggle="tab" data-value="CITE">How to cite us</a></li>
 	</ul>
+
+ <!-- <button id="._bookmark_" type="button" class="btn btn-default action-button"
+                    title="Bookmark this application&#39;s state and get a URL
+                    for sharing.">
+                                    <i class="glyphicon glyphicon-link"></i>
+                                                    Bookmark...
+                                                            </button>  -->
+
+<!--	  <div class="banner_nav">
+            <span class="b-heading_nav">Lok Dhaba</span>
+            <span class="b-subheading_nav">Food For Political Thought</span>
+    </div>-->
        </div>
     </div>
   </nav>
   <div class="container-fluid">
     <div class="tab-content">
 <!-- Home page tab, Active by default on the site opening -->
-    <div class="tab-pane active" data-value="HOME" id="tab-5312-5">
+<!--    <div class="tab-pane active" data-value="HOME" id="tab-5312-5">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -133,14 +149,14 @@ table.dataTable tbody th, table.dataTable tbody td {
 <span class="tcpd-intro-text">The project aims at measuring individual incumbency in General and State Elections.It requires the coding of incumbency, The quantification of turncoats and defections, and candidates name matching. </span>
       </div>
     </div>
-      <!-- <div class="tcpd-buttons-wrap"> -->
-      <!--   <a href="javascript:void(0)" class="tcpd-button primary" id="get-started">Get Started</a> -->
-      <!--   <a href="search.html" class="tcpd-button primary">Enter</a> -->
-      <!-- </div> -->
-	</div>
-      </div>
+      <!--<div class="tcpd-buttons-wrap">
+<!--        <a href="javascript:void(0)" class="tcpd-button primary" id="get-started">Get Started</a>
+        <a href="search.html" class="tcpd-button primary">Enter</a>
+      </div>-->
+<!--	</div>
+      </div> -->
 <!-- data visualization tab -->
-    <div class="tab-pane" data-value="EDV" id="tab-5312-2">
+    <div class="tab-pane active" data-value="EDV" id="tab-5312-2">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -182,8 +198,67 @@ table.dataTable tbody th, table.dataTable tbody td {
 
         </div>
       </div>
+<!-- Browse Data Tab -->
+<div class="tab-pane" data-value="BRS" id="tab-5312-3">
+<!-- code pasted from ui.R -->
+<div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+	  <div class="row" >
+	    <div class="col-sm-3">
+	      <form class="well">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="bd_electiontype_selector">Election Type</label>
+       <div>
+        <select id="bd_electiontype_selector" class="form-control">
+          <option value="" selected>Select Election Type</option>
+          <option value="GE">General Elections</option>
+          <option value="AE">Assembly Elections</option></select>
+          <script type="application/json" data-for="bd_electiontype_selector">{}</script>
+       </div>
+    </div>
+    <div data-display-if="input.bd_electiontype_selector!=&#39;&#39;" data-ns-prefix="">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="bd_state_selector">State Name</label>
+      <div>
+        <select id="bd_state_selector" class="form-control">
+          <option value="" selected>Select State</option></select>
+        <script type="application/json" data-for="bd_state_selector">{}</script>
+      </div>
+    </div>
+    </div>
+    <div data-display-if="input.bd_state_selector!=&#39;&#39;" >
+      <label class="control-label" for="id">Select Assembly</label>                                                                   
+      <div class="form-group shiny-input-container">
+        <div class="checkbox">
+          <label>
+            <input id="bd_select_all_assemblies" type="checkbox"/> 
+            <span>Select All</span>
+          </label>
+        </div>
+      </div>
+      <div id="bd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+        <div class="shiny-options-group"></div>
+      </div>
+
+    </div>
+  </form>
+  </div>
+	    <div class="col-sm-9">
+    <div data-display-if="input.bd_year_selector.length!=0" data-ns-prefix=""> 
+      <div id="bd_variablenames_selector" style="width:100%; height:auto;"
+        class="datatables html-widget html-widget-output">
+      </div>
+    </div>
+</div>
+</div>
+</div>
+<!--paste till here -->
+</div>
 <!-- Data download tab  -->
-    <div class="tab-pane" data-value="DLD" id="tab-5312-3">
+    <div class="tab-pane" data-value="DLD" id="tab-3246-1">
   <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -213,10 +288,19 @@ table.dataTable tbody th, table.dataTable tbody td {
           </div>
           <div data-display-if="input.dd_state_selector!=&#39;&#39;">
                      <label class="control-label" for="id">Select Assembly</label>                                                                   
-<div class="form-group shiny-input-container">                                                                                                         <div class="checkbox">                                                                                                                                 <label>                                                                                                                                                <input id="dd_select_all_assemblies" type="checkbox"/>                                                                                               <span>Select All</span>                                                                                                                                   </label>                                                                                                                                           </div>                                                                                                                                             </div>
-                   <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">                                                         <div class="shiny-options-group"></div>                                                                                                            </div>
+<div class="form-group shiny-input-container">
+  <div class="checkbox">
+    <label>                                                                                                                                                
+      <input id="dd_select_all_assemblies" type="checkbox"/>                                                                                               
+      <span>Select All</span>
+    </label> 
+</div>
+</div>
+                  <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+                   <div class="shiny-options-group"></div>
+                 </div>
 	    <span style="font-size:12px">*After selecting one or more assemblies please scroll down to accept terms and conditions and download the electoral data</span>
-          </div>
+    </div>
 	  </div>
 	    </form>
 	    <div class="col-sm-9">
@@ -243,7 +327,8 @@ table.dataTable tbody th, table.dataTable tbody td {
 		<div class="checkbox">
 
 		  <label>
-		    <input id="dd_accept_condition" type="checkbox" checked="checked"/>
+		    <input id="dd_accept_condition" type="checkbox" />
+<!--checked="checked"/>-->
 		    <span>I accept the terms and conditions mentioned here.</span>
 		  </label>
 		</div>
@@ -274,7 +359,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
 	  </div>
     </div>
-      <div class="tab-pane" data-value="CONTACTUS" id="tab-3246-1">
+<!--      <div class="tab-pane" data-value="CONTACTUS" id="tab-3246-1">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -283,7 +368,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
           <div id="contactus" class="shiny-html-output"></div>
         </div>
-      </div>
+      </div> -->
       <div class="tab-pane" data-value="CITE" id="tab-3246-2">
         <div class="container-fluid">
 	  <div class="banner">

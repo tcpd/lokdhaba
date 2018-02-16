@@ -1,7 +1,7 @@
   ###################Specific for voteshare chart visualization##########################################
   getOptions<-function(options,envr){
     #browser()
-    assign(options,c("total candidates","deposit saved"),env=envr)
+    assign(options,c("Total candidates","Deposit Saved"),env=envr)
   }
 
   plotChart<-function(state, options , plot,envr){
@@ -12,7 +12,7 @@
      b<-readCandidatesContestedDepositLostFile(sname)
         #pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
-    base<-plot_ly(b, x = ~year)
+    base<-plot_ly(b, x = ~Year)
     lapply(selectedoptionnames,function(x) {
         n<-gsub(" ","_",x)
         print(paste('adding',x));

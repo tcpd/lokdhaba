@@ -10,7 +10,7 @@ voterTurnoutChart<-function(input, output, session, parentsession,statename_reac
     b<-readVoterTurnoutFile(sname)
 
     #create a base line chart with year as the x-axis
-    base<-plot_ly(b, x = ~year)
+    base<-plot_ly(b, x = ~Year)
           lapply(selectedgendernames,function(x) {
         print(paste('adding',x));
         base<<-add_trace(base,y=~get(x),name=x,mode='lines+markers',showlegend=TRUE)
@@ -43,9 +43,11 @@ voterTurnoutChart<-function(input, output, session, parentsession,statename_reac
 
 Setup<-function(){
 parentsession$output$ae_filter_selection<-renderUI({
- ShowAll()
- tagList(
-checkboxGroupInput(ns("gender_names") , "Select turnout for ", c())) })
+ #ShowAll()
+ tmp1 <-checkboxGroupInput(ns("gender_names") , "Select turnout for ", c())
+ tagList (
+ tmp1) 
+ })
 SetupOutputRendering()
 }
 

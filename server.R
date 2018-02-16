@@ -7,8 +7,10 @@ library(DT)
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
+source("DataDownloader/browseDataOptions.R")
 source("utils/utils-classes.R")
 source("utils/utils-lokdhaba.R")
+source("utils/utils-charts-ui.R")
 library(rgdal)
 library(dplyr)
 library(leaflet.extras)
@@ -72,7 +74,7 @@ useShinyjs(html = TRUE)
   #2. During this process it will also callmodule for each UI component.  
   
   #geOptionsInput(input,output,session,"GE/",conmanager)
-  geOptionsInput(input,output,session,"GE/")
+  geOptionsInput(input,output,session,"GE/",conmanager)
   
   observe({
     if(input$electionType=="GE"){
@@ -91,6 +93,7 @@ useShinyjs(html = TRUE)
   ####################Handling UI and event handlings for data download tab 
   ####################of index.html
   dataDownloadOptions(input,output,session,"AE/",conmanager)
+  browseDataOptions(input,output,session,conmanager)
 
   ###################Rendering of contact us tab by reading the html from html file
    output$contactus<-renderUI({

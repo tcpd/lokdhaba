@@ -1,10 +1,16 @@
 title,type,filename,modulename
-Party wise vote share,Chart,gevoteShareChart.R,gevoteShareChart
-Party wise seat share,Chart,geseatShareChart.R,geseatShareChart
-Voter Turnout Timeline,Chart,gevoterTurnoutChart.R,gevoterTurnoutChart
-Candidates who saved their deposits,Chart,gecontestedDepositSavedChart.R,gecontestedDepositSavedChart
-Parties contested and represented,Chart,gepartiesPresentedChart.R,gepartiesPresentedChart
-Nota Turnout,Map,genotaTurnoutMap.R,genotaTurnoutMap
-Constituency wise party winners,Map,gewinnerMap.R,gewinnerMap
-Number of candidates,Map,genumCandidatesMap.R,genumCandidatesMap
-
+Chart: Voter Turnout,Chart,gevoterTurnoutChart.R,gevoterTurnoutChart
+Chart: Party vote share (contested),Chart,gevoteShareChart_c.R,gevoteShareChart_c
+Chart: Party vote share (all seats),Chart,gevoteShareChart_t.R,gevoteShareChart_t
+Chart: Party seat share,Chart,geseatShareChart.R,geseatShareChart
+Chart: Parties contested and represented,Chart,gepartiesPresentedChart.R,gepartiesPresentedChart
+Chart: Candidates contested /deposit saved,Chart,gecontestedDepositSavedChart.R,gecontestedDepositSavedChart
+Map: Constituency type ,Map,constituencyTypeMap.R,constituencyTypeMap
+Map: Number of candidates,Map,genumCandidatesMap.R,genumCandidatesMap
+Map: Voter Turnout,Map,voterTurnoutMap.R,voterTurnoutMap
+Map: Winners by Party,Map,gewinnerMap.R,gewinnerMap
+Map: Winners by Gender,Map,winnerGenderMap.R,winnerGenderMap
+Map: Victory Margin,Map,winnerMarginMap.R,winnerMarginMap
+Map: Vote share of winners,Map,winnerVoteShareMap.R,winnerVoteShareMap
+Map: Party-wise positions,Map,partyPositionsMap.R,partyPositionsMap
+Map: NOTA Vote,Map,genotaTurnoutMap.R,genotaTurnoutMap
