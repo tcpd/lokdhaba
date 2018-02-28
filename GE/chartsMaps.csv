@@ -13,4 +13,5 @@ Map: Winners by Gender,Map,winnerGenderMap.R,winnerGenderMap
 Map: Victory Margin,Map,winnerMarginMap.R,winnerMarginMap
 Map: Vote share of winners,Map,winnerVoteShareMap.R,winnerVoteShareMap
 Map: Party-wise positions,Map,partyPositionsMap.R,partyPositionsMap
+Map: Party-wise Voteshare, Map,partyVoteShareMap.R,partyVoteShareMap
 Map: NOTA Vote,Map,genotaTurnoutMap.R,genotaTurnoutMap
