@@ -2,7 +2,7 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
   ###################Specific for voteshare chart visualization##########################################
   getOptions<-function(options,envr){
     #browser()
-    assign(options,c("Total candidates","Deposit Saved"),env=envr)
+    assign(options,c("Total candidates","Deposit Lost"),env=envr)
   }
 
   plotChart<-function(state, options , plot,envr){
@@ -22,7 +22,7 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
         }
         )
       sname<-gsub("_"," ",sname)
-      thistitle<-paste0('Contested and deposit saved across years in ',sname)
+      thistitle<-paste0('Contested and deposits lost across years in ',sname)
       xtitle<-''
       ytitle<-'Number of Candidates'
       yrange<-c(0,5000)
