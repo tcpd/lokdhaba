@@ -5,7 +5,7 @@ Chart: Party vote share (all seats),Chart,tvoteShareChart.R,tvoteShareChart
 Chart: Party seat share,Chart,seatShareChart.R,seatShareChart
 Chart: Party strike rate,Chart,strikeRateChart.R,strikeRateChart
 Chart: Parties contested and represented,Chart,partiesPresentedChart.R,partiesPresentedChart
-Chart: Candidates contested /deposit saved,Chart,contestedDepositSavedChart.R,contestedDepositSavedChart
+Chart: Candidates contested /deposit lost,Chart,contestedDepositSavedChart.R,contestedDepositSavedChart
 Map: Constituency type , Map,winnerCasteMap.R,winnerCasteMap
 Map: Number of candidates,Map,numCandidatesMap.R,numCandidatesMap
 Map: Voter Turnout, Map,voterTurnoutMap.R,voterTurnoutMap
