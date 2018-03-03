@@ -26,7 +26,7 @@ getPartyNames<-function( year, parties, envr){
         winners$Lat<-as.vector(coordinates(shape)[,2])
         winners$Long<-as.vector(coordinates(shape)[,1])
         
-	base<-leaflet(winners,options = leafletOptions(minZoom=5,maxZoom=11,zoomSnap=0.2,zoomDelta=0.2,scrollWheelZoom=F,touchZoom=F))
+	base<-leaflet(winners,options = leafletOptions(minZoom=5,maxZoom=11,zoomSnap=0.02,zoomDelta=0.02,scrollWheelZoom=F,touchZoom=F))
         print('leaflet value is set')
         assign("leafletbase",base,env=envr)
     
@@ -67,11 +67,34 @@ plotMap<-function( year, parties, plot, envr){
                     color = "#000000", opacity = 1, weight=1,
                     fillColor = ~pal(as.character(Party)), popup=~(popup)) %>%
       addLegend("topright",color=sset$color, opacity= 1, labels=sset$legend,title="Party",
-                        )%>%
+        )%>%
         addTitleLeaflet(title)
 
     assign(plot, base,env=envr)
-    }
+}
+user.custom.map <- function(year,parties,plot,mfile,envr){
+  #browser()
+  
+  yr<-get(year,envr)
+  selectedpartynames<-get(parties,envr)
+  counted<-get("countedframe",envr)
+  pal<-getColorFactorParty(selectedpartynames)
+  sset<-subset(counted,counted$Party %in% selectedpartynames)
+  sset$color<-pal(as.character(sset$Party))
+  
+  
+  plot <- get(plot,envr)
+  plot <- plot %>% clearControls() %>% addLegend("topright",color=sset$color, opacity= 1, labels=sset$legend,title="Party") %>% addControl(html=paste0("<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
+                                         "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),position = "bottomleft",className="leaflettitle")
+  mapimg <- mapshot( x = plot
+           , file = mfile
+           , cliprect = "viewport" # the clipping rectangle matches the height & width from the viewing port
+           , selfcontained = FALSE # when this was not specified, the function for produced a PDF of two pages: one of the leaflet map, the other a blank page.
+  )
+  
+  assign("savemap",mapimg,env=envr)
+}
+
 #######################################End of helper function ############################################
 
 ######Auto generated code##############Variable to store the values used across functions
@@ -110,6 +133,7 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
+shinyjs::show("dl")  
 values$triggerfor_1<<-0
 }
 
@@ -118,6 +142,7 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
+shinyjs::hide("dl")
 }
 
 
@@ -169,6 +194,17 @@ return()
 }
 })
 
+parentsession$output$dl <- downloadHandler(
+  filename = paste0( Sys.Date()
+                     , "_GE_winners_by_party_tcpd"
+                     , ".png"
+  )
+  
+  , content = function(file) {
+    user.custom.map(year="selected_year", parties="selected_parties" ,plot="leafletmap",mfile=file , currentvalues)
+    currentvalues$savemap
+  } # end of content() function
+) # end of downloadHandler()   function
 
 
 
