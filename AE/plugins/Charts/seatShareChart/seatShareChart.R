@@ -13,9 +13,7 @@ seatShareChart<-function(input, output, session, parentsession,statename_reactiv
     sname<-gsub(" ","_",get(state,envr))
     b<-readSeatShareFile(sname)
     pivotdata<-dcast(b,Year~Party,value.var=c('Seats'))
-    col <- read.csv("../tcpd_data/data/colours.csv")
-    pal <- as.character(col$Color)
-    pal <- setNames(pal,col$Party)
+    pal <- getPartyColor(b$Party)
     #create a base line chart with year as the x-axis
     base<-plot_ly(pivotdata, x = ~Year)
     #print(paste('selected',selectedpartynames))

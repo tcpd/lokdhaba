@@ -13,9 +13,7 @@
     #browser()
     pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
 
-    col <- read.csv("../tcpd_data/data/colours.csv")
-    pal <- as.character(col$Color)
-    pal <- setNames(pal,col$Party)
+    pal <- getPartyColor(b$Party)
     
     #create a base line chart with year as the x-axis
     base<-plot_ly(pivotdata, x = ~Year)

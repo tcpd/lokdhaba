@@ -117,8 +117,49 @@ readPartyPositionsFile<- function(statename){
   
 }
 
-###########################################Party color maps##############################################
+###########################################Party color charts##############################################
+getPartyColor <- function(partynames){
+  allcols<-c('#576f2d',
+             '#c44eb7',
+             '#5dc356',
+             '#7862ce',
+             '#99b538',
+             '#d8407f',
+             '#4a9138',
+             '#cc8cd8',
+             '#c5a539',
+             '#6489cc',
+             '#df8b30',
+             '#3dbabe',
+             '#d53f41',
+             '#5ab27f',
+             '#934e88',
+             '#a9ab65',
+             '#dd81aa',
+             '#92692f',
+             '#a64657',
+             '#e09a6b',
+             '#be562a',
+             '#de7c78')
+  col <- read.csv("../tcpd_data/data/colours.csv")
+  pal <- as.character(col$Color)
+  #pal <- setNames(pal,col$Party)
+  
+  
+  rest<-setdiff(partynames,col$Party)
+  if(length(rest)==0){
+    restcols <- c()
+  }else{
+    restcols<-allcols[1:length(rest)]
+  }
+  #partyl<-c(partyl,rest)
+  pal<-c(pal,restcols)
+  pal <- setNames(pal,c(as.character(col$Party),rest))
+  return(pal)
+  
+} 
 
+###########################################Party color maps##############################################
 getColorFactorParty<-function(partynames){
   allcols<-c('#576f2d',
              '#c44eb7',
