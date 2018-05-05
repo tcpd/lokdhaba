@@ -17,10 +17,9 @@ geOptionsInput <- function(input, output, session,dname,conmanager) {
   
   #######################################
   
-  
-  
 
-######################Filling in the different charts and maps types available. This information is displayed
+
+######################Filling in the different charhttp://127.0.0.1:5426/?_state_id_=acd81dade1e5d28fts and maps types available. This information is displayed
   ######################by reading from a file 'chartsMaps.csv' that contains this meta information (title,type,filename)
   ##########Get's triggered on initialization of uityupe selection ui
   output$ge_uitype_selection<-renderUI({

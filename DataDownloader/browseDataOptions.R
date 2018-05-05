@@ -5,7 +5,10 @@ browseDataOptions <- function(input, output, session,conmanager) {
 
   ##Variable to store the values used across functions
   current_filters<-c()
-  
+  observe({
+    shiny::updateSelectInput(session,"bd_electiontype_selector",selected = conmanager$getval("bd_electiontype_selector",""))
+    
+  })
   #####################Filling in the state names from the state csv file, ideally it should be filled from 
   #####################StateNameNormalized file
   ###Get's triggered on initialization of state_selection UI
