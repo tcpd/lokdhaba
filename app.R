@@ -160,7 +160,7 @@ shinyServer <- function(input, output, session) {
       #shinyjs::reset(x)
       #resetvalues[[x]]<<-input[[x]]
     })
-    browser()
+    #browser()
     
   })
 
