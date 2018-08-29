@@ -69,7 +69,7 @@ plotMap<-function(year, options, plot, envr){
       });
       
       #addpolygon for coloured display and add legend
-      title<-paste0("Constituency wise voter turnout for loksabha in ",yr)
+      title<-paste0("Constituency wise voter turnout for Lok Sabha in ",yr)
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,

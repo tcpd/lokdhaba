@@ -56,7 +56,7 @@ plotMap<-function(year, options, plot, envr){
       pal<- leaflet::colorFactor(cols,levels=selectedcastenames,na.color = "white")
       
       #addpolygon for coloured display and add legend
-      title<-paste0("Constituency types for loksabha in ",yr)
+      title<-paste0("Constituency types for Lok Sabha in ",yr)
 
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,

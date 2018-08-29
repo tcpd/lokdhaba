@@ -58,7 +58,7 @@ plotMap<-function( year, options, plot, envr){
       pal<- leaflet::colorFactor(cols,levels=selectedgendersnames,na.color = "white")
       
       #addpolygon for coloured display and add legend
-  title<-paste0("Gender wise winners for loksabha in ",yr)
+  title<-paste0("Gender wise winners for Lok Sabha in ",yr)
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
                     color = "#000000", opacity = 1, weight=1,
