@@ -553,22 +553,25 @@ NotaTurnoutMapLegendColor<-function(inp){
 
 ##########################################Voter Turnout Map#################################################
 VoterTurnoutMapLegendList <- function(){return
-(c("<40%","40%-50%","50%-60%","60%-70%","70%-80%",">80%"))}
+(c("<50%","50%-60%","60%-70%","70%-75%","75%-80%","80%-85%","85%-90%","90%-95%",">95%"))}
 
 
 VoterTurnoutMapBreakupList<- function(){
-  return(c(0,40,50,60,70,80,100))
+  return(c(0,50,60,70,75,80,85,90,95,100))
 }
 
 VoterTurnoutMapLegendCount<- function(dframe){
   ##set a new column same as legend based on the percentage.
-  dframe$tmp[dframe$Turnout_Percentage<40]<-"<40%"
-  dframe$tmp[dframe$Turnout_Percentage>=40 & dframe$Turnout_Percentage<50]<-"40%-50%"
+  dframe$tmp[dframe$Turnout_Percentage<50]<-"<50%"
   dframe$tmp[dframe$Turnout_Percentage>=50 & dframe$Turnout_Percentage<60]<-"50%-60%"
   dframe$tmp[dframe$Turnout_Percentage>=60 & dframe$Turnout_Percentage<70]<-"60%-70%"
-  dframe$tmp[dframe$Turnout_Percentage>=70 &
-             dframe$Turnout_Percentage<80]<-"70%-80%"
-  dframe$tmp[dframe$Turnout_Percentage>=80]<-">80%"
+  dframe$tmp[dframe$Turnout_Percentage>=70 & dframe$Turnout_Percentage<75]<-"70%-75%"
+  dframe$tmp[dframe$Turnout_Percentage>=75 & dframe$Turnout_Percentage<80]<-"75%-80%"
+  dframe$tmp[dframe$Turnout_Percentage>=80 & dframe$Turnout_Percentage<85]<-"80%-85%"
+  dframe$tmp[dframe$Turnout_Percentage>=85 & dframe$Turnout_Percentage<90]<-"85%-90%"
+  dframe$tmp[dframe$Turnout_Percentage>=90 & dframe$Turnout_Percentage<95]<-"90%-95%"
+  
+  dframe$tmp[dframe$Turnout_Percentage>=95]<-">95%"
   #browser()
   dframe$Turnout_Percentage<-NULL
   dframe$count<-1
@@ -588,18 +591,24 @@ VoterTurnoutMapLegendCount<- function(dframe){
 }
 
 VoterTurnoutMapLegendColor<-function(inp){
-  if(inp=="<40%"){
-    return('#f1eef6')
-  }else if(inp=="40%-50%"){
-    return('#d0d1e6')
+  if(inp=="<50%"){
+    return('#f7fbff')
   }else if(inp=="50%-60%"){
-    return('#a6bddb')
+    return('#deebf7')
   }else if(inp=="60%-70%"){
-    return('#74a9cf')
-  }else if(inp=="70%-80%"){
-    return('#2b8cbe')
-  }else if(inp==">80%"){
-    return('#045a8d')
+    return('#c6dbef')
+  }else if(inp=="70%-75%"){
+    return('#9ecae1')
+  }else if(inp=="75%-80%"){
+    return('#6baed6')
+  }else if(inp=="80%-85%"){
+    return('#4292c6')
+  }else if(inp=="85%-90%"){
+    return('#2171b5')
+  }else if(inp=="90%-95%"){
+    return('#08519c')
+  }else if(inp==">95%"){
+    return('#08306b')
   }else{
     stop('passed argument should be either <40%, 40%-50%,50%-60%,60%-70%,
          70%-80% or >80%')
