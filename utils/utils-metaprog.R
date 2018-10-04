@@ -57,10 +57,10 @@ constructSetupFunction<-function(filteroutputarea,filterc,inputtable){
     innercode <<- paste0(filteroutputarea,"<-renderUI({\n #ShowAll()")
     ##add construction code for filter ui components here..
     apply(filterc,1,function(row){
-        if(trimws(row["isinit"])==T){
+        if(trimws(row["isinit"])=="T"){
           innercode <<- paste0(innercode, "\n tmp",row["filterid"], " <-", gsub(":",",",row["construction"]))
             #innercode<<-paste0(innercode,"\n",gsub(":",",",row["construction"]),",")
-        }else if(trimws(row["isinit"])==F){
+        }else if(trimws(row["isinit"])=="F"){
           fid <- row["filterid"]
           dep_inp <- filter(inputtable,filterid == fid) 
           innercode <<- paste0(innercode,"\n ","tmp",row["filterid"] ," <- if( T ")
