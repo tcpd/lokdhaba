@@ -10,6 +10,14 @@
   plotChart<-function( parties , plot,envr){
     selectedpartynames<-get(parties,envr)
     b<-readSeatShareFile("ge")
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    dat$State_Name <- "LokSabha"
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState","LokSabha")
+    conmanager$setval("vis","PartySeatShare")
+    
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Seats'))
     
     pal <- getPartyColor(b$Party)

@@ -12,6 +12,14 @@ gevoteShareChart_c<-function(input, output, session, parentsession,dname,conmana
     #sname<-gsub(" ","_",get(state,envr))
     b<-readcVoteShareFile("ge")
     #browser()
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    dat$State_Name <- "LokSabha"
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState","LokSabha")
+    conmanager$setval("vis","PartyVoteShare(contested_seats)")
+    
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
 
     pal <- getPartyColor(b$Party)
@@ -60,6 +68,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("distPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -68,6 +78,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("distPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

@@ -19,6 +19,7 @@ getOptions<-function(state, year, options,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
 
    assign(options,WinnerCasteMapLegendList(),env=envr)
 
@@ -55,7 +56,16 @@ plotMap<-function(state, year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
- #create a colour plaette only for the partys selected in selectedcastenames variable
+
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        dat <- subset(df,Constituency_Type %in% selectedcastenames,select = c("State_Name","Year","Constituency_No","Constituency_Name","Constituency_Type"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","Constituency_Types",yr,sep="_"))
+        
+        
+         #create a colour plaette only for the partys selected in selectedcastenames variable
       #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
       cols<-c()
       lapply(selectedcastenames,function(x){
@@ -83,47 +93,7 @@ plotMap<-function(state, year, options, plot, envr){
            
 
     assign(plot, base,env=envr)
-}
-
-user.custom.map <- function(state, year, options,plot,mfile,envr){
-  #browser()
-  
-  st<-get(state,envr)
-  yr<-get(year,envr)
-  st<-gsub(" ","_",st)
-  
-  selectedcastenames<-get(options,envr)
-  
-  counted<-get("countedframe",envr)
-  #create a colour plaette only for the partys selected in selectedcastenames variable
-  #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
-  cols<-c()
-  lapply(selectedcastenames,function(x){
-    cols<<-c(cols,WinnerCasteMapLegendColor(x))
-  })
-  
-  pal<- leaflet::colorFactor(cols,levels=selectedcastenames,na.color = "white")
-  
-  
-  plot <- get(plot,envr)
-  plot <- plot %>% clearControls() %>% addLegend("topright",pal=pal, opacity= 1,
-                                                 values=as.character(selectedcastenames),title="Constituency Type",
-                                                 labFormat = labelFormat(transform=function(x) {
-                                                   lapply(x,function(y){
-                                                     counted$legend[(trimws(counted$Constituency_Type))==y]
-                                                   });
-                                                 })
-  ) %>% addControl(html=paste0("<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                               "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),position = "bottomleft",className="leaflettitle")
-  mapimg <- mapshot( x = plot
-                     , file = mfile
-                     , cliprect = "viewport" # the clipping rectangle matches the height & width from the viewing port
-                     , selfcontained = FALSE # when this was not specified, the function for produced a PDF of two pages: one of the leaflet map, the other a blank page.
-  )
-  
-  assign("savemap",mapimg,env=envr)
-}
-
+    }
 #######################################End of helper function ############################################
 
 
@@ -165,8 +135,9 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
-  shinyjs::show("dl")
-  values$triggerfor_1<<-0
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
+values$triggerfor_1<<-0
 }
 
 
@@ -174,7 +145,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
-shinyjs::hide("dl")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 
@@ -227,17 +199,6 @@ return()
 }
 })
 
-parentsession$output$dl <- downloadHandler(
-  filename = paste0( Sys.Date()
-                     , "ConstituencyTypeMap"
-                     , ".png"
-  )
-  
-  , content = function(file) {
-    user.custom.map(state="selected_stname" , year="selected_year", options="selected_options" ,plot="leafletmap",mfile=file , currentvalues)
-    currentvalues$savemap
-  } # end of content() function
-) # end of downloadHandler()   function
 
 
 

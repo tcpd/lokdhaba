@@ -13,6 +13,13 @@ strikeRateChart<-function(input, output, session, parentsession,statename_reacti
     sname<-gsub(" ","_",get(state,envr))
     b<-readStrikeRateFile(sname)
     #browser()
+    
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","PartyStrikeRate")
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Strike_Rate'))
 
     pal <- getPartyColor(b$Party)
@@ -62,6 +69,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("distPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -70,6 +79,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("distPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

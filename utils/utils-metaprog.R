@@ -42,13 +42,25 @@ constructVariables<-function(filterc){
 
 constructShowAllFunction<-function(plotarea){
 
-    code<-paste0("ShowAll","<-","function(){\n","shinyjs::show(\"",plotarea,"\")\n","values$triggerfor_1<<-0","\n}\n")
+  innercode <- NULL
+  for(vals in plotarea){
+    innercode <- paste0(innercode,"shinyjs::show(\"",vals,"\")\n")
+  }
+  code<-paste0("ShowAll","<-","function(){\n",innercode,"values$triggerfor_1<<-0","\n}\n")
+  
+    #code<-paste0("ShowAll","<-","function(){\n","shinyjs::show(\"",plotarea,"\")\n","values$triggerfor_1<<-0","\n}\n")
     return(code)
 
     }
 
 constructHidAllFunction<-function(plotarea){
-    code<-paste0("HideAll","<-","function(){\n","ResetOutputRendering()\n","values$triggerfor_1<<- -1\n","shinyjs::hide(\"",plotarea,"\")\n","}\n")
+  innercode <- NULL
+  for(vals in plotarea){
+    innercode <- paste0(innercode,"shinyjs::hide(\"",vals,"\")\n")
+  }
+  code<-paste0("HideAll","<-","function(){\n","ResetOutputRendering()\n","values$triggerfor_1<<- -1\n",innercode,"}\n")
+  
+  #code<-paste0("HideAll","<-","function(){\n","ResetOutputRendering()\n","values$triggerfor_1<<- -1\n","shinyjs::hide(\"",plotarea,"\")\n","}\n")
     return(code)
     }
 

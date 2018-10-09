@@ -14,6 +14,11 @@
     #browser()
     pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
 
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","PartyVoteShare(all_seats)")
 
     #col <- read.csv("../tcpd_data/data/colours.csv")
     #pal <- as.character(col$Color)

@@ -12,6 +12,13 @@ seatShareChart<-function(input, output, session, parentsession,statename_reactiv
     selectedpartynames<-get(parties,envr)
     sname<-gsub(" ","_",get(state,envr))
     b<-readSeatShareFile(sname)
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","PartySeatShare")
+    
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Seats'))
     pal <- getPartyColor(b$Party)
     #create a base line chart with year as the x-axis
@@ -60,6 +67,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("distPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -68,6 +77,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("distPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

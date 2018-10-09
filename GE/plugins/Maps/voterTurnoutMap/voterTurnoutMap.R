@@ -14,9 +14,9 @@ getOptions<-function( year, options,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile("ge")%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
 
    assign(options,VoterTurnoutMapLegendList(),env=envr)
-
        shape<-readShapeFile("ge", yr)
        #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
        #for creating a new leaflet map. Set this leaflet map in the current setting variable
@@ -48,10 +48,22 @@ plotMap<-function(year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        
+        
  #create a colour plaette only for the marrgins selected in selectedpercentage variable
       #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
       cols<-c()
       optionslist<-VoterTurnoutMapLegendList()
+      #setting up variables for visualization data download
+      df <- get("winners_df",envr)
+      df$Vt_Legend <- getLegendIntervals(optionslist,df$Turnout_Percentage)
+      dat <- subset(df,Vt_Legend %in% selectedpercentage,select = c("State_Name","Year","Constituency_No","Constituency_Name","Turnout_Percentage","Vt_Legend"))
+      conmanager$setval("visData",dat)
+      conmanager$setval("selectedState","Loksabha")
+      conmanager$setval("vis",paste("Voter_Turnout",yr,sep="_"))
+      
+      
       lapply(optionslist,function(x){
         if(x %in% selectedpercentage){
           cols<<-c(cols,VoterTurnoutMapLegendColor(x))
@@ -121,6 +133,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -129,6 +143,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

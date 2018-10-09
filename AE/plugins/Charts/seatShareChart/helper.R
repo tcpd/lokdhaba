@@ -11,6 +11,13 @@
     selectedpartynames<-get(parties,envr)
     sname<-gsub(" ","_",get(state,envr))
     b<-readSeatShareFile(sname)
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","PartySeatShare")
+    
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Seats'))
     pal <- getPartyColor(b$Party)
     #create a base line chart with year as the x-axis

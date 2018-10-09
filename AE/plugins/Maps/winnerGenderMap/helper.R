@@ -18,6 +18,7 @@ getOptions<-function(state, year, options,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
 
    assign(options,WinnerGenderMapLegendList(),env=envr)
 
@@ -54,6 +55,16 @@ plotMap<-function(state, year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        dat <- subset(df,Sex %in% selectedgendersnames,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Sex","Votes"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","Genderwise_Winners",yr,sep="_"))
+        
+        
+        
  	cols<-c()
       lapply(selectedgendersnames,function(x){
         cols<<-c(cols,WinnerGenderMapLegendColor(x))

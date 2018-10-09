@@ -35,6 +35,8 @@ getOptions<-function(state,year,party,options,envr){
        yr<-get(year,envr)
        winners <- readPartyPositionsFile(st)%>%filter(Year==yr & Party == partyname)
     
+       assign("winners_df",winners,env=envr)
+       
         assign(options,voteShareMapLegendList(),env=envr)
         shape<-readShapeFile(st, yr)
                #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
@@ -69,6 +71,14 @@ plotMap<-function(state, year,party,  options, plot, envr){
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
 
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        df$Pv_Legend <- getLegendIntervals(voteShareMapLegendList(),df$Vote_Share_Percentage)
+        dat <- subset(df,Pv_Legend %in% selectedfilters,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Party","Position","Votes","Vote_Share_Percentage"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise",partyname,"VoteShares",yr,sep="_"))
+        
              #create a colour plaette only for the options selected in selectedfilters variable
       #pal<-createPal(selectedpartynames, current_filters$sname, current_filters$year)
       #pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")

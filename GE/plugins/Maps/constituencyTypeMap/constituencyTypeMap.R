@@ -13,7 +13,8 @@ getOptions<-function(year, options,envr){
 
        yr<-get(year,envr)
        winners<-readStateWinnersFile("ge")%>%filter(Year==yr)
-
+       assign("winners_df",winners,env=envr)
+       
 
    assign(options,WinnerCasteMapLegendList(),env=envr)
 
@@ -47,6 +48,14 @@ plotMap<-function(year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        dat <- subset(df,Constituency_Type %in% selectedcastenames,select = c("State_Name","Year","Constituency_No","Constituency_Name","Constituency_Type"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState","Loksabha")
+        conmanager$setval("vis",paste("Constituency_Types",yr,sep="_"))
+        
  #create a colour plaette only for the partys selected in selectedcastenames variable
       #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
       cols<-c()
@@ -117,6 +126,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -125,6 +136,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

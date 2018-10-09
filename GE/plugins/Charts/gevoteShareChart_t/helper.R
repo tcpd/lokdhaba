@@ -11,6 +11,14 @@
     #sname<-gsub(" ","_",get(state,envr))
     b<-readtVoteShareFile("ge")
     #browser()
+    
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    dat$State_Name <- "LokSabha"
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState","LokSabha")
+    conmanager$setval("vis","PartyVoteShare(all_seats)")
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
 
     pal <- getPartyColor(b$Party)

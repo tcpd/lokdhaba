@@ -13,8 +13,10 @@ getOptions<-function( year, options,envr){
 
        yr<-get(year,envr)
        winners<-readStateWinnersFile("ge")%>%filter(Year==yr)
-
-
+       
+       assign("winners_df",winners,env=envr)
+       
+       
    assign(options,NotaTurnoutMapLegendList(),env=envr)
 
        shape<-readShapeFile("ge", yr)
@@ -48,6 +50,15 @@ plotMap<-function(year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        df$Nv_Legend <- getLegendIntervals(NotaTurnoutMapLegendList(),df$Nota_Percentage)
+        dat <- subset(df,Nv_Legend %in% selectedpercentage,select = c("State_Name","Year","Constituency_No","Constituency_Name","Nota_Percentage","Nv_Legend"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState","Loksabha")
+        conmanager$setval("vis",paste("ConstituencyWise","NotaVoteShare",yr,sep="_"))
+        
 	 #create a colour plaette only for the marrgins selected in selectedpercentage variable
       #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
       cols<-c()

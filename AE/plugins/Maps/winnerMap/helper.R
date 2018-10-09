@@ -18,6 +18,8 @@ getPartyNames<-function(state, year, parties, envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
+       
        partys<-unique(winners$Party)
        assign(parties,partys,env=envr)
 
@@ -56,7 +58,16 @@ plotMap<-function(state, year, parties, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
-        pal<-getColorFactorParty(selectedpartynames)
+       
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        dat <- subset(df,Party %in% selectedpartynames,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Party","Position","Votes"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","PartyWinners",yr,sep="_"))
+        
+        
+         pal<-getColorFactorParty(selectedpartynames)
       #(selectedpartynames)
 #      pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
       # pal<-colorFactor(c("#ff6600","#A5F1F9","#0000ff","#228B22","#0000ff",

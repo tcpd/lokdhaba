@@ -4,7 +4,7 @@ library(dplyr)
 
 componentname="gevoteShareChart_c"
 componentarguments="input, output, session, parentsession,dname,conmanager"
-plotarea="distPlot"
+plotarea=c("distPlot","bookmark_edv","visDataDownload")
 filteroutput="parentsession$output$ge_filter_selection"
 #plotarea="distPlot"
 

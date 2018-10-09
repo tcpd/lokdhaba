@@ -4,7 +4,7 @@ library(dplyr)
 
 componentname="partyPositionsMap"
 componentarguments="input, output, session, parentsession,dname,conmanager"
-plotarea="mapPlot"
+plotarea=c("mapPlot","bookmark_edv","visDataDownload")
 filteroutput="parentsession$output$ge_filter_selection"
 #plotarea="distPlot"
 

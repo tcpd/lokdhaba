@@ -18,6 +18,7 @@ getMarginOptions<-function(state, year, margins,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
 
    assign(margins,WinnerMarginMapLegendList(),env=envr)
 
@@ -53,7 +54,17 @@ plotMap<-function(state, year, margins, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
-	#create a colour plaette only for the marrgins selected in selectedpercentage variable
+	
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        df$Wm_Legend <- getLegendIntervals(WinnerMarginMapLegendList(),df$Margin_Percentage)
+        dat <- subset(df,Wm_Legend %in% selectedpercentage,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Party","Margin_Percentage"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","WinningMargins",yr,sep="_"))
+        
+        
+        #create a colour plaette only for the marrgins selected in selectedpercentage variable
       cols<-c()
       optionslist<-WinnerMarginMapLegendList()
       lapply(optionslist,function(x){

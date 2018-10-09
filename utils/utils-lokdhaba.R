@@ -61,7 +61,7 @@ addControl(map,html=paste0(titlemessage,"<br>",
                                      "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),className="leaflettitle")%>%
  addCircleMarkers(data=winners,lng=~ Long, lat= ~ Lat,fill=F, stroke=F,
                   color='#000000',opacity= 0, label=~ Constituency_Name,group='const')%>%
-        addSearchMarker(targetGroup = 'const',options=searchMarkersOptions(textPlaceholder='Search Constituency', zoom=10,autoCollapse=T, autoCollapseTime=1600 , hideMarkerOnCollapse=T))
+        addSearchFeatures(targetGroup = 'const',options=searchFeaturesOptions(textPlaceholder='Search Constituency', zoom=10,autoCollapse=T, autoCollapseTime=1600 , hideMarkerOnCollapse=T))
 
 
 }
