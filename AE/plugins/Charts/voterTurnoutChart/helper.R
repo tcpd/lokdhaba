@@ -8,6 +8,12 @@
     sname<-gsub(" ","_",get(state,envr))
     b<-readVoterTurnoutFile(sname)
 
+    #setting up variables for visualization data download
+    dat <- subset(b,select = c("State_Name","Year",gsub(" ","_",selectedgendernames)))
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","VoterTurnout")
+    
     #create a base line chart with year as the x-axis
     base<-plot_ly(b, x = ~Year)
           lapply(selectedgendernames,function(x) {

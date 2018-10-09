@@ -20,7 +20,9 @@ getOptions<-function(state,year,options,envr){
 
        yr<-get(year,envr)
        winners <- readStateWinnersFile(st)%>%filter(Year==yr)
-    
+
+       assign("winners_df",winners,env=envr)
+       
         assign(options,voteShareMapLegendList(),env=envr)
         shape<-readShapeFile(st, yr)
                #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
@@ -54,6 +56,14 @@ plotMap<-function(state, year,  options, plot, envr){
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
 
+        #setting up variables for visualization data download
+        df <- get("winners_df",envr)
+        df$Vs_Legend <- getLegendIntervals(voteShareMapLegendList(),df$Vote_Share_Percentage)
+        dat <- subset(df,Vs_Legend %in% selectedfilters,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Votes","Sex","Vote_Share_Percentage","Vs_Legend"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","Winners_VoteShare",yr,sep="_"))
+        
              #create a colour plaette only for the options selected in selectedfilters variable
       #pal<-createPal(selectedpartynames, current_filters$sname, current_filters$year)
       #pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
@@ -87,46 +97,7 @@ plotMap<-function(state, year,  options, plot, envr){
         addTitleLeaflet(title)
 
     assign(plot, base,env=envr)
-}
-user.custom.map<-function(state, year,  options,plot,mfile,envr){
-  st<-get(state,envr)
-  yr<-get(year,envr)
-  st<-gsub(" ","_",st)
-  
-  selectedfilters<-get(options,envr)
-  counted<-get("countedframe",envr)
-    #create a colour plaette only for the options selected in selectedfilters variable
-  #pal<-createPal(selectedpartynames, current_filters$sname, current_filters$year)
-  #pal<- leaflet::colorFactor(topo.colors(length(selectedpartynames)),levels=selectedpartynames,na.color = "white")
-  cols<-c()
-  optionslist<-voteShareMapLegendList()
-  lapply(optionslist,function(x){
-    if(x %in% selectedfilters){
-      cols<<-c(cols,VoteShareMapLegendColor(x))
-    }else{
-      cols<<-c(cols,"white")
     }
-  })
-  pal<-leaflet::colorBin(cols,bins=voteShareMapBreakupList(),na.color="white")
-  #coords<-current_filters$coords
-  #From the colors of legend remove white they are the colors/options not selected in the checkbox 
-  legendcolors<-setdiff(cols,c("white"))
-  legendvalues<- lapply(selectedfilters,function(y){
-    counted$legend[(trimws(counted$tmp))==y]
-  });
-  plot <- get(plot,envr)
-  plot <- plot %>% clearControls() %>% addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Percentage vote share of winners"
-  ) %>% addControl(html=paste0("<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                               "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),position = "bottomleft",className="leaflettitle")
-  mapimg <- mapshot( x = plot
-                     , file = mfile
-                     , cliprect = "viewport" # the clipping rectangle matches the height & width from the viewing port
-                     , selfcontained = FALSE # when this was not specified, the function for produced a PDF of two pages: one of the leaflet map, the other a blank page.
-  )
-  
-  assign("savemap",mapimg,env=envr)
-  
-}
 #######################################End of helper function ############################################
 
 ######Auto generated code##############Variable to store the values used across functions
@@ -165,7 +136,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
-  shinyjs::show("dl")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -174,7 +146,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
-shinyjs::hide("dl")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 
@@ -227,17 +200,6 @@ return()
 }
 })
 
-parentsession$output$dl <- downloadHandler(
-  filename = paste0( Sys.Date()
-                     , "WinnersVoteShareMap"
-                     , ".png"
-  )
-  
-  , content = function(file) {
-    user.custom.map(state="selected_stname" , year="selected_year" , options="selected_options" ,plot="leafletmap",mfile=file , currentvalues)
-    currentvalues$savemap
-  } # end of content() function
-) # end of downloadHandler()   function
 
 
 

@@ -19,6 +19,7 @@ getMarginOptions<-function(state, year, margins,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
 
    assign(margins,WinnerMarginMapLegendList(),env=envr)
 
@@ -54,7 +55,17 @@ plotMap<-function(state, year, margins, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
-	#create a colour plaette only for the marrgins selected in selectedpercentage variable
+	
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        df$Wm_Legend <- getLegendIntervals(WinnerMarginMapLegendList(),df$Margin_Percentage)
+        dat <- subset(df,Wm_Legend %in% selectedpercentage,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Party","Margin_Percentage"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","WinningMargins",yr,sep="_"))
+        
+        
+        #create a colour plaette only for the marrgins selected in selectedpercentage variable
       cols<-c()
       optionslist<-WinnerMarginMapLegendList()
       lapply(optionslist,function(x){
@@ -85,46 +96,7 @@ plotMap<-function(state, year, margins, plot, envr){
       
 
     assign(plot, base,env=envr)
-}
-
-user.custom.map <- function(state, year, margins,plot,mfile,envr){
-  st<-get(state,envr)
-  yr<-get(year,envr)
-  st<-gsub(" ","_",st)
-  
-  selectedpercentage<-get(margins,envr)
-  
-  counted<-get("countedframe",envr)
-  #create a colour plaette only for the marrgins selected in selectedpercentage variable
-  cols<-c()
-  optionslist<-WinnerMarginMapLegendList()
-  lapply(optionslist,function(x){
-    if(x %in% selectedpercentage){
-      cols<<-c(cols,WinnerMarginMapLegendColor(x))
-    }else{
-      cols<<-c(cols,"white")
     }
-  })
-  pal<-leaflet::colorBin(cols,bins=WinnerMarginMapBreakupList(),na.color="white")
-  #coords<-current_filters$coords
-  #From the colors of legend remove white they are the colors/options not selected in the checkbox 
-  legendcolors<-setdiff(cols,c("white"))
-  legendvalues<- lapply(selectedpercentage,function(y){
-    counted$legend[(trimws(counted$tmp))==y]
-  });
-  plot <- get(plot,envr)
-  plot <- plot %>% clearControls() %>% addLegend("topright",colors=legendcolors, labels=legendvalues,opacity=1,title="Winner margin"
-  ) %>% addControl(html=paste0("<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                               "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),position = "bottomleft",className="leaflettitle")
-  mapimg <- mapshot( x = plot
-                     , file = mfile
-                     , cliprect = "viewport" # the clipping rectangle matches the height & width from the viewing port
-                     , selfcontained = FALSE # when this was not specified, the function for produced a PDF of two pages: one of the leaflet map, the other a blank page.
-  )
-  
-  assign("savemap",mapimg,env=envr)
-  
-}
 #######################################End of helper function ############################################
 
 
@@ -166,7 +138,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
-  shinyjs::show("dl")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -175,7 +148,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
-shinyjs::show("dl")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 
@@ -228,17 +202,6 @@ return()
 }
 })
 
-parentsession$output$dl <- downloadHandler(
-  filename = paste0( Sys.Date()
-                     , "winnerMarginMap"
-                     , ".png"
-  )
-  
-  , content = function(file) {
-    user.custom.map(state="selected_stname" , year="selected_year", margins="selected_margins" ,plot="leafletmap",mfile=file , currentvalues)
-    currentvalues$savemap
-  } # end of content() function
-) # end of downloadHandler()   function
 
 
 

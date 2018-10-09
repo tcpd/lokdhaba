@@ -14,6 +14,8 @@ getOptions<-function(year, options,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile("ge")%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
+       
 
    assign(options,WinnerGenderMapLegendList(),env=envr)
 
@@ -48,6 +50,14 @@ plotMap<-function( year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        dat <- subset(df,Sex %in% selectedgendersnames,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Sex","Votes"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState","Loksabha")
+        conmanager$setval("vis",paste("ConstituencyWise","Genderwise_Winners",yr,sep="_"))
+        
  	cols<-c()
       lapply(selectedgendersnames,function(x){
         cols<<-c(cols,WinnerGenderMapLegendColor(x))
@@ -116,6 +126,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -124,6 +136,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

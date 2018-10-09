@@ -19,6 +19,7 @@ getOptions<-function(state, year, options,envr){
        yr<-get(year,envr)
        winners<-readStateWinnersFile(st)%>%filter(Year==yr)
 
+       assign("winners_df",winners,env=envr)
 
    assign(options,WinnerGenderMapLegendList(),env=envr)
 
@@ -55,6 +56,16 @@ plotMap<-function(state, year, options, plot, envr){
 
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        dat <- subset(df,Sex %in% selectedgendersnames,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Sex","Votes"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState",st)
+        conmanager$setval("vis",paste("ConstituencyWise","Genderwise_Winners",yr,sep="_"))
+        
+        
+        
  	cols<-c()
       lapply(selectedgendersnames,function(x){
         cols<<-c(cols,WinnerGenderMapLegendColor(x))
@@ -81,41 +92,7 @@ plotMap<-function(state, year, options, plot, envr){
      
 
     assign(plot, base,env=envr)
-}
-user.custom.map <-function(state, year, options,plot,mfile,envr){
-  st<-get(state,envr)
-  yr<-get(year,envr)
-  st<-gsub(" ","_",st)
-  
-  selectedgendersnames<-get(options,envr)
-  
-  counted<-get("countedframe",envr)
-  cols<-c()
-  lapply(selectedgendersnames,function(x){
-    cols<<-c(cols,WinnerGenderMapLegendColor(x))
-  })
-  
-  #create a colour plaette only for the partys selected in selectedgendersnames variable
-  #pal<-createPal(selectedgendersnames, current_filters$sname, current_filters$year)
-  pal<- leaflet::colorFactor(cols,levels=selectedgendersnames,na.color = "white")
-  plot <- get(plot,envr)
-  plot <- plot %>% clearControls() %>% addLegend("topright",pal=pal, opacity= 1, values=as.character(selectedgendersnames),title="Gender",
-                                                 labFormat = labelFormat(transform=function(x) {
-                                                   lapply(x,function(y){
-                                                     counted$legend[(trimws(counted$Sex))==y]
-                                                   });
-                                                 })
-  ) %>% addControl(html=paste0("<p class=\"leaflet-tcpd\">Source: Adapted from <a href=&quot;www.eci.nic.in&quot;>ECI Data</a><br>",
-                               "<a href=&quot;www.tcpd.ashoka.edu.in&quot;>Trivedi Centre for Political Data, Ashoka University</a></p>"),position = "bottomleft",className="leaflettitle")
-  mapimg <- mapshot( x = plot
-                     , file = mfile
-                     , cliprect = "viewport" # the clipping rectangle matches the height & width from the viewing port
-                     , selfcontained = FALSE # when this was not specified, the function for produced a PDF of two pages: one of the leaflet map, the other a blank page.
-  )
-  
-  assign("savemap",mapimg,env=envr)
-}
-
+    }
 #######################################End of helper function ############################################
 
 
@@ -157,8 +134,9 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
-  shinyjs::show("dl")
-  values$triggerfor_1<<-0
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
+values$triggerfor_1<<-0
 }
 
 
@@ -166,7 +144,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
-shinyjs::hide("dl")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 
@@ -219,17 +198,6 @@ return()
 }
 })
 
-parentsession$output$dl <- downloadHandler(
-  filename = paste0( Sys.Date()
-                     , "winnerGenderMap"
-                     , ".png"
-  )
-  
-  , content = function(file) {
-    user.custom.map(state="selected_stname" , year="selected_year", options="selected_options" ,plot="leafletmap",mfile=file , currentvalues)
-    currentvalues$savemap
-  } # end of content() function
-) # end of downloadHandler()   function
 
 
 

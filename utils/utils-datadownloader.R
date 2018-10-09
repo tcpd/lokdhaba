@@ -133,3 +133,15 @@ getVariableInfo<-function(type){
   stopifnot(nrow(aa)!=0)
   return(aa)
 }
+getLegendIntervals <- function(vals,x){
+  #browser()
+  tmp <- vals
+  vals <- gsub("<","0-",gsub("%","",vals))
+  last <- vals[grep(">",vals)]
+  last <- (as.numeric(gsub(">","",last))+0.001) %>% paste0("-100")
+  vals[grep(">",vals)] <- last
+  splits <- strsplit(vals,"-")
+  ints <- sapply(splits, "[",1)
+  indxs <- findInterval(x,as.numeric(ints))
+  return(tmp[indxs])
+}

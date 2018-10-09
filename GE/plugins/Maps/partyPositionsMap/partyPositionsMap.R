@@ -26,6 +26,9 @@ getOptions<-function(year,party,options,envr){
        partyname<-get(party,envr)
        
        party_wise <-   readPartyPositionsFile("ge")%>%filter(Year==yr & Party == partyname)
+       
+       assign("winners_df",party_wise,env=envr)
+       
        shape<-readShapeFile("ge", yr)
        #merge shape file with winners on ASSEMBLY and AC_No and set it as the leaflet data file
        #for creating a new leaflet map. Set this leaflet map in the current setting variable
@@ -64,6 +67,16 @@ plotMap<-function(year, party, options, plot, envr){
        selectedfilters<-get(options,envr)
         counted<-get("countedframe",envr)
         base<-get("leafletbase",envr)
+        
+        #setting up variables for visualization data download
+        df<- get("winners_df",envr)
+        df$P_Legend <- getLegendIntervals(PartyPositionsMapLegendList(),df$Position)
+        dat <- subset(df,P_Legend %in% selectedfilters,select = c("State_Name","Year","Constituency_No","Constituency_Name","Candidate","Party","Position","Votes"))
+        conmanager$setval("visData",dat)
+        conmanager$setval("selectedState","Loksabha")
+        conmanager$setval("vis",paste("ConstituencyWise",partyname,"Positions",yr,sep="_"))
+        
+        
       #create a colour plaette only for the options selected in selectedfilters variable
       cols<-c()
       optionslist<-PartyPositionsMapLegendList()
@@ -142,6 +155,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("mapPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -150,6 +165,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("mapPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

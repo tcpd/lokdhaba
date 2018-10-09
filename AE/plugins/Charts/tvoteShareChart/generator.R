@@ -4,14 +4,13 @@ library(dplyr)
 
 componentname="tvoteShareChart"
 componentarguments="input, output, session, parentsession,statename_reactive,dname,conmanager"
-plotarea="distPlot"
+plotarea=c("distPlot","bookmark_edv","visDataDownload")
 filteroutput="parentsession$output$ae_filter_selection"
 #plotarea="distPlot"
 
 filters = "filterid,construction,isinit
            1,checkboxGroupInput(ns(\"party_names\") : \"Select voteshare for \": c()),T"
     
-       #1, checkboxGroupInput(ns(\"party_names\") : \"Select seatshare for \": c())"
     
 inputtable="filterid,name,type,alias
             1,statename_reactive(),string,selected_stname 

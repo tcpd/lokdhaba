@@ -8,6 +8,13 @@ gevoterTurnoutChart<-function(input, output, session, parentsession,dname,conman
     selectedgendernames<-get(gendernames,envr)
     b<-readVoterTurnoutFile("ge")
 
+    #setting up variables for visualization data download
+    dat <- subset(b,select = c("Year",gsub(" ","_",selectedgendernames)))
+    dat$State_Name <- "LokSabha"
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState","LokSabha")
+    conmanager$setval("vis","VoterTurnout")
+    
     #create a base line chart with year as the x-axis
     base<-plot_ly(b, x = ~Year)
           lapply(selectedgendernames,function(x) {
@@ -52,6 +59,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("distPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -60,6 +69,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("distPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

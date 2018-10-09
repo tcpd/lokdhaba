@@ -4,7 +4,7 @@ library(dplyr)
 
 componentname="partiesPresentedChart"
 componentarguments="input, output, session, parentsession,statename_reactive,dname,conmanager"
-plotarea="distPlot"
+plotarea=c("distPlot","bookmark_edv","visDataDownload")
 filteroutput="parentsession$output$ae_filter_selection"
 #plotarea="distPlot"
 

@@ -229,7 +229,16 @@ shinyServer <- function(input, output, session) {
      ##Render the summary report of UP election written in rmd file format.
      includeHTML("HowToCite.html")
    })
-
+   #browser()
+  output$visDataDownload <- downloadHandler(
+   filename = function() {
+	   browser()
+     paste("TCPD",conmanager$restoredvals$selectedState,conmanager$restoredvals$vis, paste0(Sys.Date(), '.csv'), sep='_')
+   },
+   content = function(con) {
+     write.csv(conmanager$restoredvals$visData, con, row.names = F)
+   }
+ )
    
 
 }

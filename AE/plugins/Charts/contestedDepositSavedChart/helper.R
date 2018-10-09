@@ -12,6 +12,14 @@
      b<-readCandidatesContestedDepositLostFile(sname)
         #pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
+    #browser()
+    #setting up variables for visualization data download
+     dat <- subset(b,select = c("State_Name","Year",gsub(" ","_",selectedoptionnames)))
+     conmanager$setval("visData",dat)
+     conmanager$setval("selectedState",sname)
+     conmanager$setval("vis","Candidates_Contested")
+     
+    
     base<-plot_ly(b, x = ~Year)
     lapply(selectedoptionnames,function(x) {
         n<-gsub(" ","_",x)

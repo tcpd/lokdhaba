@@ -15,6 +15,11 @@ tvoteShareChart<-function(input, output, session, parentsession,statename_reacti
     #browser()
     pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
 
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","PartyVoteShare(all_seats)")
 
     #col <- read.csv("../tcpd_data/data/colours.csv")
     #pal <- as.character(col$Color)
@@ -66,6 +71,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("distPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -74,6 +81,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("distPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 

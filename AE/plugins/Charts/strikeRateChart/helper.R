@@ -12,6 +12,13 @@
     sname<-gsub(" ","_",get(state,envr))
     b<-readStrikeRateFile(sname)
     #browser()
+    
+    #setting up variables for visualization data download
+    dat <- subset(b,Party %in% selectedpartynames)
+    conmanager$setval("visData",dat)
+    conmanager$setval("selectedState",sname)
+    conmanager$setval("vis","PartyStrikeRate")
+    
     pivotdata<-dcast(b,Year~Party,value.var=c('Strike_Rate'))
 
     pal <- getPartyColor(b$Party)

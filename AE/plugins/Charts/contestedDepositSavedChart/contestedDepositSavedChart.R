@@ -13,6 +13,14 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
      b<-readCandidatesContestedDepositLostFile(sname)
         #pivotdata<-dcast(b,year~party)
         #create a base line chart with year as the x-axis
+    #browser()
+    #setting up variables for visualization data download
+     dat <- subset(b,select = c("State_Name","Year",gsub(" ","_",selectedoptionnames)))
+     conmanager$setval("visData",dat)
+     conmanager$setval("selectedState",sname)
+     conmanager$setval("vis","Candidates_Contested")
+     
+    
     base<-plot_ly(b, x = ~Year)
     lapply(selectedoptionnames,function(x) {
         n<-gsub(" ","_",x)
@@ -60,6 +68,8 @@ SetupOutputRendering()
 
 ShowAll<-function(){
 shinyjs::show("distPlot")
+shinyjs::show("bookmark_edv")
+shinyjs::show("visDataDownload")
 values$triggerfor_1<<-0
 }
 
@@ -68,6 +78,8 @@ HideAll<-function(){
 ResetOutputRendering()
 values$triggerfor_1<<- -1
 shinyjs::hide("distPlot")
+shinyjs::hide("bookmark_edv")
+shinyjs::hide("visDataDownload")
 }
 
 
