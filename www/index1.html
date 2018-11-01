@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>  <script type="application/shiny-singletons">12b282b6c4e1ec3cee386f4ca6165aafc4731a84</script>  <script type="application/html-dependencies">json2[2014.02.04];jquery[1.12.4];babel-polyfill[6.7.2];shiny[0.14.2];htmlwidgets[0.8];plotlyjs[1.20.2];plotly-binding[4.5.6.9000];leaflet[0.7.3];leafletfix[1.0.0];leaflet-binding[1.0.1];bootstrap[3.3.7]</script><script src="assets/shared/json2-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link href="css/gridstyles.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.22.0/polyfill.min.js"></script>
+  <link href="shared/shiny.css" rel="stylesheet" />
+  <script src="shared/shiny.min.js"></script>
+  <script src="https://use.fontawesome.com/1e3e72b187.js"></script>
+  <script src="assets/htmlwidgets-0.8/htmlwidgets.js"></script>
+  <link href="assets/plotlyjs-1.20.2/plotly-htmlwidgets.css" rel="stylesheet" />
+  <script src="assets/plotlyjs-1.20.2/plotly-latest.min.js"></script>
+  <script src="assets/plotly-binding-4.5.6.9000/plotly.js"></script>
+  <link href="assets/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+  <script src="assets/leaflet-0.7.7/leaflet.js"></script>
+  <link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+  <link href="assets/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+  
+  <script src="assets/leaflet-label-0.2.2/leaflet.label.js"></script>
+  <script src="assets/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+  <script src="assets/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+  <script src="assets/leaflet-binding-1.1.0/leaflet.js"></script>
+  <script src="assets/d3-3.5.5/d3.min.js"></script>
+  <script src="assets/d3-legend-1.6.0/d3-legend.min.js"></script>
+  <script src="assets/radarChart-0.1/radarChart.js"></script>
+  <script src="assets/d3radar-binding-0.1/d3radar.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>  
+<script src="assets/AdminLTE-2.0.6/AdminLTE.min.css"></script>
+<script src="assets/AdminLTE-2.0.6/_all-skins.min.css"></script>
+<script src="assets/AdminLTE-2.0.6/app.min.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js'></script>
+<!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
+<link rel="stylesheet" type="text/css" href="assets/style.css"/>
+<script src="assets/datatables-binding-0.2/datatables.js"></script> 
+  <!-- <link rel="stylesheet" type="text/css" href="assets/shinyTree/jsTree-3.0.2/themes/default/style.min.css"/> -->
+  <!-- <script src="assets/shinyTree/jsTree-3.0.2/jstree.min.js"></script> -->
+  <!-- <script src="assets/shinyTree/shinyTree.js"></script> -->
+
+  <style>.shinyjs-hide { display: none !important; }</style>
+  <script>Shiny.addCustomMessageHandler('shinyjs-show', function(params) { shinyjs.debugMessage('shinyjs: calling function "show" with parameters:'); shinyjs.debugMessage(params); shinyjs.show(params);});
+Shiny.addCustomMessageHandler('shinyjs-hide', function(params) { shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:'); shinyjs.debugMessage(params); shinyjs.hide(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggle', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggle(params);});
+Shiny.addCustomMessageHandler('shinyjs-enable', function(params) { shinyjs.debugMessage('shinyjs: calling function "enable" with parameters:'); shinyjs.debugMessage(params); shinyjs.enable(params);});
+Shiny.addCustomMessageHandler('shinyjs-disable', function(params) { shinyjs.debugMessage('shinyjs: calling function "disable" with parameters:'); shinyjs.debugMessage(params); shinyjs.disable(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggleState', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleState" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleState(params);});
+Shiny.addCustomMessageHandler('shinyjs-addClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "addClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.addClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-removeClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "removeClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.removeClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-toggleClass', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggleClass" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggleClass(params);});
+Shiny.addCustomMessageHandler('shinyjs-html', function(params) { shinyjs.debugMessage('shinyjs: calling function "html" with parameters:'); shinyjs.debugMessage(params); shinyjs.html(params);});
+Shiny.addCustomMessageHandler('shinyjs-onevent', function(params) { shinyjs.debugMessage('shinyjs: calling function "onevent" with parameters:'); shinyjs.debugMessage(params); shinyjs.onevent(params);});
+Shiny.addCustomMessageHandler('shinyjs-alert', function(params) { shinyjs.debugMessage('shinyjs: calling function "alert" with parameters:'); shinyjs.debugMessage(params); shinyjs.alert(params);});
+Shiny.addCustomMessageHandler('shinyjs-logjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "logjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.logjs(params);});
+Shiny.addCustomMessageHandler('shinyjs-runjs', function(params) { shinyjs.debugMessage('shinyjs: calling function "runjs" with parameters:'); shinyjs.debugMessage(params); shinyjs.runjs(params);});
+Shiny.addCustomMessageHandler('shinyjs-reset', function(params) { shinyjs.debugMessage('shinyjs: calling function "reset" with parameters:'); shinyjs.debugMessage(params); shinyjs.reset(params);});
+Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugMessage('shinyjs: calling function "delay" with parameters:'); shinyjs.debugMessage(params); shinyjs.delay(params);});</script>
+  <script src="assets/shinyjs/shinyjs-default-funcs.js"></script>
+  <script>shinyjs.debug = false;</script>
+  <title>Lok Dhaba</title>
+  <style>
+  table.dataTable tbody th, table.dataTable tbody td {
+       padding: 2px 5px; 
+      }
+  </style>
+</head>
+<body>
+   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href = "https://tcpd.ashoka.edu.in" class="navbar-brand"><img height="20" alt="Brand"
+            src="assets/logo.png" class="img-responsive"></a>
+        </div>
+       <ul class="nav navbar-nav shiny-tab-input" id = "Page" data-tabsetid="5312">
+	  <li class= "active"><a href="#tab-5312-2" data-toggle="tab" data-value="EDV">Data
+      Visualization</a></li> 
+	  <li><a href="#tab-5312-3" data-toggle="tab" data-value="BRS">Browse Data</a></li> 
+	  <li><a href="#tab-3246-1" data-toggle="tab" data-value="DLD">Data Download</a></li> 
+	  <li><a href="#tab-3246-2" data-toggle="tab" data-value="CITE">How to cite us</a></li>
+	</ul>
+
+
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="tab-content">
+    <div class="tab-pane active" data-value="EDV" id="tab-5312-2">
+        <div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+
+          <div class="row" >
+      <div class="col-sm-4">
+        <form class="well">
+          <div class="tabbable">
+            <ul class="nav nav-tabs shiny-tab-input" id="electionType">
+              <li class="active">
+                <a href="#tab-6325-1" data-toggle="tab" data-value="GE">General Elections</a>
+              </li>
+              <li>
+                <a href="#tab-6325-2" data-toggle="tab" data-value="AE">Assembly Elections</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" data-value="GE" id="tab-6325-1">
+                <div id="ge_uitype_selection" class="shiny-html-output"></div>
+                <div id="ge_filter_selection" class="shiny-html-output"></div>
+              </div>
+              <div class="tab-pane" data-value="AE" id="tab-6325-2">
+                <div id="state_selection" class="shiny-html-output"></div>
+                <div id="ae_uitype_selection" class="shiny-html-output"></div>
+                <div id="ae_filter_selection" class="shiny-html-output"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-8">
+        <div id="distPlot" style="width:100%; height:900px; " class="plotly html-widget html-widget-output"></div>
+        <div id="mapPlot" style="width:100%; height:800px; " class="leaflet html-widget html-widget-output"></div>
+      <!--  <div id="radarPlot" style="width:100%; height:700px; " class="d3radar html-widget html-widget-output"></div>-->
+  <button id="bookmark_edv" type="button" class="btn btn-default action-button"
+                    title="Bookmark this application&#39;s state and get a URL
+                    for sharing.">
+                                    <i class="glyphicon glyphicon-link"></i>
+                                                    Bookmark...
+                                                            </button> 
+      </div>
+    </div>
+
+        </div>
+      </div>
+<!-- Browse Data Tab -->
+<div class="tab-pane" data-value="BRS" id="tab-5312-3">
+<!-- code pasted from ui.R -->
+<div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+	  <div class="row" >
+	    <div class="col-sm-3">
+	      <form class="well">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="bd_electiontype_selector">Election Type</label>
+       <div>
+        <select id="bd_electiontype_selector" class="form-control">
+          <option value="" selected>Select Election Type</option>
+          <option value="GE">General Elections</option>
+          <option value="AE">Assembly Elections</option></select>
+          <script type="application/json" data-for="bd_electiontype_selector">{}</script>
+       </div>
+    </div>
+    <div data-display-if="input.bd_electiontype_selector!=&#39;&#39;" data-ns-prefix="">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="bd_state_selector">State Name</label>
+      <div>
+        <select id="bd_state_selector" class="form-control">
+          <option value="" selected>Select State</option></select>
+        <script type="application/json" data-for="bd_state_selector">{}</script>
+      </div>
+    </div>
+    </div>
+    <div data-display-if="input.bd_state_selector!=&#39;&#39;" >
+      <label class="control-label" for="id">Select Assembly</label>                                                                   
+      <div class="form-group shiny-input-container">
+        <div class="checkbox">
+          <label>
+            <input id="bd_select_all_assemblies" type="checkbox"/> 
+            <span>Select All</span>
+          </label>
+        </div>
+      </div>
+      <div id="bd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+        <div class="shiny-options-group"></div>
+      </div>
+
+  <button id="bookmark_bd" type="button" class="btn btn-default action-button"
+                    title="Bookmark this application&#39;s state and get a URL
+                    for sharing.">
+                                    <i class="glyphicon glyphicon-link"></i>
+                                                    Bookmark...
+                                                            </button> 
+    </div>
+  </form>
+  </div>
+	    <div class="col-sm-9">
+    <div data-display-if="input.bd_year_selector.length!=0" data-ns-prefix=""> 
+      <div id="bd_variablenames_selector" style="width:100%; height:auto;"
+        class="datatables html-widget html-widget-output">
+      </div>
+    </div>
+</div>
+</div>
+</div>
+<!--paste till here -->
+</div>
+<!-- Data download tab  -->
+    <div class="tab-pane" data-value="DLD" id="tab-3246-1">
+  <div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+
+	  <div class="row" >
+	    <div class="col-sm-3">
+	      <form class="well">
+          <div class="form-group shiny-input-container">
+            <label class="control-label" for="dd_electiontype_selector">Election Type</label>
+            <div>
+              <select id="dd_electiontype_selector" class="form-control"><option value="" selected>Select Election Type</option>
+<option value="GE">General Elections</option>
+<option value="AE">Assembly Elections</option></select>
+              <script type="application/json" data-for="dd_electiontype_selector">{}</script>
+            </div>
+          </div>
+          <div data-display-if="input.dd_electiontype_selector!=&#39;&#39;">
+            <div class="form-group shiny-input-container">
+              <label class="control-label" for="dd_state_selector">State Name</label>
+              <div>
+                <select id="dd_state_selector" class="form-control"><option value="" selected>Select</option></select>
+                <script type="application/json" data-for="dd_state_selector">{}</script>
+              </div>
+            </div>
+          </div>
+          <div data-display-if="input.dd_state_selector!=&#39;&#39;">
+                     <label class="control-label" for="id">Select Assembly</label>                                                                   
+<div class="form-group shiny-input-container">
+  <div class="checkbox">
+    <label>                                                                                                                                                
+      <input id="dd_select_all_assemblies" type="checkbox"/>                                                                                               
+      <span>Select All</span>
+    </label> 
+</div>
+</div>
+                  <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
+                   <div class="shiny-options-group"></div>
+                 </div>
+	    <span style="font-size:12px">*After selecting one or more assemblies please scroll down to accept terms and conditions and download the electoral data</span>
+    </div>
+	  </div>
+	    </form>
+	    <div class="col-sm-9">
+	      <div data-display-if="input.dd_year_selector.length!=0">
+		<div style="text-align:center"><div class="tcpd-h3">Variable Names and Description</div></div>
+		<div id="dd_variablenames_selector" style="width:100%; height:100%; " class="datatables html-widget html-widget-output"></div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <div class="col-sm-12">
+	      <div data-display-if="input.dd_year_selector.length!=0">
+		<!-- place for terms and condition -->
+		<!-- <div class="banner"> -->
+		<!--   <span class="b-subheading"> -->
+		<!--     <pre id="dd_terms_and_conditions" class="shiny-text-output noplaceholder"></pre> -->
+		<!--   </span> -->
+		<!-- </div> -->
+		<div style="border-bottom: 2px solid #999999;"></div>                                                                                 		     <div id="dd_terms_and_conditions" class="shiny-html-output"></div>
+		<div style="border-bottom: 2px solid #999999;"></div>                                                                                 
+	      <!-- place for checkbox declaration -->
+	      <div class="form-group shiny-input-container" style="width:100%;margin-left:none;">
+	      <div style="text-align:center">
+		<div class="checkbox">
+
+		  <label>
+		    <input id="dd_accept_condition" type="checkbox" />
+<!--checked="checked"/>-->
+		    <span>I accept the terms and conditions mentioned here.</span>
+		  </label>
+		</div>
+	      </div>
+	      </div>
+	      </div>
+	      </div>
+	    <div class="col-sm-12">
+	      <!-- Place for simple check -->
+	      <div data-display-if="input.dd_year_selector.length!=0 && input.dd_accept_condition!=0">
+		<!-- <div data-display-if="input.dd_variablenames_selector_rows_selected.length==0"> -->
+		<!--   <div style="width:900px; margin-left:auto"> **Please select at least one variable in the above table</div> -->
+		<!-- </div> -->
+	      <!-- Place for download button -->
+		<!-- <div data-display-if="input.dd_variablenames_selector_rows_selected.length!=0"> -->
+		  <div style="text-align:center">
+		  <a id="dd_download_button" class="btn btn-default tcpd-button-wrap tcpd-button primary shiny-download-link " href="" target="_blank" download>
+		    <i class="fa fa-download"></i>
+		    Download
+		  </a>
+		  </div>
+		  <!-- <button id="dd_download_button" type="button" class="btn  btn-default tcpd-button-wrap tcpd-button primary action-button" style="margin-left:500px">Download</button> -->
+		<!-- </div> -->
+	
+	      </div>
+	    </div>
+	   </div>
+
+	  </div>
+    </div>
+<!--      <div class="tab-pane" data-value="CONTACTUS" id="tab-3246-1">
+        <div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+
+          <div id="contactus" class="shiny-html-output"></div>
+        </div>
+      </div> -->
+      <div class="tab-pane" data-value="CITE" id="tab-3246-2">
+        <div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+          <div id="howtocite" class="shiny-html-output"></div>
+        </div>
+      </div>
+
+
+<!-- UP Summary tab opened on election report viewing -->
+      <!-- <div class="tab-pane" data-value="UP" id="tab-3246-1"> -->
+      <!--   <div class="container-fluid"> -->
+      <!--     <div id="UPSummary" class="shiny-html-output"></div> -->
+      <!--   </div> -->
+      <!-- </div> -->
+<!-- UK Summary tab opened on election report viewing -->
+      <!-- <div class="tab-pane" data-value="UK" id="tab-3246-2"> -->
+      <!--   <div class="container-fluid"> -->
+      <!--     <div id="UKSummary" class="shiny-html-output"></div> -->
+      <!--   </div> -->
+      <!-- </div> -->
+<!-- Punjab Summary tab opened on election report viewing -->
+      <!-- <div class="tab-pane" data-value="PB" id="tab-3246-3"> -->
+      <!--   <div class="container-fluid"> -->
+      <!--     <div id="PBSummary" class="shiny-html-output"></div> -->
+      <!--   </div> -->
+      <!-- </div> -->
+   </div>
+  </div>
+</body>
+</html>
+
