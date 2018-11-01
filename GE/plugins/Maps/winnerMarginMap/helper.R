@@ -65,7 +65,7 @@ plotMap<-function(year, margins, plot, envr){
       });
       
       #addpolygon for coloured display and add legend
-      title<-paste0("Constituency wise winners' margin for loksabha in",yr)
+      title<-paste0("Constituency wise winners' margin for Lok Sabha in ",yr)
 
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,

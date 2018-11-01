@@ -84,7 +84,7 @@ pal<-leaflet::colorBin(cols,bins=PartyPositionsMapBreakupList(),na.color="white"
       });
       print(legendvalues)
       #addpolygon for coloured display and add legend
-      title<-paste0("Party wise positions for ",partyname," in loksabha - ",yr)
+      title<-paste0("Party wise positions for ",partyname," in Lok Sabha ",yr)
 
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,

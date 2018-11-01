@@ -1,7 +1,7 @@
   ###################Specific for voteshare chart visualization##########################################
   getOptions<-function(options,envr){
     #browser()
-    assign(options,c("Total Candidates","Deposit Saved"),env=envr)
+    assign(options,c("Total Candidates","Deposit Lost"),env=envr)
   }
 
   plotChart<-function( options , plot,envr){
@@ -19,7 +19,7 @@
         base<<-add_trace(base,y=~get(n),name=x, type ='bar')
         }
         )
-      thistitle<-paste0('Contested and deposit saved across years in LokSabha')
+      thistitle<-paste0('Contested and deposit lost across years in LokSabha')
       xtitle<-''
       ytitle<-'Number of Candidates'
       yrange <-c(0,15000)

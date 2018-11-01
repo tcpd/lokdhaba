@@ -1,0 +1,24 @@
+If running in a container:
+
+starting from a container like rocker/shiny
+docker run -it -p 3838:3838 --name lokdhaba rocker/shiny
+docker run -d -p 3838:3838  -v /root/tcpd/:/srv/shiny-server/ -v /root/tcpd/:/var/log/ -it rocker/shiny /usr/bin/shiny-server
+
+docker exec -it lokdhaba bash
+# install these packages
+apt-get install libssl-dev
+apt-get install libudunits2-dev
+apt-get install libgdal-dev
+
+In R,
+
+install.packages(c('shiny', 'rmarkdown','reshape2','devtools'), repos='https://cran.rstudio.com/')
+install.packages(c('mapview','rgdal', 'leaflet','shinyjs','shinythemes'), repos='https://cran.rstudio.com/')
+devtools::install_github('ropensci/plotly')
+install.packages(c('leaflet.extras', 'DT'))
+shiny::runApp('~/workspace/lokdhaba') (if ~/workspace/lokdhaba is where the lokdhaba git repo has been checked out)
+
+# sudo docker run -d -p 3838:3838     -v /root/tcpd/:/srv/shiny-server/ -v /root/tcpd/:/var/log/     -it tcpd/shiny-lokdhaba /usr/bin/shiny-server
+
+Optionally, you can directly use the container ashokatcpd/shiny-lokdhaba 
+

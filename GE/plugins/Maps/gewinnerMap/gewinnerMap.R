@@ -60,7 +60,7 @@ plotMap<-function( year, parties, plot, envr){
       sset$color<-pal(as.character(sset$Party))
 
       #addpolygon for coloured display and add legend
-      title<-paste0("Constituency wise party winners for Loksabha in ",yr)
+      title<-paste0("Constituency wise party winners for Lok Sabha in ",yr)
 
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,

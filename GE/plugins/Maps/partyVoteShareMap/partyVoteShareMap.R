@@ -77,7 +77,7 @@ plotMap<-function(year,party,  options, plot, envr){
       });
       #print(legendvalues)
       #addpolygon for coloured display and add legend
-      title<-paste0("Vote share for",partyname," in loksabha -",yr)
+      title<-paste0("Vote share for ",partyname," in Lok Sabha ",yr)
 
       base<-base %>% 
         addPolygons(stroke = TRUE, fillOpacity = 1, smoothFactor = 1,
