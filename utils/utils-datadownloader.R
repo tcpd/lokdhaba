@@ -18,7 +18,10 @@ getYearList<-function(statename,type="ge"){
   aa<-getUniqueANoWithYears(a,"Assembly_No")
   aa$Assembly_No<-as.numeric(trimws(aa$Assembly_No))
   aa$ano<-Vectorize(getStringFormatOfNumber)(aa$Assembly_No)
-  }else{
+  }else if(toupper(statename)=="ALL"){
+      
+  }
+  else{
     #otherwise return only election year of that state
   statenamemodified<- gsub(" ","_",statename)
     filename<-paste0("../tcpd_data/data/AE/Data/",statenamemodified,"/derived/mastersheet.csv")
@@ -84,9 +87,16 @@ getMastersheetData<-function(electiontype,statename,electionyears){
     ms<-subset(ms,ms$State_Name==statenamemodified)
   }
  }else if(trimws(toupper(electiontype))=="AE"){
+   
    ano<-"Assembly_No"
 #   print('reading data AE..')
-   ms<-read.csv(paste0("../tcpd_data/data/AE/Data/",statenamemodified,"/derived/mastersheet.csv"),stringsAsFactors=FALSE)
+   if(toupper(statenamemodified)=="ALL"){
+     ms<- read.csv("../tcpd_data/data/AE/Analysis_Data/Consolidated_AE_mastersheet.csv",stringsAsFactors=FALSE)
+   }
+   else{
+     ms<-read.csv(paste0("../tcpd_data/data/AE/Data/",statenamemodified,"/derived/mastersheet.csv"),stringsAsFactors=FALSE)
+   }
+   
  }else{
    stop('Some serious issue as only possible options are AE(assembly election)/GE(general election)')
  }

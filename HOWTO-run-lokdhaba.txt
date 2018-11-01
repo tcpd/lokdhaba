@@ -16,7 +16,8 @@ install.packages(c('shiny', 'rmarkdown','reshape2','devtools'), repos='https://c
 install.packages(c('mapview','rgdal', 'leaflet','shinyjs','shinythemes'), repos='https://cran.rstudio.com/')
 devtools::install_github('ropensci/plotly')
 install.packages(c('leaflet.extras', 'DT'))
-shiny::runApp('~/workspace/lokdhaba') (if ~/workspace/lokdhaba is where the lokdhaba git repo has been checked out)
+
+#shiny::runApp('~/workspace/lokdhaba') (if ~/workspace/lokdhaba is where the lokdhaba git repo has been checked out)
 
 # sudo docker run -d -p 3838:3838     -v /root/tcpd/:/srv/shiny-server/ -v /root/tcpd/:/var/log/     -it tcpd/shiny-lokdhaba /usr/bin/shiny-server
 
