@@ -1,3 +1,6 @@
+list.of.packages <- c("reshape2","leaflet","plotly","shinyjs","mapview","DT","rgdal","dplyr","leaflet.extras","data.table","devtools")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
 library(shiny)
 library(reshape2)
 library(leaflet)
