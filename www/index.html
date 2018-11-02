@@ -43,7 +43,9 @@
   <!-- <script src="assets/shinyTree/jsTree-3.0.2/jstree.min.js"></script> -->
   <!-- <script src="assets/shinyTree/shinyTree.js"></script> -->
 
-  <style>.shinyjs-hide { display: none !important; }</style>
+  <style>.shinyjs-hide { display: none !important; }
+	form.well{padding : 0px 20px}
+  </style>
   <script>Shiny.addCustomMessageHandler('shinyjs-show', function(params) { shinyjs.debugMessage('shinyjs: calling function "show" with parameters:'); shinyjs.debugMessage(params); shinyjs.show(params);});
 Shiny.addCustomMessageHandler('shinyjs-hide', function(params) { shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:'); shinyjs.debugMessage(params); shinyjs.hide(params);});
 Shiny.addCustomMessageHandler('shinyjs-toggle', function(params) { shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:'); shinyjs.debugMessage(params); shinyjs.toggle(params);});
@@ -116,6 +118,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
                 <a href="#tab-6325-3" data-toggle="tab" data-value="AE">Vidhan Sabha</a>
               </li>
             </ul>
+	    <br/>
             <div class="tab-content" data-tabsetid="6325">
               <div class="tab-pane " data-value="GE" id="tab-6325-2">
                 <div id="ge_uitype_selection" class="shiny-html-output"></div>

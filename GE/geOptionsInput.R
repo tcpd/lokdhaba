@@ -51,8 +51,7 @@ geOptionsInput <- function(input, output, session,dname,conmanager) {
     
     #Create a selection input box
     chartmaptitles<<-titles
-    selectInput("ge_I_chart_map_name","Visualization
-                Type",c("Chart/Map"="",titles),selectize =
+    selectInput("ge_I_chart_map_name","Visualization",c("Chart/Map"="",titles),selectize =
     TRUE,selected=conmanager$getval("ge_I_chart_map_name",""))
     
   })

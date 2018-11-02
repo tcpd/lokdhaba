@@ -1,0 +1,40 @@
+If running in a container:
+
+#starting from ashokatcpd docker hub container  :
+docker run -d -p 3838:3838 --name lokdbaha -v /root/tcpd/:/srv/shiny-server/ -v /root/tcpd/:/var/log/ -it ashokatcpd/lokdhaba_shiny
+
+
+
+starting from rocker/shiny container :
+docker run  -d -it -p 3838:3838 --name lokdhaba rocker/shiny
+docker exec -it lokdhaba bash
+# install these packages
+$apt-get install libssl-dev
+$apt-get install libudunits2-dev
+$apt-get install libgdal-dev
+
+In $R,
+
+>install.packages(c('shiny', 'rmarkdown','reshape2','devtools'), repos='https://cran.rstudio.com/')
+>install.packages(c('mapview','rgdal', 'leaflet','shinyjs','shinythemes'), repos='https://cran.rstudio.com/')
+>devtools::install_github('ropensci/plotly')
+>install.packages(c('leaflet.extras', 'DT'))
+>install.packages("shinydashboard")
+
+#commit the updated container to local repository
+$ docker commit lokdhaba lokdhabalocal
+# push to docker hub
+# docker hub username password  : "ashokatcpd"
+$ docker login
+$ docker tag lokdhaba ashokatcpd/lokdhaba_shiny
+$ docker push ashokatcpd/lokdhaba_shiny
+
+
+## Run lokdhaba from shiny
+# > shiny::runApp('~/workspace/lokdhaba') (if ~/workspace/lokdhaba is where the lokdhaba git repo has been checked out)
+
+## earlier commands 
+# sudo docker run -d -p 3838:3838     -v /root/tcpd/:/srv/shiny-server/ -v /root/tcpd/:/var/log/     -it tcpd/shiny-lokdhaba /usr/bin/shiny-server
+
+#Optionally, you can directly use the container ashokatcpd/lokdhabatest 
+

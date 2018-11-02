@@ -28,7 +28,7 @@ lst<-getValidStateNamesForElectionType("AE")
     b<-lapply((lst),function(x) gsub("_"," ",x))
     #Create a selection input box
     #print(b)
-    selectInput("I_state_name","State Name",c("State Name"="",b),selectize = TRUE,selected=conmanager$getval("I_state_name",""))
+    selectInput("I_state_name","State",c("State"="",b),selectize = TRUE,selected=conmanager$getval("I_state_name",""))
     
   })
   
@@ -74,7 +74,7 @@ lst<-getValidStateNamesForElectionType("AE")
     #Create a selection input box
     #print(titles)
     chartmaptitles<<-titles
-    selectInput("ae_I_chart_map_name","Visualization Type",c("Chart/Map"="",titles),selectize = TRUE,selected=conmanager$getval("ae_I_chart_map_name",""))
+    selectInput("ae_I_chart_map_name","Visualization",c("Chart/Map"="",titles),selectize = TRUE,selected=conmanager$getval("ae_I_chart_map_name",""))
     
   })
 
