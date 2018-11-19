@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.22.0/polyfill.min.js"></script>
   <link href="shared/shiny.css" rel="stylesheet" />
   <script src="shared/shiny.min.js"></script>
+  <script src = "metadata_lokdhaba.js"></script>
   <script src="https://use.fontawesome.com/1e3e72b187.js"></script>
   <script src="assets/htmlwidgets-0.8/htmlwidgets.js"></script>
   <link href="assets/plotlyjs-1.20.2/plotly-htmlwidgets.css" rel="stylesheet" />
@@ -18,7 +19,7 @@
   <script src="assets/leaflet-0.7.7/leaflet.js"></script>
   <link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
   <link href="assets/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
-  
+
   <script src="assets/leaflet-label-0.2.2/leaflet.label.js"></script>
   <script src="assets/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
   <script src="assets/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
@@ -31,14 +32,14 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>  
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <script src="assets/AdminLTE-2.0.6/AdminLTE.min.css"></script>
 <script src="assets/AdminLTE-2.0.6/_all-skins.min.css"></script>
 <script src="assets/AdminLTE-2.0.6/app.min.js"></script>
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js'></script>
 <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-<script src="assets/datatables-binding-0.2/datatables.js"></script> 
+<script src="assets/datatables-binding-0.2/datatables.js"></script>
   <!-- <link rel="stylesheet" type="text/css" href="assets/shinyTree/jsTree-3.0.2/themes/default/style.min.css"/> -->
   <!-- <script src="assets/shinyTree/jsTree-3.0.2/jstree.min.js"></script> -->
   <!-- <script src="assets/shinyTree/shinyTree.js"></script> -->
@@ -67,7 +68,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
   <title>Lok Dhaba</title>
   <style>
   table.dataTable tbody th, table.dataTable tbody td {
-       padding: 2px 5px; 
+       padding: 2px 5px;
       }
   </style>
 </head>
@@ -88,9 +89,9 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
         <a href="#tab-5312-1" data-toggle="tab"></a>
       </li>
 	  <li class= "active"><a href="#tab-5312-2" data-toggle="tab" data-value="EDV">Data
-      Visualization</a></li> 
-	  <li><a href="#tab-5312-3" data-toggle="tab" data-value="BRS">Browse Data</a></li> 
-	  <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li> 
+      Visualization</a></li>
+	  <li><a href="#tab-5312-3" data-toggle="tab" data-value="BRS">Browse Data</a></li>
+	  <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li>
 	  <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">How to cite us</a></li>
 	</ul>
 
@@ -123,7 +124,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
               <div class="tab-pane " data-value="GE" id="tab-6325-2">
                 <div id="ge_uitype_selection" class="shiny-html-output"></div>
                 <div id="ge_filter_selection" class="shiny-html-output"></div>
-                 
+
               </div>
               <div class="tab-pane active" data-value="AE" id="tab-6325-3">
                 <div id="state_selection" class="shiny-html-output"></div>
@@ -182,11 +183,11 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
     </div>
     </div>
     <div data-display-if="input.bd_state_selector!=&#39;&#39;" >
-      <label class="control-label" for="id">Select Assembly</label>                                                                   
+      <label class="control-label" for="id">Select Assembly</label>
       <div class="form-group shiny-input-container">
         <div class="checkbox">
           <label>
-            <input id="bd_select_all_assemblies" type="checkbox"/> 
+            <input id="bd_select_all_assemblies" type="checkbox"/>
             <span>Select All</span>
           </label>
         </div>
@@ -200,12 +201,12 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
                     for sharing.">
                                     <i class="glyphicon glyphicon-link"></i>
                                                     Bookmark...
-                                                            </button> 
+                                                            </button>
     </div>
   </form>
   </div>
 	    <div class="col-sm-9">
-    <div data-display-if="input.bd_year_selector.length!=0" data-ns-prefix=""> 
+    <div data-display-if="input.bd_year_selector.length!=0" data-ns-prefix="">
       <div id="bd_variablenames_selector" style="width:100%; height:auto;"
         class="datatables html-widget html-widget-output">
       </div>
@@ -248,7 +249,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
                   <label class="control-label" for="id">Select Assembly</label>                                                       <div class="form-group shiny-input-container">
                     <div class="checkbox">
                         <label>                                                                                                             <input id="dd_select_all_assemblies" type="checkbox"/>                                                              <span>Select All</span>
-                        </label> 
+                        </label>
                     </div>
                   </div>
                   <div id="dd_year_selector" class="form-group shiny-input-checkboxgroup shiny-input-container">
@@ -269,7 +270,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 	          <div class="col-sm-12">
 	            <div data-display-if="input.dd_year_selector.length!=0">
 		            <div style="border-bottom: 2px solid #999999;"></div>                                                               <div id="dd_terms_and_conditions" class="shiny-html-output"></div>
-		            <div style="border-bottom: 2px solid #999999;"></div>                                                                                 
+		            <div style="border-bottom: 2px solid #999999;"></div>
 	      <!-- place for checkbox declaration -->
 	              <div class="form-group shiny-input-container" style="width:100%;margin-left:none;">
 	                <div style="text-align:center">
@@ -294,14 +295,14 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 		              Download
 		            </a>
 		          </div>
-		
+
 	          </div>
 	         </div>
 	        </div>
 
 	  </div>
       </div>
-<!-- Cite Tab -->    
+<!-- Cite Tab -->
       <div class="tab-pane" data-value="CITE" id="tab-5312-5">
         <div class="container-fluid">
 	  <div class="banner">
@@ -315,4 +316,3 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
   </div>
 </body>
 </html>
-
