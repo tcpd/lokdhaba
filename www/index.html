@@ -89,6 +89,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
       Visualization</a></li> 
 	  <li><a href="#tab-5312-3" data-toggle="tab" data-value="BRS">Browse Data</a></li> 
 	  <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li> 
+	  <li><a href="#tab-5312-6" data-toggle="tab" data-value="KYN">Know Your Neta</a></li> 
 	  <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">How to cite us</a></li>
 	</ul>
 
@@ -298,6 +299,44 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 
 	  </div>
       </div>
+<!-- Know Your Neta tab -->
+      <div class="tab-pane" data-value="KYN" id="tab-5312-6">
+<div class="container-fluid">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+	  <div class="row" >
+	    <div class="col-sm-3">
+	      <form class="well">
+    <div class="form-group shiny-input-container">
+    <label class="control-label" for="kyn_pid_selector">PID</label>
+       <div>
+        <select id="kyn_pid_selector" class="form-control">
+          <option value="" selected>Select pid</option>
+          <script type="application/json" data-for="bd_electiontype_selector">{}</script>
+       </div>
+    </div>
+
+  <button id="bookmark_kyn" type="button" class="btn btn-default action-button"
+                    title="Bookmark this application&#39;s state and get a URL
+                    for sharing.">
+                                    <i class="glyphicon glyphicon-link"></i>
+                                                    Bookmark...
+                                                            </button> 
+    </div>
+  </form>
+  </div>
+	    <div class="col-sm-9">
+    <div data-display-if="input.kyn_pid_selector.length!=0" data-ns-prefix=""> 
+      <div id="kyn_table" style="width:100%; height:auto;"
+        class="datatables html-widget html-widget-output">
+      </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
 <!-- Cite Tab -->    
       <div class="tab-pane" data-value="CITE" id="tab-5312-5">
         <div class="container-fluid">

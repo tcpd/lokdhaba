@@ -13,6 +13,7 @@ source("DataDownloader/browseDataOptions.R")
 source("utils/utils-classes.R")
 source("utils/utils-lokdhaba.R")
 source("utils/utils-charts-ui.R")
+source("kynoptions.R")
 library(rgdal)
 library(dplyr)
 library(leaflet.extras)
@@ -215,6 +216,7 @@ shinyServer <- function(input, output, session) {
   ####################of index.html
   dataDownloadOptions(input,output,session,"AE/",conmanager)
   browseDataOptions(input,output,session,conmanager)
+  KnowYourNetaOptions(input,output,session,conmanager)
 
   
   
