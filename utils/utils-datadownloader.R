@@ -145,3 +145,52 @@ getLegendIntervals <- function(vals,x){
   indxs <- findInterval(x,as.numeric(ints))
   return(tmp[indxs])
 }
+
+
+getPidData<- function(fpid){
+  meta_pids <- read.csv("../tcpd_data/data/pid_meta.csv",stringsAsFactors = F,na.strings = "")
+  all_data <- NA
+  if(fpid %in% unique(meta_pids$pid)){
+    d1 <- subset(meta_pids,pid == fpid)
+    ae_states <- unique(d1$State_Name[which(d1$Election_Type=="Vidhan_Sabha")])
+    ae_data <-NULL
+    for(st in ae_states){
+      st_data <- read_csv(paste0("../tcpd_data/data/AE/Data/",st,"/derived/mastersheet.csv"))
+      st_data <- subset(st_data,pid==fpid)
+      ae_data <- rbind(ae_data,st_data)
+    }
+    ge_data <- NULL
+    if("Lok_Sabha" %in% d1$Election_Type){
+      ge_data <- read_csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
+      ge_data <- subset(ge_data,pid == fpid)
+    }
+    if(!is.null(ge_data)){
+      ge_data[names(ae_data[which(!names(ae_data)%in% names(ge_data))])] <- NA
+    }
+    ae_data$Election_Type <- "Lok_Sabha"
+    ge_data$Election_Type <- "Vidhan_Sabha"
+    all_data <- rbind(ae_data,ge_data)
+    remove(ae_data)
+    remove(ge_data)
+    remove(st_data)
+    
+  }else{
+    pid_st <- substr(fpid, 3, 4)
+    pid_et <- substr(fpid,1,2)
+    
+    if(pid_et =="GE"){
+      all_data <- read_csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
+      all_data <- subset(all_data,pid == fpid)
+    }else{
+      st_codes <- read.csv("../tcpd_data/data/state_codes.csv",stringsAsFactors = F,strip.white = T)
+      state <- as.character(subset(st_codes,ST_NAME == pid_st,select=c("State_Name")))
+      if(length(state)>1)print("morethan one states")
+      if(length(state)==1){
+        all_data <- read_csv(paste0("../tcpd_data/data/AE/Data/",state,"/derived/mastersheet.csv"))
+        all_data <- subset(all_data,pid==fpid)
+      }
+    }
+    
+  }
+  return(all_data)
+}
