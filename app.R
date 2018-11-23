@@ -6,7 +6,7 @@ library(shinyjs)
 library(mapview)
 library(shinydashboard)
 library(DT)
-library(readr)
+#library(readr)
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
@@ -132,7 +132,7 @@ shinyServer <- function(input, output, session) {
   ####### connection failure.
   ##Create an object of connectionmanager class
   cls<-getRefClass("ConnectionRestoreManager")
-  conmanager<-cls$new()
+ conmanager<-cls$new()
   
   isolate({
     lapply(names(input),function(x){

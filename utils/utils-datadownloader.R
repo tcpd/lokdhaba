@@ -161,7 +161,7 @@ getPidData<- function(fpid){
     }
     ge_data <- NULL
     if("Lok_Sabha" %in% d1$Election_Type){
-      ge_data <- read_csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
+      ge_data <- read.csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv",stringsAsFactors = F,strip.white = T)
       ge_data <- subset(ge_data,pid == fpid)
     }
     if(!is.null(ge_data)){
@@ -179,14 +179,15 @@ getPidData<- function(fpid){
     pid_et <- substr(fpid,1,2)
     
     if(pid_et =="GE"){
-      all_data <- read_csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
+      all_data <- read.csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv",stringsAsFactors = F)
       all_data <- subset(all_data,pid == fpid)
-    }else{
+    }else if(pid_et=="AE"){
       st_codes <- read.csv("../tcpd_data/data/state_codes.csv",stringsAsFactors = F,strip.white = T)
       state <- as.character(subset(st_codes,ST_NAME == pid_st,select=c("State_Name")))
       if(length(state)>1)print("morethan one states")
       if(length(state)==1){
-        all_data <- read_csv(paste0("../tcpd_data/data/AE/Data/",state,"/derived/mastersheet.csv"))
+        print(state)
+        all_data <- read.csv(paste0("../tcpd_data/data/AE/Data/",state,"/derived/mastersheet.csv"),stringsAsFactors = F)
         all_data <- subset(all_data,pid==fpid)
       }
     }
