@@ -2,41 +2,45 @@ source('utils/utils-datadownloader.R')
 library(DT)
 # library(shinyTree)
 KnowYourNetaOptions <- function(input, output, session,conmanager) {
-	ae_data <- read_csv("../tcpd_data/data/AE/Analysis_Data/Consolidated_AE_mastersheet.csv")
-	ge_data <- read_csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
-	ge_data[names(ae_data)[which(! names(ae_data) %in% names(ge_data))]] <-NA
-
-	ge_data$Election_Type <- "Lok_Sabha"
-	ae_data$Election_Type <- "Vidhan_Sabha"
-	all_data <- rbind(ge_data,ae_data)
+  
+# 	ae_data <- read_csv("../tcpd_data/data/AE/Analysis_Data/Consolidated_AE_mastersheet.csv")
+# 	ge_data <- read_csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
+# 	ge_data[names(ae_data)[which(! names(ae_data) %in% names(ge_data))]] <-NA
+# 
+# 	ge_data$Election_Type <- "Lok_Sabha"
+# 	ae_data$Election_Type <- "Vidhan_Sabha"
+# 	all_data <- rbind(ge_data,ae_data)
   ##Variable to store the values used across functions
   current_filters<-c()
   observe({
-    shiny::updateSelectInput(session,"kyn_pid_selector",selected = conmanager$getval("kyn_pid_selector",""))
-    
+    shiny::updateTextInput(session,"kyn_pid_selector",value = conmanager$getval("kyn_pid_selector",""))
+    #print(conmanager$getval("kyn_pid_selector",""))
   })
   #####################Filling in the state names from the state csv file, ideally it should be filled from 
   #####################StateNameNormalized file
   ###Get's triggered on initialization of state_selection UI
-  observe({
-      a<-unique(all_data$pid)
-      #print(paste0('Reading state lists for election type ',input$dd_electiontype_selector))
-      a <- a[-which(is.na(a))]
-      shiny::updateSelectizeInput(session,inputId = "kyn_pid_selector",choices = c("Select =",a),selected = conmanager$getval("kyn_pid_selector",""))
-      current_filters$pid <- input$kyn_pid_selector
-
-  })
+  # observe({
+  #     #shiny::updateSelectizeInput(session,inputId = "kyn_pid_selector",choices = c("Select =",a),selected = conmanager$getval("kyn_pid_selector",""))
+  #     current_filters$pid <- input$kyn_pid_selector
+  #     print(current_filters$pid)
+  # 
+  # })
   
   ##Filling of tree after the selection of statename..
   
 
   ##Rendering of variable information table
-  output$kyn_table<- renderDataTable(
+  output$kyn_table<- DT::renderDataTable(
     options= list(pageLength=100,sDom = '<"top">lrt<"bottom">ip'),
-    filter="top",selection= "multiple",rownames=F,{
-      print("rerendring browse data.")
-      print(paste(current_filters$pid))
-      dframe <- subset(all_data,pid == current_filters$pid) 
+    filter="top",selection= "single",rownames=F,{
+      #browser()
+      print("rerendering know your neta data.")
+      print(paste(session$input$kyn_pid_selector))
+      # all_data <- as.data.frame(session$input$kyn_pid_selector)
+      # return(all_data)
+      
+    dframe <- getPidData(session$input$kyn_pid_selector)
+    if(!is.na(dframe)){
       c_names <- colnames(dframe)
       prior <- c("State_Name","Year","Candidate","Sex","Party","Constituency_Name","Position")
       last <- c("ENOP","DelimID","Assembly_No","Constituency_No","month")
@@ -59,9 +63,13 @@ KnowYourNetaOptions <- function(input, output, session,conmanager) {
       n[which(n=="Vote_Share_Percentage")] <- "Vote Share %"
       n[which(n=="Constituency_No")] <- "Const. No."
       n[which(n=="Deposit_Lost")] <- "Deposit Lost"
-
+      
       names(sub) <- n
-      return(sub)
+      return(sub) 
+    }else{
+      return(NULL)
+    }
+     
     #datatable(getVariableInfo(input$bd_electiontype_selector),#current_filters$electiontype),
     #          rownames=F,
     #          style='bootstrap',

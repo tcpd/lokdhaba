@@ -208,6 +208,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
         class="datatables html-widget html-widget-output">
       </div>
     </div>
+
 </div>
 </div>
 </div>
@@ -310,11 +311,9 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 	    <div class="col-sm-3">
 	      <form class="well">
     <div class="form-group shiny-input-container">
-    <label class="control-label" for="kyn_pid_selector">PID</label>
+    <label  for="kyn_pid_selector">PID</label>
        <div>
-        <select id="kyn_pid_selector" class="form-control">
-          <option value="" selected>Select pid</option>
-          <script type="application/json" data-for="bd_electiontype_selector">{}</script>
+        <input id="kyn_pid_selector" class="form-control" type="text" value="">
        </div>
     </div>
 
@@ -324,16 +323,15 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
                                     <i class="glyphicon glyphicon-link"></i>
                                                     Bookmark...
                                                             </button> 
-    </div>
   </form>
   </div>
 	    <div class="col-sm-9">
-    <div data-display-if="input.kyn_pid_selector.length!=0" data-ns-prefix=""> 
+    <div data-display-if="input.kyn_pid_selector!=''" data-ns-prefix=""> 
       <div id="kyn_table" style="width:100%; height:auto;"
         class="datatables html-widget html-widget-output">
       </div>
     </div>
-</div>
+	</div>
 </div>
 </div>
 </div>

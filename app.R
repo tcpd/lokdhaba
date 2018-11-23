@@ -6,6 +6,7 @@ library(shinyjs)
 library(mapview)
 library(shinydashboard)
 library(DT)
+library(readr)
 source("AE/aeOptionsInput.R")
 source("GE/geOptionsInput.R")
 source("DataDownloader/dataDownloadOptions.R")
@@ -13,104 +14,104 @@ source("DataDownloader/browseDataOptions.R")
 source("utils/utils-classes.R")
 source("utils/utils-lokdhaba.R")
 source("utils/utils-charts-ui.R")
-source("kynoptions.R")
+source("DataDownloader/kynoptions.R")
 library(rgdal)
 library(dplyr)
 library(leaflet.extras)
 shiny::addResourcePath("shinyjs", "www/assets/shinyjs")
-
-ui<-function(request){
-  navbarPage(
-	#      tags$head(
-	# 	       tags$link(rel= "stylesheet",type="text/css",href="shared/shiny.css"),
-	# 	       tags$link(rel="stylesheet",type="text/css",href="assets/style.css")
-	# 			 
-	# 	       ),
-	     id="Page"
-	     ,title=div(img(src="www/assets/logo.png"))
-             ,windowTitle = "LokDhaba"
-             ,useShinyjs()
-             ,selected="EDV"
-             ,tabPanel(tagList(br(),h4("Election Data Visualization")),
-                       dashboardPage(
-                         dashboardHeader(disable = TRUE),
-                         dashboardSidebar(
-                           tabsetPanel(id="electionType",
-                                       selected = "AE",
-                                       tabPanel("General Elections",
-                                                tagList(
-                                                  uiOutput("ge_uitype_selection"),
-                                                  uiOutput("ge_filter_selection")
-                                                )
-                                                ,value="GE"),
-                                       tabPanel("Assembly Elections",
-                                                tagList(
-                                                  uiOutput("state_selection"),
-                                                  uiOutput("ae_uitype_selection"),
-                                                  uiOutput("ae_filter_selection"))
-                                                ,value="AE")
-                           )),
-                         dashboardBody(
-                           plotlyOutput("distPlot")
-                           ,leafletOutput("mapPlot")
-                           ,bookmarkButton(id="bookmark_edv")
-                           
-                         )
-                         
-                       )
-                       ,value="EDV"),
-             tabPanel(tagList(br(),h4("Data Download")),
-                      basicPage(
-                        tagList(
-                          selectizeInput("dd_electiontype_selector","Election Type",choices = c("Select Election Type"="","General Elections"="GE","Assembly Elections"="AE")),
-                          conditionalPanel(
-                            condition="input.dd_electiontype_selector!=''",
-                            selectizeInput("dd_state_selector","State Name",choices=c("Select State"=""))
-                          ),
-                          conditionalPanel(
-                            condition="input.dd_state_selector!=''",
-                            checkboxGroupInput("dd_year_selector","Years",choices=c())
-                          ),
-                          conditionalPanel(
-                            condition="input.dd_year_selector.length!=0",
-                            DT::dataTableOutput("dd_variablenames_selector")
-                            , downloadButton("id","label")
-                            
-                          )
-                        )
-                      )
-                      ,value="DLD"),
-             tabPanel(tagList(br(),h4("Browse Data")),
-                      basicPage(
-                        tagList(
-                          selectizeInput("bd_electiontype_selector","Election Type",choices = c("Select Election Type"="","General Elections"="GE","Assembly Elections"="AE")),
-                          
-                          conditionalPanel(
-                            condition="input.bd_electiontype_selector!=''",
-                            selectizeInput("bd_state_selector","State Name",choices=c("Select State"=""))
-                          ),
-                          conditionalPanel(
-                            condition="input.bd_state_selector!=''",
-                            checkboxGroupInput("bd_year_selector","Years",choices=c())
-                            ,bookmarkButton(id="bookmark_bd")
-                          ),
-                          conditionalPanel(
-                            condition="input.bd_year_selector.length!=0",
-                            DT::dataTableOutput("bd_variablenames_selector")
-                            
-                          )
-                        )
-                        )
-                      ,value = "BRS"),
-             tabPanel(tagList(br(),h4("How to Cite Us")),
-                      basicPage(
-                        htmlOutput("howtocite")
-                      )
-                      ,value="CITE")
-             
-  )
-  
-}
+# 
+# ui<-function(request){
+#   navbarPage(
+# 	#      tags$head(
+# 	# 	       tags$link(rel= "stylesheet",type="text/css",href="shared/shiny.css"),
+# 	# 	       tags$link(rel="stylesheet",type="text/css",href="assets/style.css")
+# 	# 			 
+# 	# 	       ),
+# 	     id="Page"
+# 	     ,title=div(img(src="www/assets/logo.png"))
+#              ,windowTitle = "LokDhaba"
+#              ,useShinyjs()
+#              ,selected="EDV"
+#              ,tabPanel(tagList(br(),h4("Election Data Visualization")),
+#                        dashboardPage(
+#                          dashboardHeader(disable = TRUE),
+#                          dashboardSidebar(
+#                            tabsetPanel(id="electionType",
+#                                        selected = "AE",
+#                                        tabPanel("General Elections",
+#                                                 tagList(
+#                                                   uiOutput("ge_uitype_selection"),
+#                                                   uiOutput("ge_filter_selection")
+#                                                 )
+#                                                 ,value="GE"),
+#                                        tabPanel("Assembly Elections",
+#                                                 tagList(
+#                                                   uiOutput("state_selection"),
+#                                                   uiOutput("ae_uitype_selection"),
+#                                                   uiOutput("ae_filter_selection"))
+#                                                 ,value="AE")
+#                            )),
+#                          dashboardBody(
+#                            plotlyOutput("distPlot")
+#                            ,leafletOutput("mapPlot")
+#                            ,bookmarkButton(id="bookmark_edv")
+#                            
+#                          )
+#                          
+#                        )
+#                        ,value="EDV"),
+#              tabPanel(tagList(br(),h4("Data Download")),
+#                       basicPage(
+#                         tagList(
+#                           selectizeInput("dd_electiontype_selector","Election Type",choices = c("Select Election Type"="","General Elections"="GE","Assembly Elections"="AE")),
+#                           conditionalPanel(
+#                             condition="input.dd_electiontype_selector!=''",
+#                             selectizeInput("dd_state_selector","State Name",choices=c("Select State"=""))
+#                           ),
+#                           conditionalPanel(
+#                             condition="input.dd_state_selector!=''",
+#                             checkboxGroupInput("dd_year_selector","Years",choices=c())
+#                           ),
+#                           conditionalPanel(
+#                             condition="input.dd_year_selector.length!=0",
+#                             DT::dataTableOutput("dd_variablenames_selector")
+#                             , downloadButton("id","label")
+#                             
+#                           )
+#                         )
+#                       )
+#                       ,value="DLD"),
+#              tabPanel(tagList(br(),h4("Browse Data")),
+#                       basicPage(
+#                         tagList(
+#                           selectizeInput("bd_electiontype_selector","Election Type",choices = c("Select Election Type"="","General Elections"="GE","Assembly Elections"="AE")),
+#                           
+#                           conditionalPanel(
+#                             condition="input.bd_electiontype_selector!=''",
+#                             selectizeInput("bd_state_selector","State Name",choices=c("Select State"=""))
+#                           ),
+#                           conditionalPanel(
+#                             condition="input.bd_state_selector!=''",
+#                             checkboxGroupInput("bd_year_selector","Years",choices=c())
+#                             ,bookmarkButton(id="bookmark_bd")
+#                           ),
+#                           conditionalPanel(
+#                             condition="input.bd_year_selector.length!=0",
+#                             DT::dataTableOutput("bd_variablenames_selector")
+#                             
+#                           )
+#                         )
+#                         )
+#                       ,value = "BRS"),
+#              tabPanel(tagList(br(),h4("How to Cite Us")),
+#                       basicPage(
+#                         htmlOutput("howtocite")
+#                       )
+#                       ,value="CITE")
+#              
+#   )
+#   
+# }
 
 shinyServer <- function(input, output, session) {
   

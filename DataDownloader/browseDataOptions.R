@@ -90,10 +90,35 @@ browseDataOptions <- function(input, output, session,conmanager) {
    })
 
 
+  observeEvent(input$bd_variablenames_selector_cell_clicked, {
+    validate(need(length(input$bd_variablenames_selector_cell_clicked) > 0, ''))
+    print(paste("clicked value : ",input$bd_variablenames_selector_cell_clicked$value))
+    print(input$bd_variablenames_selector_row_clicked)
+    #browser()
+    col_idx<-NA
+    if(current_filters$electiontype=="AE"){
+      col_idx <- 21
+    }else if(current_filters$electiontype=="GE"){
+      col_idx <- 19
+    }
+    
+    #print(input$bd_variablenames_selector_cell_clicked$value)
+    if(input$bd_variablenames_selector_cell_clicked$col == col_idx & !is.na(col_idx)){
+      #print("here")
+      conmanager$setval("kyn_pid_selector",input$bd_variablenames_selector_cell_clicked$value)
+      shiny::updateTextInput(session,"kyn_pid_selector",value = conmanager$getval("kyn_pid_selector",""))
+      shiny::updateNavbarPage(session,inputId = "Page",selected = "KYN")
+    }
+    
+    #KnowYourNetaOptions(input,output,session,conmanager)
+    
+    #alert("You clicked something!")
+  })
+  
   ##Rendering of variable information table
-  output$bd_variablenames_selector<- renderDataTable(
+  output$bd_variablenames_selector<- DT::renderDataTable(
     options= list(pageLength=100,sDom = '<"top">lrt<"bottom">ip'),
-    filter="top",selection= "multiple",rownames=F,{
+    filter="top",selection= "single",rownames=F,{
       print("rerendring browse data.")
       print(paste(current_filters$electiontype,current_filters$statename,input$bd_year_selector))
       dframe <- getMastersheetData(current_filters$electiontype,current_filters$statename,input$bd_year_selector)
