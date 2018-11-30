@@ -6,22 +6,42 @@ getValidStateNamesForElectionType<-function(electiontype)
     return(as.vector(unique(subset(a,select=c("State Name")))))
   }else if(toupper(trimws(electiontype))=="AE"){
     return(list.files(path="../tcpd_data/data/AE/Data"))
+  }else if(toupper(trimws(electiontype))=="GE-MN"){
+    a<-read.csv("../tcpd_data/data/MyNeta/HJS_All_GE_ADR_merged.csv",stringsAsFactors = F)
+    return(as.vector(unique(a[["State_Name"]])))
+  }else if(toupper(trimws(electiontype))=="AE-MN"){
+    a<-read.csv("../tcpd_data/data/MyNeta/HJS_All_AE_ADR_merged.csv",stringsAsFactors = F)
+    return(as.vector(unique(a[["State_Name"]])))
   }else{
-    stop('Some serious issue as only AE and GE as options are expected')
+    stop('Some serious issue as only AE,GE,AE-MN,GE-MN as options are expected')
   }
 }
 
 getYearList<-function(statename,type="ge"){
   #if type == "ge" return all years when elections happened..
-  if(toupper(type)=="GE"){
+  if(toupper(type) == "GE"){
   a<-read.csv("../tcpd_data/data/GE/Data/derived/mastersheet.csv")
   aa<-getUniqueANoWithYears(a,"Assembly_No")
   aa$Assembly_No<-as.numeric(trimws(aa$Assembly_No))
   aa$ano<-Vectorize(getStringFormatOfNumber)(aa$Assembly_No)
-  }else if(toupper(statename)=="ALL"){
+  }else if(toupper(type) == "GE-MN"){
+    a<-read.csv("../tcpd_data/data/MyNeta/HJS_All_GE_ADR_merged.csv")
+    aa<-getUniqueANoWithYears(a,"Assembly_No")
+    aa$Assembly_No<-as.numeric(trimws(aa$Assembly_No))
+    aa$ano<-Vectorize(getStringFormatOfNumber)(aa$Assembly_No)
+    
+  }else if(toupper(type)=="AE-MN"){
+    if(toupper(statename)=="ALL"){return(c("All Years"))
+    }else{
+      statenamemodified<- gsub(" ","_",statename)
+      a<-read.csv("../tcpd_data/data/MyNeta/HJS_All_AE_ADR_merged.csv")
+      a<-subset(a,State_Name == statenamemodified)
+      aa<-getUniqueANoWithYears(a,"Assembly_No")
+      aa$Assembly_No<-as.numeric(trimws(aa$Assembly_No))
+      aa$ano<-Vectorize(getStringFormatOfNumber)(aa$Assembly_No)
       
-  }
-  else{
+      }
+  }else{
     #otherwise return only election year of that state
   statenamemodified<- gsub(" ","_",statename)
     filename<-paste0("../tcpd_data/data/AE/Data/",statenamemodified,"/derived/mastersheet.csv")
@@ -97,19 +117,39 @@ getMastersheetData<-function(electiontype,statename,electionyears){
      ms<-read.csv(paste0("../tcpd_data/data/AE/Data/",statenamemodified,"/derived/mastersheet.csv"),stringsAsFactors=FALSE)
    }
    
+ }else if(trimws(toupper(electiontype))=="GE-MN"){
+   ano<-"Assembly_No"
+   #   print('reading data.. GE')
+   #read mastersheet
+   ms<-read.csv("../tcpd_data/data/MyNeta/HJS_All_GE_ADR_merged.csv",stringsAsFactors=FALSE)
+   if(toupper(statenamemodified)!="ALL"){
+     ms<-subset(ms,ms$State_Name==statenamemodified)
+   }
+ }else if(trimws(toupper(electiontype))=="AE-MN"){
+   ano<-"Assembly_No"
+   #   print('reading data.. GE')
+   #read mastersheet
+   ms<-read.csv("../tcpd_data/data/MyNeta/HJS_All_AE_ADR_merged.csv",stringsAsFactors=FALSE)
+   if(toupper(statenamemodified)!="ALL"){
+     ms<-subset(ms,ms$State_Name==statenamemodified)
+   }
  }else{
-   stop('Some serious issue as only possible options are AE(assembly election)/GE(general election)')
+   stop('Some serious issue as only possible options are AE(assembly election)/GE(general election)/AE-MN(assembly election affidavit info)/GE(general election affidavit info)')
  }
- #subset on assembly numbers 
- #get a vector of assembly numbers from election years..
- lst<-lapply(electionyears,function(x){
-   y<-getYearAndAssemblyNumberFromStringFormat(x)
-   return(as.numeric(y$Assembly))
- })
- l<-unlist(lst,1)
- ##surprising, why did we need double brackets here..
- ms<-subset(ms,ms[[ano]]%in%l)
- print(unique(ms[[ano]]))
+ 
+ if(electionyears !="All Years"){
+   #subset on assembly numbers 
+   #get a vector of assembly numbers from election years..
+   lst<-lapply(electionyears,function(x){
+     y<-getYearAndAssemblyNumberFromStringFormat(x)
+     return(as.numeric(y$Assembly))
+   })
+   l<-unlist(lst,1)
+   ##surprising, why did we need double brackets here..
+   ms<-subset(ms,ms[[ano]]%in%l)
+   print(unique(ms[[ano]]))
+   
+ }
  ####Remove all those columns which should not be distributed right now.. like caste/jati..
  ms$Jati<-NULL
  ms$Caste_Rec<-NULL
@@ -127,15 +167,21 @@ getMastersheetData<-function(electiontype,statename,electionyears){
 
 #####################################################################################################################
 getVariableInfo<-function(type){
+  
   #read a file called variable description [going forward this is our code book]
-  a<-read.csv("../tcpd_data/data/CodeBook.csv")
-  #get all attributes where type is same as type and where type is "" (to denote that those names make sense
-  #for both AE and GE)
-  #cat(file=stderr(),names(a),"\n")
-  #aa<-subset(a,trimws(toupper(a$validfor))==trimws(toupper(type)) | trimws(a$validfor)=="")
-  #cat(file=stderr(),names(aa),"\n")
-  aa<-subset(a,select=c("variable","description"))
-#,"source","citation"))
+  if(trimws(toupper(type)) %in% c("GE","AE")){
+    a<-read.csv("../tcpd_data/data/CodeBook.csv")
+    #get all attributes where type is same as type and where type is "" (to denote that those names make sense
+    #for both AE and GE)
+    #cat(file=stderr(),names(a),"\n")
+    #aa<-subset(a,trimws(toupper(a$validfor))==trimws(toupper(type)) | trimws(a$validfor)=="")
+    #cat(file=stderr(),names(aa),"\n")
+    aa<-subset(a,select=c("variable","description"))
+    #,"source","citation"))
+  }else if(trimws(toupper(type)) %in% c("GE-MN","AE-MN")){
+    aa<-read.csv("../tcpd_data/data/CodeBook_MyNeta.csv")
+  }
+  
   names(aa)[names(aa)=="variable"]<-"Variable Name"
   names(aa)[names(aa)=="description"]<-"Variable Description"
  # names(aa)[names(aa)=="source"]<-"Source"

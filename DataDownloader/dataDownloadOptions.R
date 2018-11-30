@@ -15,8 +15,8 @@ dataDownloadOptions <- function(input, output, session,dname,conmanager) {
       a<-getValidStateNamesForElectionType(input$dd_electiontype_selector)
       #print(paste0('Reading state lists for election type ',input$dd_electiontype_selector))
       b<-lapply((a),function(x) gsub("_"," ",x))
-      if(input$dd_electiontype_selector=="GE"){
-        current_filters$electiontype<<-"GE"
+      if(input$dd_electiontype_selector %in% c("GE","AE-MN","GE-MN")){
+        current_filters$electiontype <<- input$dd_electiontype_selector
         b<-c("All",b)
         shiny::updateSelectizeInput(session,"dd_state_selector",choices = c("Select"="",b),selected=conmanager$getval("dd_state_selector",""))
         ##get the statnames present in general election mastersheet file and update
@@ -108,7 +108,7 @@ dataDownloadOptions <- function(input, output, session,dname,conmanager) {
        },
        content = function(con) {
          data<-getMastersheetData(current_filters$electiontype,current_filters$statename,current_filters$electionyears)
-         write.csv(data, con,row.names=F)
+         write.csv(data, con,row.names=F,na = c("","NA"))
        }
      )
   
