@@ -15,7 +15,7 @@
     height: 154px;
     color: #CD0000;
     text-align: center;
-    border-bottom: 2px solid #999999;
+/*    border-bottom: 2px solid #999999; */
     padding-top: 1px;
 }
 .banner_nav {
@@ -115,7 +115,7 @@ body {
 
 
 .tcpd-intro-text {
-    font-size: 18px;
+    /* font-size: 18px; */
     display: block;
     text-align: center;
     margin: 10px auto;
