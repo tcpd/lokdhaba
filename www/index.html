@@ -116,11 +116,12 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
          <li>
         <a href="#tab-5312-1" data-toggle="tab"></a>
       </li>
-	  <li class= "active"><a href="#tab-5312-2" data-toggle="tab" data-value="EDV">Data
-      Visualization</a></li>
+      <li class= "active"><a href="#tab-5312-7" data-toggle="tab" data-value="HOME">Home</a></li>
+	  <li><a href="#tab-5312-2" data-toggle="tab" data-value="EDV">Data Visualization</a></li>
 	  <li><a href="#tab-5312-3" data-toggle="tab" data-value="BRS">Browse Data</a></li>
 	  <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li>
-	  <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">How to cite us</a></li>
+	  <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">Documentation </a></li>
+	  <li><a href="#tab-5312-6" data-toggle="tab" data-value="ABOUT">About </a></li>
 	</ul>
 
 
@@ -128,7 +129,7 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
   </nav>
   <div class="container-fluid">
     <div class="tab-content" data-tabsetid="5312">
-      <div class="tab-pane active" data-value="EDV" id="tab-5312-2">
+      <div class="tab-pane" data-value="EDV" id="tab-5312-2">
         <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
@@ -185,7 +186,8 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 <div class="container-fluid">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
-            <span class="b-subheading">Food For Political Thought</span>
+	    <span class="b-subheading">Food For Political Thought</span><br/>
+	    <span>(GE-2019 results not yet available. Positions are marked with placeholders.).</span><br/>
 	  </div>
 	  <div class="row" >
 	    <div class="col-sm-3">
@@ -340,8 +342,63 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
             <span class="b-heading">Lok Dhaba</span>
             <span class="b-subheading">Food For Political Thought</span>
 	  </div>
+	  <div style="margin:10px auto;max-width:900px">
+           Please refer to the <a href="May23LokDhabaCodebook.pdf">Lok Dhaba Codebook</a> to understand the fields in this dataset. <br/ >
+	   </div>
+
           <div id="howtocite" class="shiny-html-output"></div>
         </div>
+      </div>
+
+      <div class="tab-pane active" data-value="HOME" id="tab-5312-7">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+          <div id="home" style="font-size: 120%;margin: 2% 10%" class="">
+		  <p> Welcome to Lok Dhaba!
+		  <p> Lok Dhaba is a repository of Indian election results - both Vidhan Sabha (state level) and Lok Sabha (national level) - beginning 1962. 
+		  
+		  <p>
+		  The data in Lok Dhaba comes originally from the <a href="https://www.eci.gov.in/statistical-report/statistical-reports/">statistical reports</a> published by the Election Commission of India. We have cleaned and treated the data and organized it in a tabular format (which you can see under the “Browse Data” tab). In addition, we have integrated data from bypolls and assigned each contestant a person ID. The latter lets us track individuals' career trajectories over time and is the first of its kind in the context of Indian politics. Using this information, our data allows identification of turncoats and incumbents.
+
+<p>
+		  The Lok Dhaba data is free and open for anyone to use. We encourage students, researchers, media persons, policy makers and others to engage with our data. Read <a href="https://tcpd.ashoka.edu.in/press-articles/">what we have published</a> using this data and <a href="https://tcpd.ashoka.edu.in/data-quoted/">how its been used by others</a>. Should you have any query and/or notice an error, please send us a message or write us at <a href="mailto:tcpd-contact@ashoka.edu.in">tcpd-contact@ashoka.edu.in</a>.  
+		  <p> We will update the data with the results of the 2019 elections to the Lok Sabha and 4 Vidhan Sabhas as and when they come in and are thoroughly checked.
+		  <p>
+
+		  <p> For more information, please see the documentation tab, which includes a detailed codebook containing all the variables in Lok Dhaba. Should you use any information from Lok Dhaba, please be sure to cite the Trivedi Center for Political Data at Ashoka University.
+
+		  <p>
+		  <br/>
+	  </div>
+      </div>
+
+      <div class="tab-pane" data-value="ABOUT" id="tab-5312-6">
+	  <div class="banner">
+            <span class="b-heading">Lok Dhaba</span>
+            <span class="b-subheading">Food For Political Thought</span>
+	  </div>
+          <div id="about" style="margin:5% 10%" class="">
+		  Lok Dhaba is a project of the <a href="tcpd.ashoka.edu.in">Trivedi Center for Political Data</a>, a research center run by the Political Science and Computer Science Departments at <a href="ashoka.edu.in">Ashoka University</a>. 
+		  <p>
+		  <br/>
+		  Lok Dhaba's interface has been developed with open source tools such as R, Shiny, Plotly, data tables, rgdal, and Leaflet. The Lok Dhaba software itself is open source under a Apache 2.0 license and is available from <a href="https://github.com/tcpd/lokdhaba">our Github page</a>.
+
+		  <p>
+		  <br/>
+
+		  Credits:<br/>
+		  The current lead developer for the Lok Dhaba software is Mohit Kumar, who is a Data Scientist and GIS Engineer at TCPD.<br/>
+		  The project is overseen by Prof. Sudheendra Hangal and Prof. Gilles Verniers.<br/>
+		  Many students and interns have contributed to Lok Dhaba, especially in the data collection, cleaning and integration part.<br/>
+		  Past members: Dr. Chinmay Narayan, Rajkamal Singh, Venkat Prasath.<br/>
+		  See more about the <a href="https://tcpd.ashoka.edu.in/team/">TCPD team</a>.
+		  
+		  <br/>
+		  <br/>
+	  
+	  </div>
       </div>
     </div>
   </div>

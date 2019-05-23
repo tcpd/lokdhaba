@@ -1,7 +1,7 @@
 If running in a container:
 
 #starting from ashokatcpd docker hub container  :
-docker run -d -p 3838:3838 --name lokdbaha -v /root/tcpd/:/srv/shiny-server/ -v /root/tcpd/:/var/log/ -it ashokatcpd/lokdhaba_shiny
+docker run -d -p 3838:3838 --name lokdhaba -v /home/ubuntu/tcpd/:/srv/shiny-server/ -v /home/ubuntu/tcpd/:/var/log/ -it ashokatcpd/lokdhaba_shiny
 
 
 
