@@ -2,7 +2,7 @@
 readShapeFile<- function(sname, year){
   if(sname=="ge"){
     dname<-paste0("../tcpd_data/data/GE/Maps/Delim4/")
-    lname<-paste0("LOKSABHA_15_Modified")
+    lname<-paste0("India_PC_Updated")
     shape<-readOGR(dsn=dname,layer=lname)
     return(shape)  
   }else{
