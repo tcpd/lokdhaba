@@ -20,7 +20,14 @@ fixedPartyColours['JP'] = '#536896';
 fixedPartyColours['JNP'] = '#536896';
 fixedPartyColours['JNP(JP)'] = '#536896';
 fixedPartyColours['Other'] = '#000000';
+fixedPartyColours['SHS'] = '#e80839';
+fixedPartyColours['DMK'] = '#08ded0';
+fixedPartyColours['BJD'] = '#015275';
+fixedPartyColours['YSRCP'] = '#930227';
 fixedPartyColours['AITC'] = '#00137f';
+fixedPartyColours['TRS'] = '#c40da5';
+fixedPartyColours['Other'] = '#000';
+
 
 function commatize(nStr) {
     nStr += '';
