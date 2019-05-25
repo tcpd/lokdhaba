@@ -77,6 +77,13 @@ d3.csv(pids_url, function(pids_data) {
 
         var topParties = ['BJP', 'INC', 'AITC', 'DMK', 'SHS', 'YSRCP', 'TRS', 'BJD']; // , 'SP', 'BSP',
 
+        function isInArray(value, array) {
+            return array.indexOf(value) > -1;
+        }
+        function isTopParty(p) {
+            return isInArray(p, topParties);
+        }
+
         for (var i = 0; i < mydata.length; i++) {
             if (!mydata[i].Last_Party) {
                 mydata[i].Last_Party = mydata[i].Party;
@@ -88,17 +95,17 @@ d3.csv(pids_url, function(pids_data) {
 
             mydata[i].Oth_Current = mydata[i].Party;
             mydata[i].Oth_Last = mydata[i].Last_Party;
-            if (!(topParties.includes(mydata[i].Party)) && !(topParties.includes(mydata[i].Last_Party))) {
+            if (!isTopParty(mydata[i].Party) && !isTopParty(mydata[i].Last_Party)) {
                 mydata[i].Oth_Current = mydata[i].Party;
                 mydata[i].Party = 'Other';
                 mydata[i].Oth_Last = mydata[i].Last_Party;
                 mydata[i].Last_Party = 'Other';
             }
-            else if (!(topParties.includes(mydata[i].Party))) {
+            else if (!isTopParty(mydata[i].Party)) {
                 mydata[i].Oth_Current = mydata[i].Party;
                 mydata[i].Party = 'Other';
             }
-            else if (!(topParties.includes(mydata[i].Last_Party))) {
+            else if (!isTopParty(mydata[i].Last_Party)) {
                 mydata[i].Oth_Last = mydata[i].Last_Party;
                 mydata[i].Last_Party = 'Other';
             }
@@ -107,10 +114,10 @@ d3.csv(pids_url, function(pids_data) {
         //get list of all parties
         var allParties = [];
         for (i = 0; i < mydata.length; i++) {
-            if (!(allParties.includes(mydata[i].Party))) {
+            if (!isInArray(mydata[i].Party, allParties)) {
                 allParties.push(mydata[i].Party);
             }
-            if (!(allParties.includes(mydata[i].Last_Party))) {
+            if (!isInArray(mydata[i].Last_Party, allParties)) {
                 allParties.push(mydata[i].Last_Party);
             }
         }
@@ -169,7 +176,8 @@ d3.csv(pids_url, function(pids_data) {
                         }
                     }
 
-                    var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/><span class="cand-name">' + d.Candidate + '</span><br/>';
+                    var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
+                    tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
                     tooltipText += d.Constituency_Name + " (" + d.Year + ") " + d.Oth_Current + ", #" + d.Position + '<br/>';
                     tooltipText += d.MyNeta_age + ' years<br/>';
                     // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
@@ -302,7 +310,14 @@ d3.csv(pids_url, function(pids_data) {
                     else if (a.Last_Party < b.Last_Party) { return -1;}
 
                     // last_party for a and b is the same
-                    // sort by # mandates
+                    // put winners before losers
+
+                    if (a.Position == 1 && b.Position > 1)
+                        return -1;
+                    else if (a.Position > 1 && b.Position == 1)
+                        return 1;
+
+                    // if no other difference, sort by # mandates
                     return b.No_Mandates - a.No_Mandates;
                 });
                     //
