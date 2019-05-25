@@ -22,8 +22,24 @@ dt = merge (dt, terms_contested_by_pid, by=c('pid'))
 
 fwrite(dt, file='rows-ge.csv')
 
-# read the pics table and assign the link in the last row to that pid
-pics = fread ('~/tcpd_data/GE/GE_19_working/pictures_with_pids.csv');
-pid_table = pics[, .(link=.SD[nrow(.SD)]$link), by=.(pid)]
-fwrite(pid_table, file='pids.csv')
+# read the pics table from both LS and PRS and assign the link in the last row to that pid
+pics_ls = fread ('~/tcpd_data/GE/GE_19_working/pictures_with_pids.csv');
+pics_ls = pics_ls[, .(link=.SD[nrow(.SD)]$link), by=.(pid)]
+
+pics_prs = fread ('~/tcpd_data/GE/GE_19_working/pictures_with_pids_prs.csv');
+pics_prs = pics_prs[, .(link=.SD[nrow(.SD)]$link), by=.(pid)]
+
+pics_merged = merge(pics_prs, pics_ls, by=c('pid'), all.x=TRUE, all.y=TRUE)
+
+# the link is preferably PRS (link.x), but if its NA, use the LS link
+pics_merged$link = '' 
+for (i in 1:nrow(pics_merged)) {
+  if (is.na(pics_merged[i]$link.x)) {
+    pics_merged[i]$link = pics_merged[i]$link.y;
+  } else {
+    pics_merged[i]$link = pics_merged[i]$link.x;
+  }
+}
+
+fwrite(pics_merged, file='pids.csv')
 
