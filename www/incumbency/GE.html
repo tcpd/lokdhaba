@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Incumbency in the Lok Sabha</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro|Montserrat" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
+    <script data-require="d3@4.0.0" data-semver="4.0.0" src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/susielu/d3-legend/master/d3-legend.min.js"></script>
+<style>
+
+    .profile-pic { height:50px; border-radius:50%; position:relative;}
+
+    div.tooltip {   
+          position: absolute;           
+          text-align: left;                           
+          padding: 8px;             
+          font: 1vw 'Source Sans Pro';
+          color: white;      
+          background: black;   
+          border: 0px; 
+          border-color: black;     
+          border-radius: 2px;           
+          pointer-events: none;         
+}
+
+      .axis path,
+        .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+      h1, .axis, .label, .d3-legend text, label {
+        font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+      }
+        .axis text {
+            font-size: 20px;
+        }
+
+        .label {
+          font-size: 15px;
+        }
+
+        .d3-legend text {
+          font-size: 15px;
+        }
+
+        label, select {
+            display: inline-block;
+            width: 100px;
+        }
+
+        label {
+            position: relative;
+            top: -1.2em;
+            left: 5px;
+            text-align: center;
+        }
+
+        select {
+            margin: 1.5em 0 0 -100px;
+        }
+
+    #viz { width: 1200px; margin:auto}
+    div.header { width: 1200px; margin:auto; text-align:center;}
+
+</style>
+  </head>
+
+  <body>
+
+  <div class="header">
+  <h1>Incumbency profile of the 17th Lok Sabha</h1>
+    <input type = 'text' id = 'search' placeholder="Search name">
+
+    <div style="display:none;">
+
+    <label for="assemblies">Assembly</label>
+    <select id = "assemblies">
+      <option value=3>3rd Assembly</option>
+      <option value=4>4th Assembly</option> 
+      <option value=5>5th Assembly</option>
+      <option value=6>6th Assembly</option> 
+      <option value=7>7th Assembly</option> 
+      <option value=8>8th Assembly</option>
+      <option value=9>9th Assembly</option>
+      <option value=10>10th Assembly</option>
+      <option value=11>11th Assembly</option>
+      <option value=12>12th Assembly</option>
+      <option value=13>13th Assembly</option>
+      <option value=14>14th Assembly</option> 
+      <option value=15>15th Assembly</option>
+      <option value=16>16th Assembly</option> 
+      <option value=17 selected="selected">17th Assembly</option>
+  </select>
+    </div>
+
+  <label for="numbers">Label</label>
+  <select id = "numbers">
+      <option value=0>None</option>
+      <option value=1 selected='selected'>Times Won</option>
+      <option value=2>Times Contested</option> 
+  </select>
+
+  <label for="wonlost">Position</label>
+  <select id = "wonlost"> 
+      <option value=0 >All candidates</option>
+      <option value=1 selected="selected">Only winners</option>
+      <!--<option value=2>Lost</option>-->
+  </select>
+
+    <div style="display:none;">
+  <label for="turncoats">Turncoats</label>
+  <select id = "turncoats">
+      <option value=2 selected='selected'>All</option>
+      <option value=1>Turncoats</option>
+      <option value=0>Previously Contested</option>
+  </select>
+    </div>
+    </div>
+    <br>
+    <br>
+  <br>
+    <div id="viz"></div>
+  <br>
+    <script src="incumbency.js"></script>
+
+    <hr/>
+    <div style="text-align:center;font-size:80%;color:gray">
+      (c) <a href="//tcpd.ashoka.edu.in">Trivedi Center for Political Data</a>, <a href="ashoka.edu.in">Ashoka University</a>
+    </div>
+  </body>
+
+</html>
