@@ -176,9 +176,19 @@ d3.csv(pids_url, function(pids_data) {
                         }
                     }
 
+                    function string_for_row(k) {
+                        var win_or_lose_class = k.Position === 1 ? 'won' : 'lost';
+                        s = '<span class="' + win_or_lose_class + '">' + k.Constituency_Name + " (" + k.Year + ") " + k.Oth_Current + ", #" + k.Position + '</span>';
+                        if (k.Poll_No > 0) {
+                            s += '<span class="bypoll">BYE POLL</span>';
+                        }
+                        return s;
+                    }
+
                     var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
                     tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
-                    tooltipText += d.Constituency_Name + " (" + d.Year + ") " + d.Oth_Current + ", #" + d.Position + '<br/>';
+                    tooltipText += string_for_row(d) + '<br/>';
+                    d.Constituency_Name + " (" + d.Year + ") " + d.Oth_Current + ", #" + d.Position + '<br/>';
                     tooltipText += d.MyNeta_age + ' years<br/>';
                     // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
                     // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
@@ -186,8 +196,7 @@ d3.csv(pids_url, function(pids_data) {
                     tooltipText += '<hr style="color:darkgray;background-color:darkgray;margin-bottom:3px;"/>';
                     if (candHistory.length > 0) {
                         candHistory.forEach(function (k) {
-                            var win_or_lose_class = k.Position === 1 ? 'won' : 'lost';
-                            tooltipText += '<span class="' + win_or_lose_class + '">' + k.Constituency_Name + " (" + k.Year + ") " + k.Oth_Current + ", #" + k.Position + '</span><br/>'
+                            tooltipText += string_for_row(k) + '<br/>';
                         });
                     }
                     LOG (tooltipText);
