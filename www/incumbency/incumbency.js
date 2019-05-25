@@ -1,6 +1,4 @@
-
-var url = './all-ge.json'; //change json source here
-var url = './all-ge.csv'; //change json source here
+var url = './rows-ge.csv'; //change json source here
 var pids_url = './pids.csv'
 
 function LOG (s) { if (console) { console.log(s); } }
@@ -23,6 +21,18 @@ fixedPartyColours['JNP'] = '#536896';
 fixedPartyColours['JNP(JP)'] = '#536896';
 fixedPartyColours['Other'] = '#000000';
 fixedPartyColours['AITC'] = '#00137f';
+
+function commatize(nStr) {
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
 
 var partyNames = {'INC': 'Indian National Congress',
     'KJP': 'Karnataka Janata Paksha',
@@ -57,14 +67,25 @@ d3.csv(pids_url, function(pids_data) {
             d.No_Mandates = parseInt(d.No_Mandates);
             d.Contested = parseInt(d.Contested);
             d.Assembly_No = parseInt(d.Assembly_No);
+            d.No_Mandates = parseInt (d.Terms);
+            d.Contested = parseInt (d.Contested);
+            d.Year = parseInt(d.Year);
+//            d.Votes = parseInt(d.Votes);
+//            d.Margin = parseInt(d.Margin);
+//            d.Age = parseInt (d.Age);
         });
 
-        var topParties = ['BJP', 'INC', 'AITC', 'DMK', 'SHS', 'YSRCP', 'SP', 'BSP', 'TRS', 'BJD'];
+        var topParties = ['BJP', 'INC', 'AITC', 'DMK', 'SHS', 'YSRCP', 'TRS', 'BJD']; // , 'SP', 'BSP',
 
         for (var i = 0; i < mydata.length; i++) {
+            if (!mydata[i].Last_Party) {
+                mydata[i].Last_Party = mydata[i].Party;
+            }
+
             if (typeof(mydata[i].Last_Party) === 'undefined') {
                 mydata[i].Last_Party = 'None';
             }
+
             mydata[i].Oth_Current = mydata[i].Party;
             mydata[i].Oth_Last = mydata[i].Last_Party;
             if (!(topParties.includes(mydata[i].Party)) && !(topParties.includes(mydata[i].Last_Party))) {
@@ -129,32 +150,38 @@ d3.csv(pids_url, function(pids_data) {
                 .style("opacity", 0);
 
             function do_mouseover(d, i) {
-                div.transition().duration(200).style("opacity", .9);
+                div.transition().duration(200).style("opacity", 1.0);
 
                 div.html(function () {
                     var candHistory = mydata.filter(function (k) {
-                        return (k.pid == d.pid && d.Assembly_No > k.Assembly_No);
+                        return (k.pid === d.pid && d.Assembly_No > k.Assembly_No);
                     });
-                    console.log(candHistory)
-                    candHistory.sort(function (a, b) {
-                        return b.Assembly_No - a.Assembly_No
-                    });
+                    LOG(candHistory);
+                    candHistory.sort(function (a, b) {return b.Year - a.Year});
 
                     // get the img link
                     var img_link = ''; //'http://164.100.47.193/mpimage/photo/4797.jpg'; // default
                     var pid = d.pid;
                     for (var x = 0; x < pids_data.length; x++) {
-                        if (pids_data[x].pid == pid) {
+                        if (pids_data[x].pid === pid) {
                             img_link = pids_data[x].link;
                             break;
                         }
                     }
 
-                    var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + d.Candidate + "<hr>";
-                    tooltipText += d.Constituency_Name + ", " + d.Assembly_No + ", " + d.Oth_Current + ", #" + d.Position
-                    candHistory.forEach(function (k) {
-                        tooltipText += "<br/>" + k.Constituency_Name + ", " + k.Assembly_No + ", " + k.Oth_Current + ", #" + k.Position
-                    });
+                    var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/><span class="cand-name">' + d.Candidate + '</span><br/>';
+                    tooltipText += d.Constituency_Name + " (" + d.Year + ") " + d.Oth_Current + ", #" + d.Position + '<br/>';
+                    tooltipText += d.MyNeta_age + ' years<br/>';
+                    // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
+                    // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
+
+                    tooltipText += '<hr style="color:darkgray;background-color:darkgray;margin-bottom:3px;"/>';
+                    if (candHistory.length > 0) {
+                        candHistory.forEach(function (k) {
+                            var win_or_lose_class = k.Position === 1 ? 'won' : 'lost';
+                            tooltipText += '<span class="' + win_or_lose_class + '">' + k.Constituency_Name + " (" + k.Year + ") " + k.Oth_Current + ", #" + k.Position + '</span><br/>'
+                        });
+                    }
                     LOG (tooltipText);
                     return tooltipText;
                 })
@@ -177,11 +204,7 @@ d3.csv(pids_url, function(pids_data) {
                     currentAssembly = currentAssembly.filter(function (i) {
                         return i.Position === 1;
                     });
-                } else if (wonlost === "2") {
-                    currentAssembly = currentAssembly.filter(function (i) {
-                        return i.Position > 1;
-                    });
-                }
+                } // else all candidates, do nothing
 
                 if (turncoats === "1") {
                     currentAssembly = currentAssembly.filter(function (i) {
@@ -257,18 +280,43 @@ d3.csv(pids_url, function(pids_data) {
                 });
             }
 
-            partywise.forEach(function (e) {
-                e.sort(function (a, b) {
-                    if (a.Last_Party === b.Last_Party) {
-                        return b.No_Mandates - a.No_Mandates;
-                    }
-                    else if (a.Last_Party > b.Last_Party) {
-                        return 1;
-                    }
-                    else if (a.Last_Party < b.Last_Party) {
-                        return -1;
-                    }
+            partywise.forEach(function (party_rows) {
+                var party_count_for_last_party = [];
+                party_rows.forEach(function(d) {
+                    if (party_count_for_last_party[d.Last_Party])
+                        party_count_for_last_party[d.Last_Party]++;
+                    else
+                        party_count_for_last_party[d.Last_Party] = 1;
                 });
+
+                party_count_for_last_party['Other'] = -1; // let this rank at the bottom
+
+                party_rows.sort(function (a, b) {
+                    // rows with last_party = higher count will come before rows with last_party = lower count
+                    if (party_count_for_last_party[a.Last_Party] !== party_count_for_last_party[b.Last_Party])
+                        return party_count_for_last_party[b.Last_Party] - party_count_for_last_party[a.Last_Party];
+
+                    // rows_with_last_party is same for a and b (may or may not be the same last_party)
+                    // if so, sort partywise in alpha order
+                    if (a.Last_Party > b.Last_Party) { return 1; }
+                    else if (a.Last_Party < b.Last_Party) { return -1;}
+
+                    // last_party for a and b is the same
+                    // sort by # mandates
+                    return b.No_Mandates - a.No_Mandates;
+                });
+                    //
+                    // party_rows.sort(function (a, b) {
+                    // if (a.Last_Party === b.Last_Party) {
+                    //     return b.No_Mandates - a.No_Mandates;
+                    // }
+                    // else if (a.Last_Party > b.Last_Party) {
+                    //     return 1;
+                    // }
+                    // else if (a.Last_Party < b.Last_Party) {
+                    //     return -1;
+                    // }
+                // });
             });
 
             var xMax = 0;
@@ -333,7 +381,7 @@ d3.csv(pids_url, function(pids_data) {
                             return symbolSize * 0.4;
                         }))
                     .attr("transform", function (d, i) {
-                        if (i == 0) {
+                        if (i === 0) {
                             col += rowMax + 1;
                         }
                         var x = ((i % rowMax) + col) * (symbolSize / 11);
@@ -611,23 +659,26 @@ d3.csv(pids_url, function(pids_data) {
                 .call(legendOrdinal);
 
             //create symbol legend
-            circle = d3.symbol().type(d3.symbolCircle).size(200)();
-            square = d3.symbol().type(d3.symbolSquare).size(200)();
+            if (wonlost === '2') {
+                // only show legend if we're showing all
+                circle = d3.symbol().type(d3.symbolCircle).size(200)();
+                square = d3.symbol().type(d3.symbolSquare).size(200)();
 
-            var symbolScale = d3.scaleOrdinal()
-                .domain(['Winner', 'Loser'])
-                .range([square, circle]);
+                var symbolScale = d3.scaleOrdinal()
+                    .domain(['Winner', 'Loser'])
+                    .range([square, circle]);
 
-            svg.append("g")
-                .attr("class", "legendSymbol")
-                .attr("transform", "translate(" + (width + 20) + ", 100)");
+                svg.append("g")
+                    .attr("class", "legendSymbol")
+                    .attr("transform", "translate(" + (width + 20) + ", 100)");
 
-            var legendPath = d3.legendSymbol()
-                .scale(symbolScale)
-                .orient("vertical");
+                var legendPath = d3.legendSymbol()
+                    .scale(symbolScale)
+                    .orient("vertical");
 
-            svg.select(".legendSymbol")
-                .call(legendPath);
+                svg.select(".legendSymbol")
+                    .call(legendPath);
+            }
         };
 
 
@@ -644,6 +695,8 @@ d3.csv(pids_url, function(pids_data) {
 
         // handle on click event
         $('#assemblies,#numbers,#wonlost,#turncoats,#search').on('change', refresh);
+        $('#search').on('keyup', refresh);
+
 //    generateGraph(mydata, 17, 1, 1, 2, '');
         refresh();
 

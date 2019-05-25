@@ -12,7 +12,11 @@
     <script type="text/javascript" src="https://rawgit.com/susielu/d3-legend/master/d3-legend.min.js"></script>
 <style>
 
-    .profile-pic { height:50px; position:relative;}
+    .profile-pic { height:100px; position:relative; opacity: 1.0;}
+    select { height: 30px;}
+    input { height: 30px; }
+    .controls { background-color: #f8f8f8; padding: 20px;}
+    .lost { color: gray; }
 
     div.tooltip {   
           position: absolute;           
@@ -56,7 +60,7 @@
 
         label {
             position: relative;
-            top: -1.2em;
+            top: -1.7em;
             left: 5px;
             text-align: center;
         }
@@ -67,6 +71,7 @@
 
     #viz { width: 1200px; margin:auto}
     div.header { width: 1200px; margin:auto; text-align:center;}
+  .cand-name { font-size: 120%; color: #00a65a;}
 
 </style>
   </head>
@@ -75,11 +80,15 @@
 
   <div class="header">
   <h1>Incumbency profile of the 17th Lok Sabha</h1>
-    <input type = 'text' id = 'search' placeholder="Search person or constituency">
+
+    <div class="controls">
+
+      <label style="margin-left:20px;left:130px" for="search">Search</label>
+    <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" size="28" type = 'text' id = 'search' placeholder="Person or constituency name">
 
     <div style="display:none;">
 
-    <label for="assemblies">Assembly</label>
+    <label style="margin-left:20px" for="assemblies">Assembly</label>
     <select id = "assemblies">
       <option value=3>3rd Assembly</option>
       <option value=4>4th Assembly</option> 
@@ -99,29 +108,30 @@
   </select>
     </div>
 
-  <label for="numbers">Label</label>
+  <label style="margin-left:20px" for="numbers">Label</label>
   <select id = "numbers">
-      <option value=0>None</option>
-      <option value=1 selected='selected'>Times Won</option>
-      <option value=2>Times Contested</option> 
+      <option value="0">None</option>
+      <option value="1" selected='selected'>Times Won</option>
+      <option value="2">Times Contested</option>
   </select>
 
-  <label for="wonlost">Position</label>
+  <label style="margin-left:20px" for="wonlost">Position</label>
   <select id = "wonlost"> 
-      <option value=0 >All candidates</option>
-      <option value=1 selected="selected">Only winners</option>
+      <option value="1" selected="selected">Only winners</option>
+      <option value="2" >All candidates</option>
       <!--<option value=2>Lost</option>-->
   </select>
 
-    <div style="display:none;">
+    <div style="margin-left:20px;display:none;">
   <label for="turncoats">Turncoats</label>
   <select id = "turncoats">
-      <option value=2 selected='selected'>All</option>
-      <option value=1>Turncoats</option>
-      <option value=0>Previously Contested</option>
+      <option value="2" selected='selected'>All</option>
+      <option value="1">Turncoats</option>
+      <option value="0">Previously Contested</option>
   </select>
     </div>
     </div>
+  </div>
     <br>
     <br>
   <br>
