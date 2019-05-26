@@ -29,19 +29,6 @@ fixedPartyColours['TRS'] = '#c40da5';
 fixedPartyColours['Other'] = '#000';
 
 
-function commatize(nStr) {
-    if (!nStr)
-        return '';
-    nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + ',' + '$2');
-    }
-    return x1 + x2;
-}
 
 var partyNames = {'INC': 'Indian National Congress',
     'KJP': 'Karnataka Janata Paksha',
@@ -64,11 +51,29 @@ var partyNames = {'INC': 'Indian National Congress',
     'CPM': 'Communist Party of India (Marxist)',
     'CPI(ML)(L)': 'Communist Party of India (Marxist Leninist) (Liberation)'};
 
+// these are the most successful parties in LS-17
+// top parties have their own column in the viz. all others are clubbed into "Other"
+var topParties = ['BJP', 'INC', 'AITC', 'DMK', 'SHS', 'YSRCP', 'TRS', 'BJD']; // , 'SP', 'BSP',
+
+function commatize(nStr) {
+    if (!nStr)
+        return '';
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
+
+// read the pids file and then the raw data file
 d3.csv(pids_url, function(pids_data) {
 
     d3.csv(url, function (data) {
         var mydata = data; // data.rows;
-//    var pid_data = data.pids;
 
         // check data and convert strings to ints
         mydata.forEach(function (d) {
@@ -79,12 +84,12 @@ d3.csv(pids_url, function(pids_data) {
             d.No_Mandates = parseInt (d.Terms);
             d.Contested = parseInt (d.Contested);
             d.Year = parseInt(d.Year);
+            // enable these rows if we want to show more info in the person's info box
 //            d.Votes = parseInt(d.Votes);
 //            d.Margin = parseInt(d.Margin);
 //            d.Age = parseInt (d.Age);
         });
 
-        var topParties = ['BJP', 'INC', 'AITC', 'DMK', 'SHS', 'YSRCP', 'TRS', 'BJD']; // , 'SP', 'BSP',
 
         function isInArray(value, array) {
             return array.indexOf(value) > -1;
@@ -93,14 +98,40 @@ d3.csv(pids_url, function(pids_data) {
             return isInArray(p, topParties);
         }
 
+
+        //get list of all parties
+        var allParties = [];
+        for (i = 0; i < mydata.length; i++) {
+            if (!isInArray(mydata[i].Party, allParties)) {
+                allParties.push(mydata[i].Party);
+            }
+            if (!isInArray(mydata[i].Last_Party, allParties)) {
+                allParties.push(mydata[i].Last_Party);
+            }
+        }
+
+        // # of seats won by party (all assemblies, not just the one being shown). This will be used for generating the sort order of parties.
+        var numSeats = [];
+        mydata.forEach(function (data) {
+            var party = data.Party;
+            if (data.Position === 1) {
+                if (numSeats[party])
+                    numSeats[party]++;
+                else
+                    numSeats[party] = 1;
+            }
+        });
+
+        // If not top party, change party and last_party of a row to Other. but same these fields in Oth_Current and Oth_last, so we can show the info accurately on hover
         for (var i = 0; i < mydata.length; i++) {
+            // last party is not set for someone's first election. In this case, we treat their last party as simply the same party, so the color of the box remains the same as their party
             if (!mydata[i].Last_Party) {
                 mydata[i].Last_Party = mydata[i].Party;
             }
 
-            if (typeof(mydata[i].Last_Party) === 'undefined') {
-                mydata[i].Last_Party = 'None';
-            }
+            // if (typeof(mydata[i].Last_Party) === 'undefined') {
+            //     mydata[i].Last_Party = 'None';
+            // }
 
             mydata[i].Oth_Current = mydata[i].Party;
             mydata[i].Oth_Last = mydata[i].Last_Party;
@@ -120,41 +151,23 @@ d3.csv(pids_url, function(pids_data) {
             }
         }
 
-        //get list of all parties
-        var allParties = [];
-        for (i = 0; i < mydata.length; i++) {
-            if (!isInArray(mydata[i].Party, allParties)) {
-                allParties.push(mydata[i].Party);
-            }
-            if (!isInArray(mydata[i].Last_Party, allParties)) {
-                allParties.push(mydata[i].Last_Party);
+        //generate colour range for parties (after Other has been set for the non-top parties)
+        {
+            var colourRange = randomColor({
+                count: allParties.length,
+                luminosity: 'dark',
+                format: 'rgb' // e.g. 'rgb(225,200,20)'
+            });
+
+            //dict of party and colour
+            var partyColours = {};
+            for (i = 0; i < allParties.length; i++) {
+                var party = allParties[i];
+                partyColours[party] = (fixedPartyColours[party]) ? fixedPartyColours[party] : colourRange[i];
             }
         }
 
-        var numSeats = []; // # of seats won by party (all assemblies)
-        mydata.forEach(function (data) {
-            var party = data.Party;
-            if (data.Position === 1) {
-                if (numSeats[party])
-                    numSeats[party]++;
-                else
-                    numSeats[party] = 1;
-            }
-        });
 
-        //generate colour range for parties
-        var colourRange = randomColor({
-            count: allParties.length,
-            luminosity: 'dark',
-            format: 'rgb' // e.g. 'rgb(225,200,20)'
-        });
-
-        //dict of party and colour
-        var partyColours = {};
-        for (i = 0; i < allParties.length; i++) {
-            var party = allParties[i];
-            partyColours[party] = (fixedPartyColours[party]) ? fixedPartyColours[party] : colourRange[i];
-        }
 
         var generateGraph = function (mydata, assemblyNo, nums, wonlost, turncoats, searchTerm) {
 
