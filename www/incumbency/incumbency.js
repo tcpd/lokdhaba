@@ -1,5 +1,5 @@
 var url = './rows-ge.csv'; //change json source here
-var pids_url = './pids.csv'
+var pids_url = './pids.csv';
 
 function LOG (s) { if (console) { console.log(s); } }
 
@@ -30,10 +30,12 @@ fixedPartyColours['Other'] = '#000';
 
 
 function commatize(nStr) {
+    if (!nStr)
+        return '';
     nStr += '';
-    x = nStr.split('.');
-    x1 = x[0];
-    x2 = x.length > 1 ? '.' + x[1] : '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
     var rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
@@ -69,7 +71,7 @@ d3.csv(pids_url, function(pids_data) {
 //    var pid_data = data.pids;
 
         // check data and convert strings to ints
-        mydata.forEach(function (d, i) {
+        mydata.forEach(function (d) {
             d.Position = parseInt(d.Position);
             d.No_Mandates = parseInt(d.No_Mandates);
             d.Contested = parseInt(d.Contested);
@@ -163,61 +165,56 @@ d3.csv(pids_url, function(pids_data) {
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-            function do_mouseover(d, i) {
+            function do_mouseover(d) {
                 div.transition().duration(200).style("opacity", 1.0);
 
                 div.html(function () {
-                    var candHistory = mydata.filter(function (k) {
-                        return (k.pid === d.pid && d.Assembly_No > k.Assembly_No);
-                    });
-                    LOG(candHistory);
-                    candHistory.sort(function (a, b) {return b.Year - a.Year});
-
-                    // get the img link
-                    var img_link = ''; //'http://164.100.47.193/mpimage/photo/4797.jpg'; // default
-                    var pid = d.pid;
-                    for (var x = 0; x < pids_data.length; x++) {
-                        if (pids_data[x].pid === pid) {
-                            img_link = pids_data[x].link;
-                            break;
-                        }
-                    }
-
-                    function string_for_row(k) {
-                        var win_or_lose_class = k.Position === 1 ? 'won' : 'lost';
-                        s = '<span class="' + win_or_lose_class + '">' + k.Constituency_Name + " (" + k.Year + ") " + k.Oth_Current + ", #" + k.Position + '</span>';
-                        if (k.Poll_No > 0) {
-                            s += '<span class="bypoll">BYE POLL</span>';
-                        }
-                        return s;
-                    }
-
-                    var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
-                    tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
-                    tooltipText += string_for_row(d) + '<br/>';
-                    d.Constituency_Name + " (" + d.Year + ") " + d.Oth_Current + ", #" + d.Position + '<br/>';
-                    tooltipText += d.MyNeta_age + ' years<br/>';
-                    // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
-                    // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
-
-                    tooltipText += '<hr style="color:darkgray;background-color:darkgray;margin-bottom:3px;"/>';
-                    if (candHistory.length > 0) {
-                        candHistory.forEach(function (k) {
-                            tooltipText += string_for_row(k) + '<br/>';
+                        var candHistory = mydata.filter(function (k) {
+                            return (k.pid === d.pid && d.Assembly_No > k.Assembly_No);
                         });
-                    }
-                    LOG (tooltipText);
-                    return tooltipText;
-                })
+                        LOG(candHistory);
+                        candHistory.sort(function (a, b) {return b.Year - a.Year});
+
+                        // get the img link
+                        var img_link = ''; //'http://164.100.47.193/mpimage/photo/4797.jpg'; // default
+                        var pid = d.pid;
+                        for (var x = 0; x < pids_data.length; x++) {
+                            if (pids_data[x].pid === pid) {
+                                img_link = pids_data[x].link;
+                                break;
+                            }
+                        }
+
+                        function string_for_row(row) {
+                            var win_or_lose_class = row.Position === 1 ? 'won' : 'lost';
+                            var result = '<span class="' + win_or_lose_class + '">' + row.Constituency_Name + " (" + row.Year + ") " + row.Oth_Current + ", #" + row.Position + '</span>';
+                            if (row.Poll_No > 0) {
+                                result += '<span class="bypoll">BYE POLL</span>';
+                            }
+                            return result;
+                        }
+
+                        var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
+                        tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
+                        tooltipText += string_for_row(d) + '<br/>';
+                        tooltipText += d.MyNeta_age + ' years<br/>';
+                        // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
+                        // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
+
+                        tooltipText += '<hr style="color:darkgray;background-color:darkgray;margin-bottom:3px;"/>';
+                        candHistory.forEach(function (k) { tooltipText += string_for_row(k) + '<br/>'; });
+                        LOG (tooltipText);
+                        return tooltipText;
+                    })
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             }
 
-            function do_mouseout(d) {
+            function do_mouseout() {
                 div.transition().duration(500).style("opacity", 0);
             }
 
-            //get current assembly rows
+            // get current assembly rows
             var currentAssembly;
             {
                 currentAssembly = mydata.filter(function (i) {
@@ -234,7 +231,7 @@ d3.csv(pids_url, function(pids_data) {
                     currentAssembly = currentAssembly.filter(function (i) {
                         return i.Turncoat === 'FALSE';
                     });
-                } else if (turncoats == 0) {
+                } else if (turncoats === "0") {
                     currentAssembly = currentAssembly.filter(function (i) {
                         return i.Contested > 1;
                     });
@@ -257,10 +254,10 @@ d3.csv(pids_url, function(pids_data) {
 
                 // sort by the # of seats
                 parties = parties.sort(function (a, b) {
-                    if (a == 'Other') {
+                    if (a === 'Other') {
                         return 1;
                     }
-                    else if (b == 'Other') {
+                    else if (b === 'Other') {
                         return -1;
                     }
                     else return numSeats[b] - numSeats[a]
@@ -291,7 +288,7 @@ d3.csv(pids_url, function(pids_data) {
                     return (a.Last_Party > b.Last_Party) ? 1 : ((b.Last_Party > a.Last_Party) ? -1 : 0);
                 });
                 partywise[parties.indexOf('Other')].forEach(function (v, i) {
-                    if (v.Last_Party == 'None') {
+                    if (v.Last_Party === 'None') {
                         partywise[parties.indexOf('Other')].push(partywise[parties.indexOf('Other')][i]);
                         partywise[parties.indexOf('Other')].splice(i, 1);
                     }
@@ -328,9 +325,9 @@ d3.csv(pids_url, function(pids_data) {
                     // last_party for a and b is the same
                     // put winners before losers
 
-                    if (a.Position == 1 && b.Position > 1)
+                    if (a.Position === 1 && b.Position > 1)
                         return -1;
-                    else if (a.Position > 1 && b.Position == 1)
+                    else if (a.Position > 1 && b.Position === 1)
                         return 1;
 
                     // if no other difference, sort by # mandates
@@ -400,7 +397,7 @@ d3.csv(pids_url, function(pids_data) {
             //generate shapes
             var col = -rowMax;
             var row = -1;
-            for (var k = 0; k < partywise.length; k++) {
+            for (k = 0; k < partywise.length; k++) {
                 svg.selectAll('u')
                     .data(partywise[k])
                     .enter()
@@ -408,7 +405,7 @@ d3.csv(pids_url, function(pids_data) {
                     .attr('d', d3.symbol().type(function (d) {
                         return (d.Position === 1) ? d3.symbolSquare : d3.symbolCircle;
                     })
-                        .size(function (d, i) {
+                        .size(function () {
                             return symbolSize * 0.4;
                         }))
                     .attr("transform", function (d, i) {
@@ -416,16 +413,16 @@ d3.csv(pids_url, function(pids_data) {
                             col += rowMax + 1;
                         }
                         var x = ((i % rowMax) + col) * (symbolSize / 11);
-                        if (i % rowMax == 0 && i != 0) {
+                        if (i % rowMax === 0 && i !== 0) {
                             row += 1;
                         }
-                        if (i == 0) {
+                        if (i === 0) {
                             row = 0;
                         }
                         var y = (row + 3) * (symbolSize / 10);
                         return "translate(" + x + "," + y + ")"
                     })
-                    .attr("currentParty", function (d, i) {
+                    .attr("currentParty", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -436,7 +433,7 @@ d3.csv(pids_url, function(pids_data) {
                             return (partyNames[d.Party]);
                         }
                     })
-                    .attr("lastParty", function (d, i) {
+                    .attr("lastParty", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -450,7 +447,7 @@ d3.csv(pids_url, function(pids_data) {
                             return partyNames[d.Last_Party];
                         }
                     })
-                    .attr("name", function (d, i) {
+                    .attr("name", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -458,13 +455,13 @@ d3.csv(pids_url, function(pids_data) {
                             return (d.Candidate);
                         }
                     })
-                    .attr("acName", function (d, i) {
+                    .attr("acName", function (d) {
                         return d.Constituency_Name;
                     })
-                    .attr("position", function (d, i) {
+                    .attr("position", function (d) {
                         return d.Position;
                     })
-                    .style("fill", function (d, i) {
+                    .style("fill", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -497,7 +494,7 @@ d3.csv(pids_url, function(pids_data) {
                             return d3.symbolCircle;
                         }
                     })
-                        .size(function (d, i) {
+                        .size(function () {
                             return symbolSize;
                         }))
                     .attr("transform", function (d, i) {
@@ -514,7 +511,7 @@ d3.csv(pids_url, function(pids_data) {
                         var y = (row + 3) * (symbolSize / 10);
                         return "translate(" + x + "," + y + ")"
                     })
-                    .attr("currentParty", function (d, i) {
+                    .attr("currentParty", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -525,7 +522,7 @@ d3.csv(pids_url, function(pids_data) {
                             return (partyNames[d.Party]);
                         }
                     })
-                    .attr("lastParty", function (d, i) {
+                    .attr("lastParty", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -539,7 +536,7 @@ d3.csv(pids_url, function(pids_data) {
                             return partyNames[d.Last_Party];
                         }
                     })
-                    .style("fill", function (d, i) {
+                    .style("fill", function (d) {
                         if (typeof(d) === 'undefined') {
                             return 0;
                         }
@@ -558,11 +555,11 @@ d3.csv(pids_url, function(pids_data) {
             }
 
             //generate text
-            if (nums > 0) {
+            if (nums !== 'NO_LABEL') {
                 col = -rowMax;
                 row = -1;
-                letterArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
-                for (j = 0; j < partywise.length; j++) {
+                var letterArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
+                for (var j = 0; j < partywise.length; j++) {
                     svg.selectAll(letterArray[j])
                         .data(partywise[j])
                         .enter()
@@ -571,7 +568,7 @@ d3.csv(pids_url, function(pids_data) {
                             if (i === 0) {
                                 col += rowMax + 1;
                             }
-                            if (nums == 2) {
+                            if (nums === 'TIMES_CONTESTED') {
                                 if (d.Contested > 9) {
                                     return ((i % rowMax) + col) * (symbolSize / 11) - 5;
                                 }
@@ -579,7 +576,7 @@ d3.csv(pids_url, function(pids_data) {
                                     return ((i % rowMax) + col) * (symbolSize / 11) - 3;
                                 }
                             }
-                            if (nums == 1) {
+                            if (nums === 'TIMES_WON') {
                                 if (d.No_Mandates > 9) {
                                     return ((i % rowMax) + col) * (symbolSize / 11) - 5;
                                 }
@@ -593,24 +590,24 @@ d3.csv(pids_url, function(pids_data) {
                             if (i % rowMax === 0 && i !== 0) {
                                 row += 1;
                             }
-                            if (i == 0) {
+                            if (i === 0) {
                                 row = 0;
                             }
                             return (row + 3) * (symbolSize / 10) + 4;
                         })
                         .text(function (d) {
-                            if (nums == 2) {
+                            if (nums === 'TIMES_CONTESTED') {
                                 if (d.Contested > 1) {
                                     return d.Contested;
                                 }
                             }
-                            if (nums == 1) {
+                            if (nums === 'TIMES_WON') {
                                 if (d.No_Mandates > 0) {
                                     return d.No_Mandates;
                                 }
                             }
                         })
-                        .attr("currentParty", function (d, i) {
+                        .attr("currentParty", function (d) {
                             if (typeof(d) === 'undefined') {
                                 return 0;
                             }
@@ -621,7 +618,7 @@ d3.csv(pids_url, function(pids_data) {
                                 return (partyNames[d.Party]);
                             }
                         })
-                        .attr("lastParty", function (d, i) {
+                        .attr("lastParty", function (d) {
                             if (typeof(d) === 'undefined') {
                                 return 0;
                             }
@@ -635,7 +632,7 @@ d3.csv(pids_url, function(pids_data) {
                                 return partyNames[d.Last_Party];
                             }
                         })
-                        .attr("name", function (d, i) {
+                        .attr("name", function (d) {
                             if (typeof(d) === 'undefined') {
                                 return 0;
                             }
@@ -643,16 +640,16 @@ d3.csv(pids_url, function(pids_data) {
                                 return (d.Candidate);
                             }
                         })
-                        .attr("acName", function (d, i) {
+                        .attr("acName", function (d) {
                             return d.Constituency_Name;
                         })
-                        .attr("position", function (d, i) {
+                        .attr("position", function (d) {
                             return d.Position;
                         })
                         .style("fill", 'white')
                         .style("font-family", 'Montserrat')
                         .style("font-size", function (d) {
-                            if (nums == 2) {
+                            if (nums === 'TIMES_CONTESTED') {
                                 if (d.Contested > 9) {
                                     return '10px';
                                 }
@@ -660,7 +657,7 @@ d3.csv(pids_url, function(pids_data) {
                                     return '11px';
                                 }
                             }
-                            if (nums == 1) {
+                            if (nums === 'TIMES_WON') {
                                 if (d.No_Mandates > 9) {
                                     return '10px';
                                 }
@@ -692,8 +689,8 @@ d3.csv(pids_url, function(pids_data) {
             //create symbol legend
             if (wonlost === '2') {
                 // only show legend if we're showing all
-                circle = d3.symbol().type(d3.symbolCircle).size(200)();
-                square = d3.symbol().type(d3.symbolSquare).size(200)();
+                var circle = d3.symbol().type(d3.symbolCircle).size(200)();
+                var square = d3.symbol().type(d3.symbolSquare).size(200)();
 
                 var symbolScale = d3.scaleOrdinal()
                     .domain(['Winner', 'Loser'])
@@ -715,7 +712,7 @@ d3.csv(pids_url, function(pids_data) {
 
         var refresh = function () {
             var assemblyNo = $('#assemblies').val();
-            var nums = $('#numbers').val();
+            var nums = $('#label').val();
             var wonlost = $('#wonlost').val();
             var turncoats = $('#turncoats').val();
             var searchTerm = $('#search').val();
@@ -725,7 +722,7 @@ d3.csv(pids_url, function(pids_data) {
         };
 
         // handle on click event
-        $('#assemblies,#numbers,#wonlost,#turncoats,#search').on('change', refresh);
+        $('#assemblies,#label,#wonlost,#turncoats,#search').on('change', refresh);
         $('#search').on('keyup', refresh);
 
 //    generateGraph(mydata, 17, 1, 1, 2, '');
