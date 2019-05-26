@@ -73,6 +73,14 @@ function commatize(nStr) {
 d3.csv(pids_url, function(pids_data) {
 
     d3.csv(url, function (data) {
+
+        function isInArray(value, array) {
+            return array.indexOf(value) > -1;
+        }
+        function isTopParty(p) {
+            return isInArray(p, topParties);
+        }
+
         var mydata = data; // data.rows;
 
         // check data and convert strings to ints
@@ -89,15 +97,6 @@ d3.csv(pids_url, function(pids_data) {
 //            d.Margin = parseInt(d.Margin);
 //            d.Age = parseInt (d.Age);
         });
-
-
-        function isInArray(value, array) {
-            return array.indexOf(value) > -1;
-        }
-        function isTopParty(p) {
-            return isInArray(p, topParties);
-        }
-
 
         //get list of all parties
         var allParties = [];
@@ -122,30 +121,24 @@ d3.csv(pids_url, function(pids_data) {
             }
         });
 
-        // If not top party, change party and last_party of a row to Other. but same these fields in Oth_Current and Oth_last, so we can show the info accurately on hover
+        // if Last_Party is not set, set it to the same as Party, so the color of the box remains the same as their party
         for (var i = 0; i < mydata.length; i++) {
-            // last party is not set for someone's first election. In this case, we treat their last party as simply the same party, so the color of the box remains the same as their party
+            // last party is not set for someone's first election.
             if (!mydata[i].Last_Party) {
                 mydata[i].Last_Party = mydata[i].Party;
             }
+        }
 
-            // if (typeof(mydata[i].Last_Party) === 'undefined') {
-            //     mydata[i].Last_Party = 'None';
-            // }
-
+        // If not top party, change party and last_party of a row to Other.
+        // but save these fields in Oth_Current and Oth_last, so we can show the info accurately on hover
+        for (var i = 0; i < mydata.length; i++) {
             mydata[i].Oth_Current = mydata[i].Party;
             mydata[i].Oth_Last = mydata[i].Last_Party;
-            if (!isTopParty(mydata[i].Party) && !isTopParty(mydata[i].Last_Party)) {
-                mydata[i].Oth_Current = mydata[i].Party;
-                mydata[i].Party = 'Other';
-                mydata[i].Oth_Last = mydata[i].Last_Party;
-                mydata[i].Last_Party = 'Other';
-            }
-            else if (!isTopParty(mydata[i].Party)) {
+            if (!isTopParty(mydata[i].Party)) {
                 mydata[i].Oth_Current = mydata[i].Party;
                 mydata[i].Party = 'Other';
             }
-            else if (!isTopParty(mydata[i].Last_Party)) {
+            if (!isTopParty(mydata[i].Last_Party)) {
                 mydata[i].Oth_Last = mydata[i].Last_Party;
                 mydata[i].Last_Party = 'Other';
             }
@@ -167,37 +160,15 @@ d3.csv(pids_url, function(pids_data) {
             }
         }
 
-
-
         var generateGraph = function (mydata, assemblyNo, nums, wonlost, turncoats, searchTerm) {
 
 
             LOG('generating graph with ' + mydata.length + ' rows for assembly#' + assemblyNo + ' labels ' + nums + ' wonlost=' + wonlost + ' turncoats=' + turncoats);
 
-            var div = d3.select("#viz").append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0);
-
             function do_mouseover(d) {
+                var div = d3.select('.tooltip');
                 div.transition().duration(200).style("opacity", 1.0);
-
                 div.html(function () {
-                        var candHistory = mydata.filter(function (k) {
-                            return (k.pid === d.pid && d.Assembly_No > k.Assembly_No);
-                        });
-                        LOG(candHistory);
-                        candHistory.sort(function (a, b) {return b.Year - a.Year});
-
-                        // get the img link
-                        var img_link = ''; //'http://164.100.47.193/mpimage/photo/4797.jpg'; // default
-                        var pid = d.pid;
-                        for (var x = 0; x < pids_data.length; x++) {
-                            if (pids_data[x].pid === pid) {
-                                img_link = pids_data[x].link;
-                                break;
-                            }
-                        }
-
                         function string_for_row(row) {
                             var win_or_lose_class = row.Position === 1 ? 'won' : 'lost';
                             var result = '<span class="' + win_or_lose_class + '">' + row.Constituency_Name + " (" + row.Year + ") " + row.Oth_Current + ", #" + row.Position + '</span>';
@@ -207,15 +178,33 @@ d3.csv(pids_url, function(pids_data) {
                             return result;
                         }
 
-                        var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
-                        tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
-                        tooltipText += string_for_row(d) + '<br/>';
-                        tooltipText += d.MyNeta_age + ' years<br/>';
-                        // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
-                        // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
+                        // get the img link - first matching link in pids table, or empty if no match
+                        var img_link = '';
+                        var pid = d.pid;
+                        for (var x = 0; x < pids_data.length; x++) {
+                            if (pids_data[x].pid === pid) {
+                                img_link = pids_data[x].link;
+                                break;
+                            }
+                        }
 
+                        // add the initial tooltip
+                        var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
+                            tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
+                            tooltipText += string_for_row(d) + '<br/>';
+                            tooltipText += d.MyNeta_age + ' years<br/>';
+                            // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
+                            // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
+
+                        // then add the history. This is only the history in prev. assemblies.
+                        // Possible improvement: show in history if same cand. has contested another seat in the same assembly also.
+                        var candHistory = mydata.filter(function (k) {
+                            return (k.pid === d.pid && d.Assembly_No > k.Assembly_No);
+                        });
+                        candHistory.sort(function (a, b) {return b.Year - a.Year});
                         tooltipText += '<hr style="color:darkgray;background-color:darkgray;margin-bottom:3px;"/>';
                         candHistory.forEach(function (k) { tooltipText += string_for_row(k) + '<br/>'; });
+
                         LOG (tooltipText);
                         return tooltipText;
                     })
