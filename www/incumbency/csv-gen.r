@@ -8,15 +8,22 @@ filePath = '~/tcpd_data/GE/GE_19_working/mastersheet_with_adr_data.csv'
 data = fread(filePath)
 #dt <- dt[dt$No_Mandates > 0]
 data <- data[Party != 'NOTA' & Candidate != 'NOTA', c("Assembly_No", "Poll_No", "Year", "Candidate", "State_Name", "Constituency_Name", "Party", "Last_Party", "pid", "Votes", "Sex", "Position", "Contested", "No_Mandates", "Turncoat", "Incumbent", "Vote_Share_Percentage", "Margin", "Margin_Percentage", "MyNeta_age")]
-
+data = 
 # filter dt down to only rows whose pid is present in this assembly
 for (assembly in min(data$Assembly_No):max(data$Assembly_No)) {
   print (paste('Generating data for assembly# ', assembly))
   
   dt = data[Assembly_No <= assembly] # filter out all rows after this assembly
   
-  # get pids of everyone who has a line in this assembly, but drop INDs > 3 to avoid the long tail of insignificant cands
-  this_assembly_pids = unique(dt[Assembly_No == assembly & !(Party == 'IND' & Position > 3)]$pid)
+  # get pids of everyone who has a line in this assembly...
+  # ... but drop INDs and non-winning-parties parties unless their Position is < 3 to avoid the long tail of insignificant cands
+  
+  party_seat_count = dt[Assembly_No == assembly & Position == 1, .(count = .N), by='Party']
+  winning_parties = party_seat_count$Party # only winning parties will have an entry in this table
+  this_assembly_pids = unique(dt[Assembly_No == assembly & (Position < 3 | (Party %in% winning_parties & Party != 'IND'))]$pid)
+
+  print (paste("winning parties = ", winning_parties))
+  
   dt = dt[pid %in% this_assembly_pids]
   # only keep those rows with a pid in this assembly
   

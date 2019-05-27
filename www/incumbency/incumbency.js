@@ -1,4 +1,9 @@
-var url = './rows-ge.csv'; //change json source here
+var assemblyNo = 17;
+
+$('#assembly-number').html(assemblyNo == 3 ? "3rd" : (assemblyNo + "th"));
+
+var url = './ge-incumbency-' + assemblyNo + '.csv'; //change json source here
+
 var pids_url = './pids.csv';
 
 function LOG (s) { if (console) { console.log(s); } }
@@ -385,7 +390,8 @@ d3.csv(pids_url, function(pids_data) {
                     })
                     .style("fill", function (d) {
                         var pattern = new RegExp(searchTerm, 'i');
-                        return (pattern.test(d.Candidate) || pattern.test(d.Constituency_Name)) ? partyColours[d.Last_Party] : '#dddddd';
+                        // remember to test Oth_Current because the part we are looking for may be there
+                        return (pattern.test(d.Candidate) || pattern.test(d.Constituency_Name) || pattern.test(d.Party) || pattern.test(d.Oth_Current)) ? partyColours[d.Last_Party] : '#dddddd';
                     })
                     //.style('opacity', 0.5)
                     .on("mouseover", do_mouseover)
@@ -509,7 +515,7 @@ d3.csv(pids_url, function(pids_data) {
         };
 
         var refresh = function () {
-            var assemblyNo = $('#assemblies').val();
+            //var assemblyNo = $('#assemblies').val();
             var labels = $('#label').val();
             var wonlost = $('#wonlost').val();
             var turncoats = $('#turncoats').val();
@@ -523,7 +529,6 @@ d3.csv(pids_url, function(pids_data) {
         $('#assemblies,#label,#wonlost,#turncoats,#search').on('change', refresh);
         $('#search').on('keyup', refresh);
 
-//    generateGraph(mydata, 17, 1, 1, 2, '');
         refresh();
 
     });
