@@ -1,4 +1,8 @@
-var assemblyNo = 17;
+
+var params = (new URL(document.location)).searchParams;
+var assemblyNo = params.get("a");
+if (!assemblyNo)
+    assemblyNo = 17;
 
 $('#assembly-number').html(assemblyNo == 3 ? "3rd" : (assemblyNo + "th"));
 
