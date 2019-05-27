@@ -81,10 +81,10 @@ d3.csv(pids_url, function(pids_data) {
             return isInArray(p, topParties);
         }
 
-        var mydata = data; // data.rows;
+        var allRows = data; // data.rows;
 
         // check data and convert strings to ints
-        mydata.forEach(function (d) {
+        allRows.forEach(function (d) {
             d.Position = parseInt(d.Position);
             d.No_Mandates = parseInt(d.No_Mandates);
             d.Contested = parseInt(d.Contested);
@@ -100,18 +100,18 @@ d3.csv(pids_url, function(pids_data) {
 
         //get list of all parties
         var allParties = [];
-        for (i = 0; i < mydata.length; i++) {
-            if (!isInArray(mydata[i].Party, allParties)) {
-                allParties.push(mydata[i].Party);
+        for (i = 0; i < allRows.length; i++) {
+            if (!isInArray(allRows[i].Party, allParties)) {
+                allParties.push(allRows[i].Party);
             }
-            if (!isInArray(mydata[i].Last_Party, allParties)) {
-                allParties.push(mydata[i].Last_Party);
+            if (!isInArray(allRows[i].Last_Party, allParties)) {
+                allParties.push(allRows[i].Last_Party);
             }
         }
 
         // # of seats won by party (all assemblies, not just the one being shown). This will be used for generating the sort order of parties.
-        var numSeats = [];
-        mydata.forEach(function (data) {
+        var numSeats = {'Other': 0};
+        allRows.forEach(function (data) {
             var party = data.Party;
             if (data.Position === 1) {
                 if (numSeats[party])
@@ -122,27 +122,27 @@ d3.csv(pids_url, function(pids_data) {
         });
 
         // if Last_Party is not set, set it to the same as Party, so the color of the box remains the same as their party
-        for (var i = 0; i < mydata.length; i++) {
+        allRows.forEach(function (row) {
             // last party is not set for someone's first election.
-            if (!mydata[i].Last_Party) {
-                mydata[i].Last_Party = mydata[i].Party;
+            if (!row.Last_Party) {
+                row.Last_Party = row.Party;
             }
-        }
+        });
 
         // If not top party, change party and last_party of a row to Other.
         // but save these fields in Oth_Current and Oth_last, so we can show the info accurately on hover
-        for (var i = 0; i < mydata.length; i++) {
-            mydata[i].Oth_Current = mydata[i].Party;
-            mydata[i].Oth_Last = mydata[i].Last_Party;
-            if (!isTopParty(mydata[i].Party)) {
-                mydata[i].Oth_Current = mydata[i].Party;
-                mydata[i].Party = 'Other';
+        allRows.forEach(function (row) {
+            row.Oth_Current = row.Party;
+            row.Oth_Last = row.Last_Party;
+            if (!isTopParty(row.Party)) {
+                row.Oth_Current = row.Party;
+                row.Party = 'Other';
             }
-            if (!isTopParty(mydata[i].Last_Party)) {
-                mydata[i].Oth_Last = mydata[i].Last_Party;
-                mydata[i].Last_Party = 'Other';
+            if (!isTopParty(row.Last_Party)) {
+                row.Oth_Last = row.Last_Party;
+                row.Last_Party = 'Other';
             }
-        }
+        });
 
         //generate colour range for parties (after Other has been set for the non-top parties)
         {
@@ -162,13 +162,10 @@ d3.csv(pids_url, function(pids_data) {
 
         var generateGraph = function (mydata, assemblyNo, nums, wonlost, turncoats, searchTerm) {
 
-
-            LOG('generating graph with ' + mydata.length + ' rows for assembly#' + assemblyNo + ' labels ' + nums + ' wonlost=' + wonlost + ' turncoats=' + turncoats);
-
             function do_mouseover(d) {
-                var div = d3.select('.tooltip');
-                div.transition().duration(200).style("opacity", 1.0);
-                div.html(function () {
+                var tooltip = d3.select('.tooltip');
+                tooltip.transition().duration(200).style("opacity", 1.0);
+                tooltip.html(function () {
                         function string_for_row(row) {
                             var win_or_lose_class = row.Position === 1 ? 'won' : 'lost';
                             var result = '<span class="' + win_or_lose_class + '">' + row.Constituency_Name + " (" + row.Year + ") " + row.Oth_Current + ", #" + row.Position + '</span>';
@@ -197,6 +194,7 @@ d3.csv(pids_url, function(pids_data) {
                             // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
 
                         // then add the history. This is only the history in prev. assemblies.
+                        // note this is history on all rows, not just currently filtered rows
                         // Possible improvement: show in history if same cand. has contested another seat in the same assembly also.
                         var candHistory = mydata.filter(function (k) {
                             return (k.pid === d.pid && d.Assembly_No > k.Assembly_No);
@@ -208,61 +206,59 @@ d3.csv(pids_url, function(pids_data) {
                         LOG (tooltipText);
                         return tooltipText;
                     })
-                    .style("left", (d3.event.pageX) + "px")
+                    .style("left", (d3.event.pageX+5) + "px") // offset the tooltip location a bit from the event's pageX/Y
                     .style("top", (d3.event.pageY - 28) + "px");
             }
 
             function do_mouseout() {
-                div.transition().duration(500).style("opacity", 0);
+                var tooltip = d3.select('.tooltip');
+                tooltip.transition().duration(500).style("opacity", 0);
             }
 
+            // actual code for generateGraph begins
+            LOG('generating graph with ' + mydata.length + ' rows for assembly#' + assemblyNo + ' labels ' + nums + ' wonlost=' + wonlost + ' turncoats=' + turncoats);
+
             // get current assembly rows
-            var currentAssembly;
+            var filteredRows;
             {
-                currentAssembly = mydata.filter(function (i) {
+                filteredRows = mydata.filter(function (i) {
                     return i.Assembly_No === parseInt(assemblyNo);
                 });
 
                 if (wonlost === "1") {
-                    currentAssembly = currentAssembly.filter(function (i) {
+                    filteredRows = filteredRows.filter(function (i) {
                         return i.Position === 1;
                     });
                 } // else all candidates, do nothing
 
                 if (turncoats === "1") {
-                    currentAssembly = currentAssembly.filter(function (i) {
+                    filteredRows = filteredRows.filter(function (i) {
                         return i.Turncoat === 'FALSE';
                     });
                 } else if (turncoats === "0") {
-                    currentAssembly = currentAssembly.filter(function (i) {
+                    filteredRows = filteredRows.filter(function (i) {
                         return i.Contested > 1;
                     });
                 }
 
-                LOG('filtered rows ' + currentAssembly.length);
+                LOG('filtered rows ' + filteredRows.length);
             }
 
-            // get parties in these rows and sort them in alphabetical order
+            // get parties in these rows and sort them by importance (# seats won in this dataset)
             var parties = [];
             {
                 var lookup = {};
-                for (var i = 0; i < currentAssembly.length; i++) {
-                    var Party = currentAssembly[i].Party;
+                for (var i = 0; i < filteredRows.length; i++) {
+                    var Party = filteredRows[i].Party;
                     if (!(Party in lookup)) {
                         lookup[Party] = 1;
                         parties.push(Party);
                     }
                 }
 
-                // sort by the # of seats
+                // sort by the # of seats. But other's count is set to 0, so it is always shown last
                 parties = parties.sort(function (a, b) {
-                    if (a === 'Other') {
-                        return 1;
-                    }
-                    else if (b === 'Other') {
-                        return -1;
-                    }
-                    else return numSeats[b] - numSeats[a]
+                    return numSeats[b] - numSeats[a]
                 });
             }
 
@@ -271,7 +267,7 @@ d3.csv(pids_url, function(pids_data) {
             {
                 for (i = 0; i < parties.length; i++) {
                     var currentParty = parties[i];
-                    var currentEntries = currentAssembly.filter(function (i) {
+                    var currentEntries = filteredRows.filter(function (i) {
                         if (currentParty === 'IND') {
                             return (i.Party === currentParty && i.Last_Party !== 'None'); // If Ind, filter out candidates whose last_party is None
                         }
@@ -314,6 +310,7 @@ d3.csv(pids_url, function(pids_data) {
 
                 party_count_for_last_party['Other'] = -1; // let this rank at the bottom
 
+                // sort the boxes within a given party column
                 party_rows.sort(function (a, b) {
                     // rows with last_party = higher count will come before rows with last_party = lower count
                     if (party_count_for_last_party[a.Last_Party] !== party_count_for_last_party[b.Last_Party])
@@ -335,18 +332,6 @@ d3.csv(pids_url, function(pids_data) {
                     // if no other difference, sort by # mandates
                     return b.No_Mandates - a.No_Mandates;
                 });
-                    //
-                    // party_rows.sort(function (a, b) {
-                    // if (a.Last_Party === b.Last_Party) {
-                    //     return b.No_Mandates - a.No_Mandates;
-                    // }
-                    // else if (a.Last_Party > b.Last_Party) {
-                    //     return 1;
-                    // }
-                    // else if (a.Last_Party < b.Last_Party) {
-                    //     return -1;
-                    // }
-                // });
             });
 
             var xMax = 0;
@@ -396,7 +381,7 @@ d3.csv(pids_url, function(pids_data) {
                 .attr('width', width + legendMargin)
                 .attr('height', height);
 
-            //generate shapes
+            //generate shapes for this col
             var col = -rowMax;
             var row = -1;
             for (k = 0; k < partywise.length; k++) {
@@ -404,12 +389,8 @@ d3.csv(pids_url, function(pids_data) {
                     .data(partywise[k])
                     .enter()
                     .append('path')
-                    .attr('d', d3.symbol().type(function (d) {
-                        return (d.Position === 1) ? d3.symbolSquare : d3.symbolCircle;
-                    })
-                        .size(function () {
-                            return symbolSize * 0.4;
-                        }))
+                    .attr('d', d3.symbol().type(function (d) { return (d.Position === 1) ? d3.symbolSquare : d3.symbolCircle; })
+                    .size(function () {return symbolSize * 0.4;}))
                     .attr("transform", function (d, i) {
                         if (i === 0) {
                             col += rowMax + 1;
@@ -423,45 +404,6 @@ d3.csv(pids_url, function(pids_data) {
                         }
                         var y = (row + 3) * (symbolSize / 10);
                         return "translate(" + x + "," + y + ")"
-                    })
-                    .attr("currentParty", function (d) {
-                        if (typeof(d) === 'undefined') {
-                            return 0;
-                        }
-                        else if (d.Party === 'Other') {
-                            return d.Oth_Current;
-                        }
-                        else {
-                            return (partyNames[d.Party]);
-                        }
-                    })
-                    .attr("lastParty", function (d) {
-                        if (typeof(d) === 'undefined') {
-                            return 0;
-                        }
-                        if (typeof(d.Last_Party) === 'undefined') {
-                            return ('None');
-                        }
-                        else if (d.Last_Party === 'Other') {
-                            return d.Oth_Last;
-                        }
-                        else {
-                            return partyNames[d.Last_Party];
-                        }
-                    })
-                    .attr("name", function (d) {
-                        if (typeof(d) === 'undefined') {
-                            return 0;
-                        }
-                        else {
-                            return (d.Candidate);
-                        }
-                    })
-                    .attr("acName", function (d) {
-                        return d.Constituency_Name;
-                    })
-                    .attr("position", function (d) {
-                        return d.Position;
                     })
                     .style("fill", function (d) {
                         if (typeof(d) === 'undefined') {
@@ -488,17 +430,8 @@ d3.csv(pids_url, function(pids_data) {
                     .data(partywise[k])
                     .enter()
                     .append('path')
-                    .attr('d', d3.symbol().type(function (d) {
-                        if (d.Position === 1) {
-                            return d3.symbolSquare;
-                        }
-                        else {
-                            return d3.symbolCircle;
-                        }
-                    })
-                        .size(function () {
-                            return symbolSize;
-                        }))
+                    .attr('d', d3.symbol().type(function (d) { return (d.Position === 1) ? d3.symbolSquare : d3.symbolCircle; })
+                    .size(function () { return symbolSize; }))
                     .attr("transform", function (d, i) {
                         if (i === 0) {
                             col += rowMax + 1;
@@ -513,50 +446,15 @@ d3.csv(pids_url, function(pids_data) {
                         var y = (row + 3) * (symbolSize / 10);
                         return "translate(" + x + "," + y + ")"
                     })
-                    .attr("currentParty", function (d) {
-                        if (typeof(d) === 'undefined') {
-                            return 0;
-                        }
-                        else if (d.Party === 'Other') {
-                            return d.Oth_Current;
-                        }
-                        else {
-                            return (partyNames[d.Party]);
-                        }
-                    })
-                    .attr("lastParty", function (d) {
-                        if (typeof(d) === 'undefined') {
-                            return 0;
-                        }
-                        if (typeof(d.Last_Party) === 'undefined') {
-                            return ('None');
-                        }
-                        else if (d.Last_Party === 'Other') {
-                            return d.Oth_Last;
-                        }
-                        else {
-                            return partyNames[d.Last_Party];
-                        }
-                    })
                     .style("fill", function (d) {
-                        if (typeof(d) === 'undefined') {
-                            return 0;
-                        }
-                        if (typeof(d.Last_Party) === 'undefined') {
-                            return partyColours['None'];
-                        }
-                        if (!pattern.test(d.Candidate) && !pattern.test(d.Constituency_Name)) {
-                            return '#dddddd'; // ''#ffffff'
-                        }
-                        else {
-                            return partyColours[d.Last_Party];
-                        }
+                        // grey out things that don't match the term, otherwise return last party's color
+                        return (pattern.test(d.Candidate) || pattern.test(d.Constituency_Name)) ? partyColours[d.Last_Party] : '#dddddd';
                     })
                     .on("mouseover", do_mouseover)
                     .on("mouseout", do_mouseout);
             }
 
-            //generate text
+            // generate label
             if (nums !== 'NO_LABEL') {
                 col = -rowMax;
                 row = -1;
@@ -599,54 +497,13 @@ d3.csv(pids_url, function(pids_data) {
                         })
                         .text(function (d) {
                             if (nums === 'TIMES_CONTESTED') {
-                                if (d.Contested > 1) {
-                                    return d.Contested;
-                                }
+                                return d.Contested; // well, contested can't be == 0.
                             }
                             if (nums === 'TIMES_WON') {
                                 if (d.No_Mandates > 0) {
                                     return d.No_Mandates;
                                 }
                             }
-                        })
-                        .attr("currentParty", function (d) {
-                            if (typeof(d) === 'undefined') {
-                                return 0;
-                            }
-                            else if (d.Party === 'Other') {
-                                return d.Oth_Current;
-                            }
-                            else {
-                                return (partyNames[d.Party]);
-                            }
-                        })
-                        .attr("lastParty", function (d) {
-                            if (typeof(d) === 'undefined') {
-                                return 0;
-                            }
-                            if (typeof(d.Last_Party) === 'undefined') {
-                                return ('None');
-                            }
-                            else if (d.Last_Party === 'Other') {
-                                return d.Oth_Last;
-                            }
-                            else {
-                                return partyNames[d.Last_Party];
-                            }
-                        })
-                        .attr("name", function (d) {
-                            if (typeof(d) === 'undefined') {
-                                return 0;
-                            }
-                            else {
-                                return (d.Candidate);
-                            }
-                        })
-                        .attr("acName", function (d) {
-                            return d.Constituency_Name;
-                        })
-                        .attr("position", function (d) {
-                            return d.Position;
                         })
                         .style("fill", 'white')
                         .style("font-family", 'Montserrat')
@@ -688,7 +545,7 @@ d3.csv(pids_url, function(pids_data) {
             svg.select(".legendOrdinal")
                 .call(legendOrdinal);
 
-            //create symbol legend
+            // create symbol legend, but only if we're showing losers. no need to show it if we are only showing winners.
             if (wonlost === '2') {
                 // only show legend if we're showing all
                 var circle = d3.symbol().type(d3.symbolCircle).size(200)();
@@ -720,7 +577,7 @@ d3.csv(pids_url, function(pids_data) {
             var searchTerm = $('#search').val();
             //d3.selectAll("svg").transition().duration(400).style("opacity", 0).remove();
             d3.selectAll("svg").remove();
-            generateGraph(mydata, assemblyNo, nums, wonlost, turncoats, searchTerm);
+            generateGraph(allRows, assemblyNo, nums, wonlost, turncoats, searchTerm);
         };
 
         // handle on click event
