@@ -11,14 +11,23 @@ dt <- data[Party != 'NOTA' & Candidate != 'NOTA', c("Assembly_No", "Poll_No", "Y
 
 # filter dt down to only rows whose pid is present in this assembly
 assembly = 17
-this_assembly_pids = unique(dt[Assembly_No == assembly]$pid)
+dt = dt[Assembly_No <= assembly] # filter out all rows after this assembly
+
+# get pids of everyone who has a line in this assembly, but drop INDs > 3 to avoid the long tail of insignificant cands
+this_assembly_pids = unique(dt[Assembly_No == assembly & !(Party == 'IND' & Position > 3)]$pid)
 dt = dt[pid %in% this_assembly_pids]
+# only keep those rows with a pid in this assembly
 
 terms_served_by_pid = dt[Position == 1, .(Terms=length(unique(Assembly_No))), by=c('pid')]
-dt = merge (dt, terms_served_by_pid, by=c('pid'))
+dt = merge (dt, terms_served_by_pid, by=c('pid'), all.x=TRUE)
+
+# fix the #mandates and contested to be whatever it is up to the current assembly
+# otherwise rows for the same pid will have different values in these columns
+dt[, No_Mandates:=max(No_Mandates), by=c('pid')]
+dt[, Contested:=max(Contested), by=c('pid')]
 
 terms_contested_by_pid = dt[, .(Terms_Contested=length(unique(Assembly_No))), by=c('pid')]
-dt = merge (dt, terms_contested_by_pid, by=c('pid'))
+dt = merge (dt, terms_contested_by_pid, by=c('pid'), all.x = TRUE)
 
 fwrite(dt, file='rows-ge.csv')
 

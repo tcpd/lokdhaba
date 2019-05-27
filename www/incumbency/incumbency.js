@@ -306,8 +306,12 @@ d3.csv(pids_url, function(pids_data) {
                     else if (a.Position > 1 && b.Position === 1)
                         return 1;
 
-                    // if no other difference, sort by # mandates
-                    return b.No_Mandates - a.No_Mandates;
+                    // if no other difference, sort by # terms or terms_contested.
+                    // IMP: Don't use # mandates here. Different rows for the same PID have different No_Mandates, but # Terms is the same
+                    if (a.Terms !== b.Terms) {
+                        return b.Terms - a.Terms;
+                    }
+                    return b.Terms_Contested - a.Terms_Contested;
                 });
             });
 
