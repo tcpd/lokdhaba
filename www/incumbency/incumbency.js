@@ -4,7 +4,7 @@ var assemblyNo = params.get("a");
 if (!assemblyNo)
     assemblyNo = 17;
 
-$('#assembly-number').html(assemblyNo == 3 ? "3rd" : (assemblyNo + "th"));
+$('.assembly-number').html(assemblyNo == 3 ? "3rd" : (assemblyNo + "th"));
 
 var url = './ge-incumbency-' + assemblyNo + '.csv'; //change json source here
 
@@ -175,7 +175,8 @@ d3.csv(pids_url, function(pids_data) {
                         var tooltipText = '<img class="profile-pic" src="' + img_link + '"/> ' + '<br/>';
                             tooltipText += '<span class="cand-name">' + d.Candidate.toUpperCase() + '</span><br/>';
                             tooltipText += string_for_row(d) + '<br/>';
-                            tooltipText += d.MyNeta_age + ' years<br/>';
+                            if (d.MyNeta_age)
+                                tooltipText += d.MyNeta_age + ' years<br/>';
                             // tooltipText += '<i>Votes</i>: ' + commatize(d.Votes) + ' (' + d.Vote_Share_Percentage + '%) <br/>';
                             // tooltipText += '<i>Margin</i>: ' + commatize(d.Margin) + ' (' + d.Margin_Percentage + '%) <br/>';
 
