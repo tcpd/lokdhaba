@@ -1,0 +1,62 @@
+    .profile-pic { height:100px; position:relative; opacity: 1.0;}
+    select { height: 30px;}
+    input { height: 30px; }
+    .controls { background-color: #f8f8f8; padding: 20px;}
+    .lost { color: gray; }
+
+    div.tooltip {   
+          position: absolute;           
+          text-align: left;                           
+          padding: 8px;             
+          font: 1vw 'Source Sans Pro';
+          color: white;      
+          background: black;   
+          border: 0px; 
+          border-color: black;     
+          border-radius: 2px;           
+          pointer-events: none;         
+}
+
+      .axis path,
+        .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+      body, h1, .axis, .label, .d3-legend text, label {
+        font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+      }
+        .axis text {
+            font-size: 20px;
+        }
+
+        .label {
+          font-size: 15px;
+        }
+
+        .d3-legend text {
+          font-size: 15px;
+        }
+
+        label, select {
+            display: inline-block;
+            width: 100px;
+        }
+
+        label {
+            position: relative;
+            top: -1.7em;
+            left: 5px;
+            text-align: center;
+        }
+
+        select {
+            margin: 1.5em 0 0 -100px;
+        }
+
+    #viz { width: 1000px; margin:auto}
+    div.header { width: 1000px; margin:auto; }
+    div.help { width: 1000px; color: gray; font-size:90%; text-align:left;}
+  .cand-name { font-size: 120%; color: #00a65a;}
+    .bypoll { margin-left:5px; padding:0px 5px; background-color:yellow;color:black; font-size:80%;}
