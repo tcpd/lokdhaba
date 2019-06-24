@@ -16,17 +16,12 @@
           border-radius: 2px;           
           pointer-events: none;         
 }
-
       .axis path,
         .axis line {
             fill: none;
             stroke: black;
             shape-rendering: crispEdges;
         }
-
-      body, h1, .axis, .label, .d3-legend text, label {
-        font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-      }
         .axis text {
             font-size: 20px;
         }
