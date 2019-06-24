@@ -67,8 +67,6 @@ body {
     padding-top: 80px; 
     padding-bottom: 45px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    background: url("watermark.svg");
-    background-repeat: no-repeat;
 }
 
 @media screen and (max-width: 768px) {
