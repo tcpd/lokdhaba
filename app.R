@@ -231,6 +231,11 @@ shinyServer <- function(input, output, session) {
      includeHTML("www/about.html")
    })
 
+   #Rendering of incumbency tab 
+   output$incumbency<-renderUI({
+     includeHTML("www/incumbencyGE.html")
+   })
+
    #browser()
   output$visDataDownload <- downloadHandler(
    filename = function() {
