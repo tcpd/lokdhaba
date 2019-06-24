@@ -216,19 +216,21 @@ shinyServer <- function(input, output, session) {
   dataDownloadOptions(input,output,session,"AE/",conmanager)
   browseDataOptions(input,output,session,conmanager)
 
+  #Rendering of home tab 
+  output$home<-renderUI({
+     includeHTML("www/home.html")
+   })
   
-  
-  ###################Rendering of contact us tab by reading the html from html file
-   output$contactus<-renderUI({
-     ##Render the summary report of UP election written in rmd file format.
-     includeHTML("ContactUs.html")
+  #Rendering of documentation tab 
+   output$documentation<-renderUI({
+     includeHTML("www/documentation.html")
    })
 
-   ################Rendering of how to cite us tab by reading the html file   
-   output$howtocite<-renderUI({
-     ##Render the summary report of UP election written in rmd file format.
-     includeHTML("HowToCite.html")
+  #Rendering of about tab 
+   output$about<-renderUI({
+     includeHTML("www/about.html")
    })
+
    #browser()
   output$visDataDownload <- downloadHandler(
    filename = function() {
