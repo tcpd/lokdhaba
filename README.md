@@ -9,5 +9,6 @@ docker run -d -p 3838:3838 --name lokdhaba -v /home/ubuntu/tcpd/:/srv/shiny-serv
 
 ## Run LokDhaba in Shiny
 ```
-shiny::runApp('~/workspace/lokdhaba') (if ~/workspace/lokdhaba is where the lokdhaba git repo has been checked out)
+shiny::runApp('~/workspace/lokdhaba')
 ```
+(if ~/workspace/lokdhaba is where the lokdhaba git repo has been checked out)
