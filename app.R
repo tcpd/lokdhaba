@@ -233,7 +233,7 @@ shinyServer <- function(input, output, session) {
 
    #Rendering of incumbency tab 
    output$incumbency<-renderUI({
-     includeHTML("www/incumbencyGE.html")
+     includeHTML("www/incumbency/GE.html")
    })
 
    #browser()

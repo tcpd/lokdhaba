@@ -3,8 +3,8 @@
 library(data.table)
 library(jsonlite)
 library(readr)
-filePath <- '~/tcpd_data/GE/Data/derived/mastersheet.csv'
-filePath = '~/tcpd_data/GE/GE_19_working/mastersheet_with_adr_data.csv'
+filePath <- '~/github/tcpd_data/data/GE/Data/derived/mastersheet.csv'
+filePath = '~/github/tcpd_data/data/GE/Data/derived/mastersheet_ADR.csv'
 data = fread(filePath)
 #dt <- dt[dt$No_Mandates > 0]
 data <- data[Party != 'NOTA' & Candidate != 'NOTA', c("Assembly_No", "Poll_No", "Year", "Candidate", "State_Name", "Constituency_Name", "Party", "Last_Party", "pid", "Votes", "Sex", "Position", "Contested", "No_Mandates", "Turncoat", "Incumbent", "Vote_Share_Percentage", "Margin", "Margin_Percentage", "MyNeta_age")]
@@ -42,10 +42,10 @@ for (assembly in min(data$Assembly_No):max(data$Assembly_No)) {
 }
 
 # read the pics table from both LS and PRS and assign the link in the last row to that pid
-pics_ls = fread ('~/tcpd_data/GE/GE_19_working/pictures_with_pids.csv');
+pics_ls = fread ('~/github/tcpd_data/data/GE/GE_19_working/pictures_with_pids.csv');
 pics_ls = pics_ls[, .(link=.SD[nrow(.SD)]$link), by=.(pid)]
 
-pics_prs = fread ('~/tcpd_data/GE/GE_19_working/pictures_with_pids_prs.csv');
+pics_prs = fread ('~/github/tcpd_data/data/GE/GE_19_working/pictures_with_pids_prs.csv');
 pics_prs = pics_prs[, .(link=.SD[nrow(.SD)]$link), by=.(pid)]
 
 pics_merged = merge(pics_prs, pics_ls, by=c('pid'), all.x=TRUE, all.y=TRUE)
