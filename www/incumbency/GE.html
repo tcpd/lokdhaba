@@ -71,7 +71,7 @@
         }
 
     #viz { width: 1000px; margin:auto}
-    div.header { width: 1000px; margin:auto; text-align:center;}
+    div.header { width: 1000px; margin:auto; }
     div.help { width: 1000px; color: gray; font-size:90%; text-align:left;}
   .cand-name { font-size: 120%; color: #00a65a;}
     .bypoll { margin-left:5px; padding:0px 5px; background-color:yellow;color:black; font-size:80%;}
@@ -102,7 +102,7 @@
     <div class="controls">
 
       <label style="margin-left:20px;left:130px" for="search">Search</label>
-    <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" size="28" type = 'text' id = 'search' placeholder="Person, constituency or party">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" size="28" type = 'text' class="select-search" id = 'search' placeholder="Person, constituency or party">
 
     <div style="display:none;">
 
@@ -127,27 +127,36 @@
     </div>
 
   <label style="margin-left:20px" for="label">Label</label>
-  <select id = "label" style="width:130px">
+  <select class="select-label" id = "label" style="width:130px">
       <option value="NO_LABEL">No label</option>
       <option value="TIMES_WON" selected='selected'>Times Won</option>
       <option value="TIMES_CONTESTED">Times Contested</option>
   </select>
 
   <label style="margin-left:20px" for="wonlost">Position</label>
-  <select id = "wonlost"> 
+  <select class="select-wonlost" id= "wonlost">
       <option value="1" selected="selected">Only winners</option>
       <option value="2" >All candidates</option>
       <!--<option value=2>Lost</option>-->
   </select>
 
-    <div style="margin-left:20px;display:none;">
-  <label for="turncoats">Turncoats</label>
-  <select id = "turncoats">
-      <option value="2" selected='selected'>All</option>
-      <option value="1">Turncoats</option>
-      <option value="0">Previously Contested</option>
+  <label style="margin-left:20px" for="turncoats">Experience</label>
+  <select class="select-turncoats" id="turncoats">
+      <option value="ALL" selected='selected'>All</option>
+      <option value="NEWCOMERS">Newcomers</option>
+      <option value="PREVIOUSLY_CONTESTED">Previously Contested</option>
+      <option value="TURNCOATS">Turncoats</option>
   </select>
-    </div>
+
+
+    <label style="margin-left:20px" for="Sex">Gender</label>
+    <select class="select-sex" id="sex">
+        <option value="ALL" selected='selected'>All</option>
+        <option value="FEMALE">Female</option>
+        <option value="MALE">Male</option>
+        <option value="OTHER">Other</option>
+    </select>
+
     </div>
 
   </div>

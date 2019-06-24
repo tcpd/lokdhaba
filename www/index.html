@@ -123,11 +123,13 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 	  <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li>
 	  <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">Documentation </a></li>
 	  <li><a href="#tab-5312-6" data-toggle="tab" data-value="ABOUT">About </a></li>
+	  <li><a href ="#tab-5312-8" data-toggle="tab" data-value="INCM">Incumbency Profile </a></li>
 	</ul>
 
 
     </div>
   </nav>
+<!-- Data VisualizationTab -->
   <div class="container-fluid">
     <div class="tab-content" data-tabsetid="5312">
       <div class="tab-pane" data-value="EDV" id="tab-5312-2">
@@ -374,7 +376,14 @@ Shiny.addCustomMessageHandler('shinyjs-delay', function(params) { shinyjs.debugM
 		  <br/>
 	  </div>
       </div>
+<!-- Incumbency Tab -->
+      <div class="tab-pane" data-value="INCM" id="tab-5312-8">
+        <div class="container-fluid">
+	  <iframe seamless src="incumbency/GE.html" width="100%" height = "900px"></iframe>
+        </div>
+      </div>
 
+<!-- About tab -->
       <div class="tab-pane" data-value="ABOUT" id="tab-5312-6">
 	  <div class="banner">
             <span class="b-heading">Lok Dhaba</span>
