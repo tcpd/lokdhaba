@@ -17,16 +17,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.22.0/polyfill.min.js"></script>
   <link href="shared/shiny.css" rel="stylesheet" />
   <script src="shared/shiny.min.js"></script>
-  <script src="assets/radarChart-0.1/radarChart.js"></script>
-  <script src="assets/shared/json2-min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="assets/AdminLTE-2.0.6/AdminLTE.min.css"></script>
-  <script src="assets/AdminLTE-2.0.6/_all-skins.min.css"></script>
-  <script src="assets/AdminLTE-2.0.6/app.min.js"></script>
   <script type="application/ld+json">
     {
       "context": "http://schema.org/",
-      "@type": "Dataset",
+    "@type": "Dataset",
       "name": "Indian Elections Dataset",
       "description": "The Indian General & State Assembly Election and Candidates Database 1961- today ",
       "url": "http://lokdhaba.ashoka.edu.in/LokDhaba-Shiny/",
@@ -196,7 +190,7 @@
         <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li>
         <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">Documentation </a></li>
         <li><a href="#tab-5312-6" data-toggle="tab" data-value="ABOUT">About </a></li>
-        <li><a href="#tab-5312-7" data-toggle="tab" data-value="INCM">Incumbency Profile </a></li>
+        <li><a href="https://lokdhaba.ashoka.edu.in/incumbency/GE.html" target="_blank">Incumbency Profile </a></li>
       </ul>
       </div>
 
@@ -206,8 +200,6 @@
   <div class="container-fluid">
     <div class="tab-content" data-tabsetid="5312">
       <div class="tab-pane" data-value="EDV" id="tab-5312-2">
-          <br />
-          <br />
           <br />
           <br />
         <div class="container-fluid">
@@ -257,8 +249,6 @@
       </div>
       <!-- Browse Data Tab -->
       <div class="tab-pane" data-value="BRS" id="tab-5312-3">
-          <br />
-          <br />
           <br />
           <br />
         <!-- code pasted from ui.R -->
@@ -327,8 +317,6 @@
       </div>
       <!-- Data download tab  -->
       <div class="tab-pane" data-value="DLD" id="tab-5312-4">
-          <br />
-          <br />
           <br />
           <br />
         <div class="container-fluid">
@@ -432,15 +420,11 @@
       <div class="tab-pane active" data-value="HOME" id="tab-5312-1">
           <br />
           <br />
-          <br />
-          <br />
           <div id="home" class="shiny-html-output"></div>
         </div>
 
       <!-- Documentation Tab -->
       <div class="tab-pane" data-value="CITE" id="tab-5312-5">
-          <br />
-          <br />
           <br />
           <br />
         <div class="container-fluid">
@@ -452,22 +436,9 @@
       <div class="tab-pane" data-value="ABOUT" id="tab-5312-6">
           <br />
           <br />
-          <br />
-          <br />
         <div id="about" class="shiny-html-output"></div>
       </div>
-
-      <!-- Incumbency Tab -->
-      <div class="tab-pane" data-value="INCM" id="tab-5312-7">
-          <br />
-          <br />
-          <br />
-          <br />
-          <div class="container-fluid">
-              <div id="incumbency" class="shiny-html-output"></div>
-          </div>
-        </div>
-
+      
     </div>
   </div>
 </body>
