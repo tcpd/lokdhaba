@@ -7,7 +7,6 @@
   <script type="application/html-dependencies">
     json2[2014.02.04];jquery[1.12.4];babel-polyfill[6.7.2];shiny[0.14.2];htmlwidgets[0.8];plotlyjs[1.20.2];plotly-binding[4.5.6.9000];leaflet[0.7.3];leafletfix[1.0.0];leaflet-binding[1.0.1];bootstrap[3.3.7]
   </script>
-  <script src="assets/shared/json2-min.js"></script>
   <meta name="google-site-verification" content="cqwiASnlLzrz-kK9H8BR5zhu4xDy4XYUNRw6kWNYpU8" />
   <meta name="keywords"
     content="lokdhaba,tcpd,Indian election data,trivedi center for political data, Ashoka University" />
@@ -63,23 +62,15 @@
   <script src="assets/leaflet-binding-1.1.0/leaflet.js"></script>
   <script src="assets/d3-3.5.5/d3.min.js"></script>
   <script src="assets/d3-legend-1.6.0/d3-legend.min.js"></script>
-  <script src="assets/radarChart-0.1/radarChart.js"></script>
   <script src="assets/d3radar-binding-0.1/d3radar.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <script src="assets/AdminLTE-2.0.6/AdminLTE.min.css"></script>
-  <script src="assets/AdminLTE-2.0.6/_all-skins.min.css"></script>
-  <script src="assets/AdminLTE-2.0.6/app.min.js"></script>
   <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js'></script>
   <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
   <link rel="stylesheet" type="text/css" href="assets/style.css" />
   <script src="assets/datatables-binding-0.2/datatables.js"></script>
-  <!-- <link rel="stylesheet" type="text/css" href="assets/shinyTree/jsTree-3.0.2/themes/default/style.min.css"/> -->
-  <!-- <script src="assets/shinyTree/jsTree-3.0.2/jstree.min.js"></script> -->
-  <!-- <script src="assets/shinyTree/shinyTree.js"></script> -->
 
   <style>
     .shinyjs-hide {
@@ -186,15 +177,11 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
-
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand"><img height="70" src="assets/logo.png"></a>
+       </button>
+        <a class="navbar-brand"><img height="100%" width="auto" src="assets/logo.png"></a>
       </div>
       <ul class="nav navbar-nav shiny-tab-input" id="Page" data-tabsetid="5312">
         <li class="active"><a href="#tab-5312-1" data-toggle="tab" data-value="HOME">Home</a></li>
@@ -205,6 +192,7 @@
         <li><a href="#tab-5312-6" data-toggle="tab" data-value="ABOUT">About </a></li>
         <li><a href="#tab-5312-7" data-toggle="tab" data-value="INCM">Incumbency Profile </a></li>
       </ul>
+      </div>
 
     </div>
   </nav>
