@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script type="application/shiny-singletons">12b282b6c4e1ec3cee386f4ca6165aafc4731a84</script>
   <script type="application/html-dependencies">
-    json2[2014.02.04];jquery[1.12.4];babel-polyfill[6.7.2];shiny[0.14.2];htmlwidgets[0.8];plotlyjs[1.20.2];plotly-binding[4.5.6.9000];leaflet[0.7.3];leafletfix[1.0.0];leaflet-binding[1.0.1];bootstrap[3.3.7]
+    json2[2014.02.04];jquery[1.12.4];babel-polyfill[6.7.2];shiny[0.14.2];htmlwidgets[0.8];plotlyjs[1.20.2];plotly-binding[4.5.6.9000];leaflet[0.7.3];leafletfix[1.0.0];leaflet-binding[1.0.1];bootstrap[3.4.1]
   </script>
   <meta name="google-site-verification" content="cqwiASnlLzrz-kK9H8BR5zhu4xDy4XYUNRw6kWNYpU8" />
   <meta name="keywords"
@@ -64,13 +64,14 @@
   <script src="assets/d3-legend-1.6.0/d3-legend.min.js"></script>
   <script src="assets/d3radar-binding-0.1/d3radar.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js'></script>
   <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
   <link rel="stylesheet" type="text/css" href="assets/style.css" />
   <script src="assets/datatables-binding-0.2/datatables.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 
   <style>
     .shinyjs-hide {
@@ -81,88 +82,6 @@
       padding: 0px 20px
     }
   </style>
-  <script>
-    Shiny.addCustomMessageHandler('shinyjs-show', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "show" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.show(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-hide', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.hide(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-toggle', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.toggle(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-enable', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "enable" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.enable(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-disable', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "disable" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.disable(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-toggleState', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "toggleState" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.toggleState(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-addClass', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "addClass" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.addClass(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-removeClass', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "removeClass" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.removeClass(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-toggleClass', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "toggleClass" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.toggleClass(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-html', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "html" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.html(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-onevent', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "onevent" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.onevent(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-alert', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "alert" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.alert(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-logjs', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "logjs" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.logjs(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-runjs', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "runjs" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.runjs(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-reset', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "reset" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.reset(params);
-    });
-    Shiny.addCustomMessageHandler('shinyjs-delay', function (params) {
-      shinyjs.debugMessage('shinyjs: calling function "delay" with parameters:');
-      shinyjs.debugMessage(params);
-      shinyjs.delay(params);
-    });
-  </script>
   <script src="assets/shinyjs/shinyjs-default-funcs.js"></script>
   <script>
     shinyjs.debug = false;
@@ -370,7 +289,7 @@
             <div class="col-sm-9">
               <div data-display-if="input.dd_year_selector.length!=0">
                 <div style="text-align:center">
-                  <div class="tcpd-h3">Variable Names and Description</div>
+                  <h1>Variable Names and Description</h1>
                 </div>
                 <div id="dd_variablenames_selector" style="width:100%; height:100%; "
                   class="datatables html-widget html-widget-output"></div>
@@ -403,7 +322,7 @@
               <div data-display-if="input.dd_year_selector.length!=0 && input.dd_accept_condition!=0">
                 <div style="text-align:center">
                   <a id="dd_download_button"
-                    class="btn btn-default tcpd-button-wrap tcpd-button primary shiny-download-link " href=""
+                    class="btn btn-default shiny-download-link " href=""
                     target="_blank" download>
                     <i class="fa fa-download"></i>
                     Download
@@ -438,7 +357,6 @@
           <br />
         <div id="about" class="shiny-html-output"></div>
       </div>
-      
     </div>
   </div>
 </body>
