@@ -55,6 +55,88 @@
   <script src="assets/leaflet-0.7.7/leaflet.js"></script>
   <link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
   <link href="assets/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+  <script>
+    Shiny.addCustomMessageHandler('shinyjs-show', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "show" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.show(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-hide', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "hide" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.hide(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-toggle', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "toggle" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.toggle(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-enable', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "enable" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.enable(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-disable', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "disable" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.disable(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-toggleState', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "toggleState" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.toggleState(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-addClass', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "addClass" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.addClass(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-removeClass', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "removeClass" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.removeClass(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-toggleClass', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "toggleClass" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.toggleClass(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-html', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "html" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.html(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-onevent', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "onevent" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.onevent(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-alert', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "alert" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.alert(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-logjs', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "logjs" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.logjs(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-runjs', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "runjs" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.runjs(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-reset', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "reset" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.reset(params);
+    });
+    Shiny.addCustomMessageHandler('shinyjs-delay', function (params) {
+      shinyjs.debugMessage('shinyjs: calling function "delay" with parameters:');
+      shinyjs.debugMessage(params);
+      shinyjs.delay(params);
+    });
+  </script>
 
   <script src="assets/leaflet-label-0.2.2/leaflet.label.js"></script>
   <script src="assets/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
