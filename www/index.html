@@ -20,7 +20,7 @@
   <script type="application/ld+json">
     {
       "context": "http://schema.org/",
-    "@type": "Dataset",
+      "@type": "Dataset",
       "name": "Indian Elections Dataset",
       "description": "The Indian General & State Assembly Election and Candidates Database 1961- today ",
       "url": "http://lokdhaba.ashoka.edu.in/LokDhaba-Shiny/",
@@ -151,9 +151,13 @@
   <!--<link rel="stylesheet" type="text/css" href="shinythemes/css/darkly.min.css"/>-->
   <link rel="stylesheet" type="text/css" href="assets/style.css" />
   <script src="assets/datatables-binding-0.2/datatables.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+  </script>
 
   <style>
     .shinyjs-hide {
@@ -181,7 +185,7 @@
   <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
-       </button>
+        </button>
         <a class="navbar-brand"><img height="100%" width="auto" src="assets/logo.png"></a>
       </div>
       <ul class="nav navbar-nav shiny-tab-input" id="Page" data-tabsetid="5312">
@@ -191,9 +195,17 @@
         <li><a href="#tab-5312-4" data-toggle="tab" data-value="DLD">Data Download</a></li>
         <li><a href="#tab-5312-5" data-toggle="tab" data-value="CITE">Documentation </a></li>
         <li><a href="#tab-5312-6" data-toggle="tab" data-value="ABOUT">About </a></li>
-        <li><a href="https://lokdhaba.ashoka.edu.in/incumbency/GE.html" target="_blank">Incumbency Profile </a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">Incumbency Profile<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="https://lokdhaba.ashoka.edu.in:7000/GE.html" target="_blank">Lok Sabha</a></li>
+            <li><a href="https://lokdhaba.ashoka.edu.in:7000/HR.html" target="_blank">Haryana</a></li>
+            <li><a href="https://lokdhaba.ashoka.edu.in:7000/MH.html" target="_blank">Maharashtra</a></li>
+          </ul>
+        </li>
       </ul>
-      </div>
+    </div>
 
     </div>
   </nav>
@@ -201,8 +213,8 @@
   <div class="container-fluid">
     <div class="tab-content" data-tabsetid="5312">
       <div class="tab-pane" data-value="EDV" id="tab-5312-2">
-          <br />
-          <br />
+        <br />
+        <br />
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-3">
@@ -250,8 +262,8 @@
       </div>
       <!-- Browse Data Tab -->
       <div class="tab-pane" data-value="BRS" id="tab-5312-3">
-          <br />
-          <br />
+        <br />
+        <br />
         <!-- code pasted from ui.R -->
         <div class="container-fluid">
           <div class="row">
@@ -318,8 +330,8 @@
       </div>
       <!-- Data download tab  -->
       <div class="tab-pane" data-value="DLD" id="tab-5312-4">
-          <br />
-          <br />
+        <br />
+        <br />
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-3">
@@ -403,9 +415,8 @@
               <!-- Place for simple check -->
               <div data-display-if="input.dd_year_selector.length!=0 && input.dd_accept_condition!=0">
                 <div style="text-align:center">
-                  <a id="dd_download_button"
-                    class="btn btn-default shiny-download-link " href=""
-                    target="_blank" download>
+                  <a id="dd_download_button" class="btn btn-default shiny-download-link " href="" target="_blank"
+                    download>
                     <i class="fa fa-download"></i>
                     Download
                   </a>
@@ -419,15 +430,15 @@
 
       <!-- Home Tab-->
       <div class="tab-pane active" data-value="HOME" id="tab-5312-1">
-          <br />
-          <br />
-          <div id="home" class="shiny-html-output"></div>
-        </div>
+        <br />
+        <br />
+        <div id="home" class="shiny-html-output"></div>
+      </div>
 
       <!-- Documentation Tab -->
       <div class="tab-pane" data-value="CITE" id="tab-5312-5">
-          <br />
-          <br />
+        <br />
+        <br />
         <div class="container-fluid">
           <div id="documentation" class="shiny-html-output"></div>
         </div>
@@ -435,8 +446,8 @@
 
       <!-- About tab -->
       <div class="tab-pane" data-value="ABOUT" id="tab-5312-6">
-          <br />
-          <br />
+        <br />
+        <br />
         <div id="about" class="shiny-html-output"></div>
       </div>
     </div>
