@@ -59,7 +59,7 @@ readVoteShareFile<-function(statename){
     print(paste0('reading from ',filename))
     
     m<-read.csv(filename)
-    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","votes"))
+    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","Vote_Share_Percentage"))
     m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newYear"]<-"Year"
@@ -83,7 +83,7 @@ readtVoteShareFile<-function(statename){
     print(paste0('reading from ',filename))
     
     m<-read.csv(filename)
-    m<-subset(m,select=c("Year","Assembly_No","Party","Votes"))
+    m<-subset(m,select=c("Year","Assembly_No","Party","Vote_Share_Percentage"))
     m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newYear"]<-"Year"
@@ -105,7 +105,7 @@ readcVoteShareFile<-function(statename){
     print(paste0('reading from ',filename))
     
     m<-read.csv(filename)
-    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","votes"))
+    m<-subset(m,select=c("State_Name","Year","Assembly_No","Party","Vote_Share_Percentage"))
     m$newYear<-paste0(m$Year," (#",m$Assembly_No,")")
     m$Year<-NULL
     names(m)[names(m)=="newYear"]<-"Year"

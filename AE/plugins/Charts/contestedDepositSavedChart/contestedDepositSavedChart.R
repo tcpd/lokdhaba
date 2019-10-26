@@ -2,7 +2,7 @@ contestedDepositSavedChart<-function(input, output, session, parentsession,state
   ###################Specific for voteshare chart visualization##########################################
   getOptions<-function(options,envr){
     #browser()
-    assign(options,c("Total candidates","Deposit Lost"),env=envr)
+    assign(options,c("Total Candidates","Deposit Lost"),env=envr)
   }
 
   plotChart<-function(state, options , plot,envr){

@@ -19,7 +19,7 @@ cvoteShareChart<-function(input, output, session, parentsession,statename_reacti
     conmanager$setval("selectedState",sname)
     conmanager$setval("vis","PartyVoteShare(contested_seats)")
     
-    pivotdata<-dcast(b,Year~Party,value.var=c('votes'))
+    pivotdata<-dcast(b,Year~Party,value.var=c('Vote_Share_Percentage'))
 
     pal <- getPartyColor(b$Party)
     #create a base line chart with year as the x-axis

@@ -13,7 +13,7 @@ tvoteShareChart<-function(input, output, session, parentsession,statename_reacti
     sname<-gsub(" ","_",get(state,envr))
     b<-readtVoteShareFile(sname)
     #browser()
-    pivotdata<-dcast(b,Year~Party,value.var=c('Votes'))
+    pivotdata<-dcast(b,Year~Party,value.var=c('Vote_Share_Percentage'))
 
     #setting up variables for visualization data download
     dat <- subset(b,Party %in% selectedpartynames)
